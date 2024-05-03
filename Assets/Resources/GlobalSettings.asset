@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734bbbda1f2f8ee4694f66a841dca8d1, type: 3}
+  m_Name: GlobalSettings
+  m_EditorClassIdentifier: 
+  _baseSpeed: 5
+  _additionalSpeedByUpgrade: 0.01
+  _timeToStartRun: 5
+  _speedPowers:
+  - _minDeviation: 0.1
+    _speedMultiplier: 0.5
+  - _minDeviation: 0.3
+    _speedMultiplier: 0.2
+  - _minDeviation: 0.6
+    _speedMultiplier: 0
+  - _minDeviation: 1
+    _speedMultiplier: -0.2
+  _distanceToStartPower: 5
+  _fallAngle: 45
+  _chunkMargin: 2
+  _roadsOffset: 2
+  _minRoadLength: 3
+  _minRoadsCount: 3
