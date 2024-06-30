@@ -8,14 +8,14 @@ public class Countdown : MonoBehaviour
 	[SerializeField] private TMP_Text _countdownText;
 	[SerializeField] private float _timeToDisplayGO;
 
+	public void Run()
+	{
+		StartCoroutine(StartCountdown());
+	}
+
 	private void Awake()
 	{
 		_countdownText.gameObject.SetActive(false);
-	}
-
-	private void Start()
-	{
-		StartCoroutine(StartCountdown());
 	}
 
 	private IEnumerator StartCountdown()

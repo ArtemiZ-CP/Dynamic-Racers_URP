@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a96db882ea56b4cdf85c25e0f42ab5ed, type: 3}
+  m_Name: AlienWaterpool
+  m_EditorClassIdentifier: 
+  _startMiddle: {fileID: 4389088238115731540, guid: d2fb401dfd4544c84b158a3500552ab2,
+    type: 3}
+  _middleMiddle: {fileID: 4389088238115731540, guid: 520b0b653fc1242a8ae6ef19b92dc34f,
+    type: 3}
+  _startSide: {fileID: 4389088238115731540, guid: 140b3d946437d45fa82bf1cac5b0d71c,
+    type: 3}
+  _middleSide: {fileID: 4389088238115731540, guid: 7e921e7d96dbc4132880ed2aa0dd6bc0,
+    type: 3}
+  _roadMargin: {fileID: 4389088238115731540, guid: 38c68af0913084d3db2cddd4b077ef00,
+    type: 3}
+  _middleMargin: {fileID: 4389088238115731540, guid: c08b97f37fc804ad780a5792dba35ffe,
+    type: 3}
+  _sideMargin: {fileID: 4389088238115731540, guid: 4e98eae3339ed4e62af1a4c205e41307,
+    type: 3}
+  _startRoadMargin: {fileID: 4389088238115731540, guid: 47b80945972e7408e94e8dc65e05b8fd,
+    type: 3}
+  _startMiddleMargin: {fileID: 4389088238115731540, guid: 9b7629a2d288649eeb41cdd04fe305a6,
+    type: 3}
+  _startSideMargin: {fileID: 4389088238115731540, guid: 3fbba151b1ba24afa8e994e907afa8c1,
+    type: 3}

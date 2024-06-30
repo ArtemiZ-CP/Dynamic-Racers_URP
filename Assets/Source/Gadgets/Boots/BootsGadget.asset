@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 877db2fbb19117e4084e6e96afbc5de5, type: 3}
+  m_Name: BootsGadget
+  m_EditorClassIdentifier: 
+  _gadgetAnimationInfos:
+  - _chunkType: 0
+    _animationTrigger: Boots
+    _prefab: {fileID: 2119092854821998363, guid: 9516a2fc70bcc46679e8ce3be953d73c,
+      type: 3}
+  _speedMultiplier: 0.2
+  _distanceToDisactive: 0
+  _isInfiniteDistance: 1
+  _activeCount: 1
+  _isInfiniteActiveCounts: 1
+  _name: Boots
+  _prefab: {fileID: 919132149155446097, guid: f6363c3fb427248658d389b8470c8146, type: 3}
+  _icon: {fileID: 21300000, guid: 8cacb1c187ced40e1889352069344641, type: 3}
+  _description: "\u041D\u0430\u0439\u043A\u0438"

@@ -15,18 +15,34 @@ MonoBehaviour:
   _baseSpeed: 5
   _additionalSpeedByUpgrade: 0.01
   _timeToStartRun: 5
-  _speedPowers:
-  - _minDeviation: 0.1
-    _speedMultiplier: 0.5
-  - _minDeviation: 0.3
-    _speedMultiplier: 0.2
-  - _minDeviation: 0.6
-    _speedMultiplier: 0
-  - _minDeviation: 1
-    _speedMultiplier: -0.2
-  _distanceToStartPower: 5
+  _distanceToStartPower: 15
+  _startPowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1.374015
+      outSlope: -1.374015
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.09323585
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _fallAngle: 45
-  _chunkMargin: 2
+  _chunkMargin: 4
   _roadsOffset: 2
   _minRoadLength: 3
   _minRoadsCount: 3
+  _halfBoardLength: 3

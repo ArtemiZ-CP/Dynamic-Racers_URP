@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -10,16 +8,16 @@ public class UpgradeUI : MonoBehaviour
 	[SerializeField] private TMP_Text _ascendText;
 	[SerializeField] private TMP_Text _glideText;
 
-	private void Start()
+	private void Update()
 	{
 		SetText();
 	}
 
 	private void SetText()
 	{
-		_raceText.text = GameData.PlayerRace.ToString();
-		_diveText.text = GameData.PlayerDive.ToString();
-		_ascendText.text = GameData.PlayerAscend.ToString();
-		_glideText.text = GameData.PlayerGlide.ToString();
+		_raceText.text = PlayerCharacteristics.PlayerRace.ToString();
+		_diveText.text = PlayerCharacteristics.PlayerDive.ToString();
+		_ascendText.text = PlayerCharacteristics.PlayerAscend.ToString();
+		_glideText.text = PlayerCharacteristics.PlayerGlide.ToString();
 	}
 }

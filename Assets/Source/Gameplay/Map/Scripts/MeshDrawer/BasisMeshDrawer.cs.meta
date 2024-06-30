@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 570548792ac8042479616222b939e0bb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _meshParent: {instanceID: 0}
+  - _edgeCorner: {fileID: 3848698157293380671, guid: 35fff901a750d4c9e8ab167829921433,
+      type: 3}
+  - _edgeMiddle: {fileID: 3848698157293380671, guid: f1c40bf0044774590979a5d565186a83,
+      type: 3}
+  - _corner: {fileID: 3848698157293380671, guid: b1e2ede0c08a04686b21f6988d60f537,
+      type: 3}
+  - _middle: {fileID: 3848698157293380671, guid: 6bb21af0efd46432a9972447e420bb82,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
