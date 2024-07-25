@@ -1,4 +1,4 @@
-public interface ISelectableGadget
+public interface IClickableGadget
 {
-    public void SelectGadget(GadgetScriptableObject gadgets);
+    public void Click(GadgetScriptableObject gadgets);
 }

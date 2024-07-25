@@ -111,6 +111,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Alpha: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -152,7 +153,7 @@ Material:
     - _metallic: 0
     - _opacity: -0.18
     - _rotate: 45
-    - _roughness: -7.77
+    - _roughness: 0
     - _saturation: 1.5
     - _tile: 0
     - _x: -1406.5

@@ -2,17 +2,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SelectGadgetLine : MonoBehaviour, ISelectableGadget
+public class SelectGadgetLine : MonoBehaviour, IClickableGadget
 {
     [SerializeField] private RectTransform _gadgetCellParent;
     [SerializeField] private GadgetCell _gadgetCellPrefab;
     [SerializeField] private SelectedGadgetInfo _selectedGadgetInfo;
 
-    private List<GadgetScriptableObject> _gadgets;
+    private List<Gadget> _gadgets;
     private List<GadgetCell> _gadgetCells = new();
     private float _contentWidth;
 
-    public void SelectGadget(GadgetScriptableObject gadget)
+    public void Click(GadgetScriptableObject gadget)
     {
         _selectedGadgetInfo.Select(gadget);
 
@@ -23,7 +23,7 @@ public class SelectGadgetLine : MonoBehaviour, ISelectableGadget
                 cell.Deselect();
             }
 
-            _gadgetCells.Find(gadgetCell => gadgetCell.Gadget == gadget)?.Select();
+            _gadgetCells.Find(gadgetCell => gadgetCell.Gadget.GadgetScriptableObject == gadget)?.Select();
             RunSettings.PlayerGadget = gadget;
         }
     }
@@ -39,7 +39,7 @@ public class SelectGadgetLine : MonoBehaviour, ISelectableGadget
     private void OnEnable()
     {
         InitCells();
-        SelectGadget(RunSettings.PlayerGadget);
+        Click(RunSettings.PlayerGadget);
     }
 
     private void InitCells()
@@ -55,13 +55,13 @@ public class SelectGadgetLine : MonoBehaviour, ISelectableGadget
         for (int i = 0; i < _gadgets.Count; i++)
         {
             GadgetCell gadgetCell = Instantiate(_gadgetCellPrefab, _gadgetCellParent);
-            gadgetCell.Init(_gadgets[i], this);
+            gadgetCell.Init(_gadgets[i], clickableGadget: this, fixVerticalSize: false);
             _gadgetCells.Add(gadgetCell);
         }
 
         _contentWidth = 0;
-        
-        SelectGadget(null);
+
+        Click(null);
     }
 
     private bool IsContentWindowResized()
@@ -80,6 +80,14 @@ public class SelectGadgetLine : MonoBehaviour, ISelectableGadget
     private void SetContentPosition()
     {
         RectTransform content = _gadgetCellParent.GetComponent<RectTransform>();
-        content.anchoredPosition = new Vector3(content.rect.width / 2, content.localPosition.y, content.localPosition.z);
+
+        if (content.rect.width < Screen.width)
+        {
+            content.position = new Vector3(Screen.width / 2, content.position.y, content.position.z);
+        }
+        else
+        {
+            content.anchoredPosition = new Vector3(content.rect.width / 2, content.localPosition.y, content.localPosition.z);
+        }
     }
 }

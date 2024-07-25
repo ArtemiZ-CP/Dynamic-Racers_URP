@@ -7,16 +7,16 @@ public abstract class CharacterMovement : MonoBehaviour
 {
 	private List<Chunk> _chunks;
 	private GlobalSettings _globalSettings;
-
 	private int _currentChunkIndex = 0;
 	private int _currentMovePointIndex = 0;
-
 	private float _speed;
 	private float _speedMultiplier = 1;
+	private float _distance;
 
-	public event Action<ChunkType> OnChangeChunkType;
+	public event Action<Chunk, CharacterMovement> OnChangeChunk;
 
-	public float CurrentDistance { get; private set; }
+	public float Distance => _distance;
+	public bool IsFinished => _currentChunkIndex == _chunks.Count - 1;
 	public float Speed => _speed * _speedMultiplier;
 
 	public float DistanceToFinish()
@@ -41,7 +41,7 @@ public abstract class CharacterMovement : MonoBehaviour
 	public void StartMove(List<Chunk> chunks, float multiplier)
 	{
 		_chunks = chunks;
-		CurrentDistance = 0;
+		_distance = 0;
 		StartCoroutine(AddAcceleration(multiplier, _globalSettings.DistanceToStartPower, _globalSettings.StartPowerCurve));
 		StartCoroutine(Move());
 	}
@@ -58,11 +58,11 @@ public abstract class CharacterMovement : MonoBehaviour
 
 	public IEnumerator AddAcceleration(float multiplier, float distance, AnimationCurve moveCurve)
 	{
-		float startDistance = CurrentDistance;
+		float startDistance = Distance;
 
-		while (CurrentDistance - startDistance < distance)
+		while (Distance - startDistance < distance)
 		{
-			float t = moveCurve.Evaluate((CurrentDistance - startDistance) / distance);
+			float t = moveCurve.Evaluate((Distance - startDistance) / distance);
 			_speedMultiplier += multiplier * t;
 
 			yield return null;
@@ -81,19 +81,19 @@ public abstract class CharacterMovement : MonoBehaviour
 
 	private void OnEnable()
 	{
-		OnChangeChunkType += OnChangeChunkHandler;
+		OnChangeChunk += OnChangeChunkHandler;
 	}
 
 	private void OnDisable()
 	{
-		OnChangeChunkType -= OnChangeChunkHandler;
+		OnChangeChunk -= OnChangeChunkHandler;
 	}
 
 	private void Update()
 	{
-		CurrentDistance += _speed * _speedMultiplier * Time.deltaTime;
+		_distance += Speed * Time.deltaTime;
 	}
-
+	
 	private float DistanceToChunkEnd(int chunkIndex, int startPointIndex)
 	{
 		Transform from;
@@ -119,9 +119,9 @@ public abstract class CharacterMovement : MonoBehaviour
 		return distance;
 	}
 
-	private void OnChangeChunkHandler(ChunkType chunkType)
+	private void OnChangeChunkHandler(Chunk chunk, CharacterMovement characterMovement)
 	{
-		float additionalSpeed = GetUpgradeAmount(chunkType) * _globalSettings.AdditionalSpeedByUpgrade;
+		float additionalSpeed = GetUpgradeAmount(chunk.Type) * _globalSettings.AdditionalSpeedByUpgrade;
 		_speed = _globalSettings.BaseSpeed + additionalSpeed;
 	}
 
@@ -131,7 +131,7 @@ public abstract class CharacterMovement : MonoBehaviour
 		{
 			if (_chunks[_currentChunkIndex].Type != ChunkType.Finish)
 			{
-				OnChangeChunkType?.Invoke(_chunks[_currentChunkIndex + 1].Type);
+				OnChangeChunk?.Invoke(_chunks[_currentChunkIndex + 1], this);
 			}
 		}
 
@@ -149,6 +149,7 @@ public abstract class CharacterMovement : MonoBehaviour
 			}
 			else
 			{
+				_currentChunkIndex = _chunks.Count - 1;
 				return null;
 			}
 		}
@@ -169,7 +170,7 @@ public abstract class CharacterMovement : MonoBehaviour
 	private IEnumerator Move()
 	{
 		Transform target = GetTarget();
-		OnChangeChunkType.Invoke(_chunks[_currentChunkIndex].Type);
+		OnChangeChunk.Invoke(_chunks[_currentChunkIndex], this);
 
 		while (target != null)
 		{

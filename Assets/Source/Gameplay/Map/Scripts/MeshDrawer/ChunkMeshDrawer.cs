@@ -9,10 +9,25 @@ public abstract class ChunkMeshDrawer : MonoBehaviour
 		Middle,
 		Road
 	}
-	
+
 	[SerializeField] private Transform _meshParent;
 
+	private GlobalSettings _globalSettings;
+
 	public Transform MeshParent => _meshParent;
+
+	private GlobalSettings GlobalSettings
+	{
+		get
+		{
+			if (_globalSettings == null)
+			{
+				_globalSettings = GlobalSettings.Instance;
+			}
+
+			return _globalSettings;
+		}
+	}
 
 	public void DestroyMesh()
 	{
@@ -27,44 +42,22 @@ public abstract class ChunkMeshDrawer : MonoBehaviour
 		}
 	}
 
-	public virtual Vector3Int SpawnMesh(Vector3Int size)
+	public virtual Vector3Int SpawnMesh(Vector3Int size, MapCellsContainer mapCellsContainer, bool emptyBefore, bool emptyAfter)
 	{
-		if (size.x < GlobalSettings.Instance.MinRoadsCount)
+		if (size.x < GlobalSettings.MinRoadsCount)
 		{
-			size.x = GlobalSettings.Instance.MinRoadsCount;
+			size.x = GlobalSettings.MinRoadsCount;
 		}
 
 		size.x = Mathf.Max(size.x, 1);
-		size.x += GlobalSettings.Instance.ChunkMargin * 2;
+		size.x += GlobalSettings.ChunkMargin * 2;
 
 		DestroyMesh();
 
 		return size;
 	}
 
-	protected void SpawnLine(float xPosition, int lenght, bool mirror, GameObject start, GameObject middle)
-	{
-		Vector3 size = new(1, 1, 1);
-		lenght--;
-
-		if (mirror)
-		{
-			size.x *= -1;
-		}
-
-		SpawnCell(start, new Vector3(xPosition, 0, 0), size);
-		size.z *= -1;
-		SpawnCell(start, new Vector3(xPosition, 0, lenght), size);
-
-		if (lenght > 1)
-		{
-			float positionZ = lenght / 2f;
-			size.z = lenght - 1;
-			SpawnCell(middle, new Vector3(xPosition, 0, positionZ), size);
-		}
-	}
-
-	protected void SpawnWallLine(float xPosition, int lenght, bool mirror, GameObject start, GameObject middle, GameObject end)
+	protected void SpawnLine(float xPosition, int lenght, bool mirror, GameObject start, GameObject middle, bool emptyBefore, bool emptyAfter)
 	{
 		Vector3 size = new(1, 1, 1);
 
@@ -73,49 +66,134 @@ public abstract class ChunkMeshDrawer : MonoBehaviour
 			size.x *= -1;
 		}
 
-		SpawnCell(start, new Vector3(xPosition, 1, 1), size);
-		SpawnCell(end, new Vector3(xPosition, lenght, 1), size);
-
-		if (lenght > 2)
+		for (int z = 0; z < lenght; z++)
 		{
-			float positionY = (1 + lenght) / 2f;
-			size.y = lenght - 2;
-			SpawnCell(middle, new Vector3(xPosition, positionY, 1), size);
+			if (z == 0)
+			{
+				SpawnCell(start, new Vector3(xPosition, 0, z), size, emptyBefore, emptyAfter);
+			}
+			else if (z == lenght - 1)
+			{
+				size.z *= -1;
+				SpawnCell(start, new Vector3(xPosition, 0, z), size, emptyBefore, emptyAfter);
+				size.z *= -1;
+			}
+			else
+			{
+				SpawnCell(middle, new Vector3(xPosition, 0, z), size, emptyBefore, emptyAfter);
+			}
 		}
 	}
 
-	protected void SpawnCell(GameObject objectToSpawn, Vector3 position, Vector3 scaleMultiplier)
+	protected void SpawnLine(float xPosition, int lenght, bool mirror, GameObject start, GameObject second, GameObject middle, GameObject end, bool emptyBefore, bool emptyAfter)
 	{
-		SpawnObject(objectToSpawn, CellToWorldPosition(position), scaleMultiplier);
+		Vector3 size = new(1, 1, 1);
+
+		if (mirror)
+		{
+			size.x *= -1;
+		}
+
+		for (int z = 0; z < lenght; z++)
+		{
+			if (z == 0)
+			{
+				SpawnCell(start, new Vector3(xPosition, 0, z), size, emptyBefore, emptyAfter);
+			}
+			else if (z == 1)
+			{
+				SpawnCell(second, new Vector3(xPosition, 0, 1), size, emptyBefore, emptyAfter);
+			}
+			else if (z == lenght - 1)
+			{
+				size.z *= -1;
+				SpawnCell(end, new Vector3(xPosition, 0, z), size, emptyBefore, emptyAfter);
+				size.z *= -1;
+			}
+			else
+			{
+				SpawnCell(middle, new Vector3(xPosition, 0, z), size, emptyBefore, emptyAfter);
+			}
+		}
+	}
+
+	protected void SpawnWallLine(float xPosition, int lenght, bool mirror, GameObject start, GameObject middle, GameObject end, bool emptyBefore, bool emptyAfter)
+	{
+		Vector3 size = new(1, 1, 1);
+
+		if (mirror)
+		{
+			size.x *= -1;
+		}
+
+		for (int y = 0; y < lenght; y++)
+		{
+			if (y == 0)
+			{
+				SpawnCell(start, new Vector3(xPosition, 1, 1), size, emptyBefore, emptyAfter);
+			}
+			else if (y == lenght - 1)
+			{
+				SpawnCell(end, new Vector3(xPosition, lenght, 1), size, emptyBefore, emptyAfter);
+			}
+			else
+			{
+				SpawnCell(middle, new Vector3(xPosition, y + 1, 1), size, emptyBefore, emptyAfter);
+			}
+		}
+	}
+
+	protected void SpawnCell(GameObject objectToSpawn, Vector3 position, Vector3 scaleMultiplier, bool emptyBefore, bool emptyAfter)
+	{
+		if (scaleMultiplier.z < 0)
+		{
+			(emptyBefore, emptyAfter) = (emptyAfter, emptyBefore);
+		}
+		
+		GameObject gameObject = SpawnObject(objectToSpawn, CellToWorldPosition(position), scaleMultiplier, emptyBefore, emptyAfter);
+
+		if (gameObject != null && gameObject.TryGetComponent(out TileEditor tileEditor))
+		{
+			tileEditor.SetupTile(emptyBefore, emptyAfter);
+		}
 	}
 
 	private Vector3 CellToWorldPosition(Vector3 position)
 	{
 		Vector3 newPosition = position;
 		newPosition += Vector3.one / 2;
-		newPosition *= GlobalSettings.Instance.RoadsOffset;
+		newPosition *= GlobalSettings.RoadsOffset;
 		newPosition += transform.position;
 		return newPosition;
 	}
 
-	private void SpawnObject(GameObject objectToSpawn, Vector3 position, Vector3 scaleMultiplier)
+	private GameObject SpawnObject(GameObject objectToSpawn, Vector3 position, Vector3 scaleMultiplier, bool emptyBefore, bool emptyAfter)
 	{
 		if (objectToSpawn == null)
 		{
-			return;
+			return null;
 		}
 
+		if (Application.isPlaying == false)
+		{
 #if UNITY_EDITOR
-		objectToSpawn = (GameObject)PrefabUtility.InstantiatePrefab(objectToSpawn, MeshParent);
-		objectToSpawn.transform.position = position;
+			objectToSpawn = (GameObject)PrefabUtility.InstantiatePrefab(objectToSpawn, MeshParent);
+			objectToSpawn.transform.position = position;
 #else
-		objectToSpawn = Instantiate(objectToSpawn, position, Quaternion.identity, MeshParent);
+			objectToSpawn = Instantiate(objectToSpawn, position, Quaternion.identity, MeshParent);
 #endif
+		}
+		else
+		{
+			objectToSpawn = Instantiate(objectToSpawn, position, Quaternion.identity, MeshParent);
+		}
 
 		Vector3 newScale = objectToSpawn.transform.localScale;
 		newScale.x *= scaleMultiplier.x;
 		newScale.y *= scaleMultiplier.y;
 		newScale.z *= scaleMultiplier.z;
 		objectToSpawn.transform.localScale = newScale;
+
+		return objectToSpawn;
 	}
 }

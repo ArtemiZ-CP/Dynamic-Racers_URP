@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
+[RequireComponent(typeof(EnvironmentSpawner))]
 public abstract class Chunk : MonoBehaviour
 {
 	[SerializeField] private ChunkMeshDrawer _chunkMeshDrawer;
@@ -9,10 +10,13 @@ public abstract class Chunk : MonoBehaviour
 	[SerializeField] private Transform _movePoints;
 	[SerializeField] private Transform _endPoint;
 	[SerializeField] private Transform _changeAnimationPoint;
-	[Header("Test Resize")]
+	[Header("Debug")]
+    [SerializeField] private MapCellsContainer _mapCellsContainer;
 	[SerializeField] private Vector3Int _testSize;
 
 	private Vector3Int _chunkSize;
+	private GlobalSettings _globalSettings;
+	private EnvironmentSpawner _environmentSpawner;
 
 	public ChunkType Type => _chunkType;
 	public Vector3Int Size => _chunkSize;
@@ -20,21 +24,35 @@ public abstract class Chunk : MonoBehaviour
 	public List<Transform> MovePoints => GetMovePoints();
 	public Transform ChangeAnimationPoint => _changeAnimationPoint;
 
+	private GlobalSettings GlobalSettings
+	{
+		get
+		{
+			if (_globalSettings == null)
+			{
+				_globalSettings = GlobalSettings.Instance;
+			}
+
+			return _globalSettings;
+		}
+	}
+
 	[ContextMenu("Set Chunk Size")]
 	public void SetChunkSize()
 	{
-		SetChunkSize(_testSize);
+		SetupChunk(_testSize, _mapCellsContainer);
 		
 #if UNITY_EDITOR
 		UnityEditor.EditorUtility.SetDirty(this);
 #endif
 	}
 
-	public void SetChunkSize(Vector3Int size)
+	public void SetupChunk(Vector3Int size, MapCellsContainer mapCellsContainer, bool emptyBefore = false, bool emptyAfter = false)
 	{
-		_chunkMeshDrawer?.SpawnMesh(size);
+		_chunkMeshDrawer?.SpawnMesh(size, mapCellsContainer, emptyBefore, emptyAfter);
+		_environmentSpawner.SpawnEnvironment(size, _chunkType, mapCellsContainer);
 
-		size *= GlobalSettings.Instance.RoadsOffset;
+		size *= GlobalSettings.RoadsOffset;
 		SetBasePosition();
 		SetChunkWidth(size.x);
 		SetChunkHeight(size.y);
@@ -73,9 +91,9 @@ public abstract class Chunk : MonoBehaviour
 			return width;
 		}
 
-		if (width < GlobalSettings.Instance.MinRoadsCount)
+		if (width < GlobalSettings.MinRoadsCount)
 		{
-			width = GlobalSettings.Instance.MinRoadsCount;
+			width = GlobalSettings.MinRoadsCount;
 		}
 
 		return width;
@@ -83,6 +101,8 @@ public abstract class Chunk : MonoBehaviour
 
 	private void Awake()
 	{
+		_environmentSpawner = GetComponent<EnvironmentSpawner>();
+
 		if (_changeAnimationPoint == null)
 		{
 			_changeAnimationPoint = _movePoints.GetChild(_movePoints.childCount - 1);

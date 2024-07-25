@@ -137,7 +137,12 @@ namespace CharacterCustomization
         private static void AddAnimator(GameObject character)
         {
             var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(AssetsPath.AnimationController);
-            var characterAnimator = character.AddComponent<Animator>();
+
+            if (character.TryGetComponent<Animator>(out var characterAnimator) == false)
+            {
+                characterAnimator = character.AddComponent<Animator>();
+            }
+
             characterAnimator.runtimeAnimatorController = controller;
         }
 

@@ -18,7 +18,13 @@ MonoBehaviour:
     type: 2}
   _wallCellsContainer: {fileID: 11400000, guid: 52b600818c88d4ce3a7b097368d7f76c,
     type: 2}
-  _carpetCellsContainer: {fileID: 11400000, guid: 053b1a45163784a30aa75d5885ce90bf,
-    type: 2}
   _waterpoolCellsContainer: {fileID: 11400000, guid: cdddd9e66ea2c46abb6c55411bca70bf,
     type: 2}
+  _marginCellsContainer: {fileID: 11400000, guid: 00432166a2a824188a857748921e9cc5,
+    type: 2}
+  _wallMarginCellsContainer: {fileID: 11400000, guid: d2bd4b5915c0f43518c2fbbfd676f3d5,
+    type: 2}
+  _environmentContainer: {fileID: 11400000, guid: 57e233feef99e45059e7576fb23f811a,
+    type: 2}
+  _finishPrefab: {fileID: 1199139674193166142, guid: 68a075e137a8249288193593069eb823,
+    type: 3}

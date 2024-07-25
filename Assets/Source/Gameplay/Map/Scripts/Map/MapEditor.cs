@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 public class MapEditor : MonoBehaviour
@@ -7,48 +6,53 @@ public class MapEditor : MonoBehaviour
 	private readonly List<Chunk> _currentChunks = new();
 
 	[SerializeField] private List<Chunk> _chunks;
-	[Header("Customize")]
-	[SerializeField] private int _mapWidth;
 	[Header("Debug")]
-	[SerializeField] private List<ChunkSettings> _debugChunkSettings;
-
-	private List<ChunkSettings> _chunkSettings;
+	[SerializeField] private MapPreset _debugChunkSettings;
+	[SerializeField] private MapCellsContainer _mapCellsContainer;
+	[SerializeField] private int _playersCount;
 
 	[ContextMenu("Respawn Chunks")]
 	public void DebugRespawnChunks()
 	{
-		_chunkSettings = _debugChunkSettings;
-		RespawnChunks();
+		RespawnChunks(_playersCount, _debugChunkSettings.Map, _mapCellsContainer);
+
+#if UNITY_EDITOR
+		UnityEditor.EditorUtility.SetDirty(this);
+#endif
 	}
 
-	private void Awake()
+	private void Start()
 	{
-		_chunkSettings = RunSettings.Map;
+		int playersCount;
+		List<ChunkSettings> map;
+		MapCellsContainer mapCellsContainer;
 
-		if (_chunkSettings != null)
+		if (RunSettings.Map != null)
 		{
-			RespawnChunks();
+			map = RunSettings.Map;
+			playersCount = RunSettings.PlayersCount;
+			mapCellsContainer = RunSettings.MapCellsContainer;
 		}
-	}	
+		else
+		{
+			map = _debugChunkSettings.Map;
+			playersCount = _playersCount;
+			mapCellsContainer = _mapCellsContainer;
+		}
 
-	private void RespawnChunks()
+		RespawnChunks(playersCount, map, mapCellsContainer);
+	}
+
+	private void RespawnChunks(int linesCount, List<ChunkSettings> map, MapCellsContainer mapCellsContainer)
 	{
+		linesCount += 2 * GlobalSettings.Instance.AdditionalRoadWidht;
 		DestroyAll();
-		SpawnChunks();
-		SetupMap();
+		SpawnChunks(linesCount, map, mapCellsContainer);
 	}
 
-	private void SetupMap()
+	private void SpawnChunks(int linesCount, List<ChunkSettings> map, MapCellsContainer mapCellsContainer)
 	{
-		for (int i = 0; i < _chunkSettings.Count; i++)
-		{
-			SetupChunk(i);
-		}
-	}
-
-	private void SpawnChunks()
-	{
-		foreach (ChunkSettings chunkSettings in _chunkSettings)
+		foreach (ChunkSettings chunkSettings in map)
 		{
 			Chunk chunk = _chunks.Find(chunk => chunk.Type == chunkSettings.Type);
 
@@ -67,26 +71,34 @@ public class MapEditor : MonoBehaviour
 				position = previousChunk.EndPoint.position;
 			}
 
+			Vector3Int size = new(linesCount, chunkSettings.Size.y, chunkSettings.Size.x);
+
 			chunk = AddChunk(chunk, position);
-			chunk.SetChunkSize(new Vector3Int(_mapWidth, chunkSettings.Size.y, chunkSettings.Size.x));
+
+			bool emptyBefore;
+			bool emptyAfter;
+			int index = map.IndexOf(chunkSettings);
+
+			if (index == 0 || map[index - 1].Type == ChunkType.Fly)
+			{
+				emptyBefore = true;
+			}
+			else
+			{
+				emptyBefore = false;
+			}
+			
+			if (index == map.Count - 1 || map[index + 1].Type == ChunkType.Fly || map[index].Type == ChunkType.Wall)
+			{
+				emptyAfter = true;
+			}
+			else
+			{
+				emptyAfter = false;
+			}
+
+			chunk.SetupChunk(size, mapCellsContainer, emptyBefore, emptyAfter);
 		}
-	}
-
-	private void SetupChunk(int chunkIndex)
-	{
-		Chunk chunk = _currentChunks[chunkIndex];
-		ChunkSettings chunkSettings = _chunkSettings[chunkIndex];
-
-		chunk.SetChunkSize(new Vector3Int(_mapWidth, chunkSettings.Size.y, chunkSettings.Size.x));
-
-		Vector3 chunkPosition = Vector3.zero;
-
-		if (chunkIndex > 0)
-		{
-			chunkPosition = _currentChunks[chunkIndex - 1].EndPoint.position;
-		}
-
-		chunk.transform.position = chunkPosition;
 	}
 
 	private void DestroyAll()

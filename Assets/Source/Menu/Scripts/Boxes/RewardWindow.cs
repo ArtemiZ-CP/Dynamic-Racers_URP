@@ -6,6 +6,7 @@ public class RewardWindow : MonoBehaviour
     [SerializeField] private GadgetCell _gadgetCell;
     [SerializeField] private CharacteristicCell _characteristicCell;
     [SerializeField] private RewardMenu _rewardMenu;
+    [SerializeField] private AudioSource _rewardSound;
 
     private Queue<Reward> _rewards = new();
 
@@ -40,7 +41,7 @@ public class RewardWindow : MonoBehaviour
         {
             ShowCharacteristic(characteristicReward);
         }
-        
+
         if (_rewards.Count == 0)
         {
             IsActive = false;
@@ -61,8 +62,11 @@ public class RewardWindow : MonoBehaviour
 
     private void ShowGadget(GadgetReward gadgetReward)
     {
+        Gadget gadget = new(gadgetReward.Gadget, gadgetReward.Amount);
+        
         _gadgetCell.gameObject.SetActive(true);
-        _gadgetCell.Init(gadgetReward.Gadget, null);
+        _gadgetCell.Init(gadget, fixVerticalSize: true);
+        _rewardSound.Play();
     }
 
     private void ShowCharacteristic(CharacteristicReward characteristicReward)

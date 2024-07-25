@@ -6,6 +6,6 @@ public class SelectmapPreset : MonoBehaviour
 
     private void Awake()
     {
-        RunSettings.MapSetting = _mapSetting;
+        RunSettings.MapCellsContainer = _mapSetting;
     }
 }

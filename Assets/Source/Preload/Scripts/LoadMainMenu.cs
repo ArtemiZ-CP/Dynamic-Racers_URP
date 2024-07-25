@@ -8,26 +8,31 @@ public class LoadMainMenu : MonoBehaviour
     private const float ActivationProgress = 0.9f;
 
     [SerializeField] private Slider _progressBar;
-    [SerializeField] private string _sceneToLoad;
+    [SerializeField] private string _menuScene;
     [SerializeField] private TMP_Text _loadingPercentage;
 
-    private AsyncOperation loadingOperation;
+    private AsyncOperation _loadingOperation;
 
     private void Start()
     {
-        loadingOperation = SceneManager.LoadSceneAsync(_sceneToLoad);
-        loadingOperation.allowSceneActivation = false;
+        LoadSceneAsync();
     }
 
     private void Update()
     {
-        float progress = Mathf.Clamp01(loadingOperation.progress / ActivationProgress);
+        float progress = Mathf.Clamp01(_loadingOperation.progress / ActivationProgress);
         _progressBar.value = progress;
         _loadingPercentage.text = $"{(int)(progress * 100)}%";
 
-        if (loadingOperation.progress >= ActivationProgress)
+        if (_loadingOperation.progress >= ActivationProgress)
         {
-            loadingOperation.allowSceneActivation = true;
+            _loadingOperation.allowSceneActivation = true;
         }
+    }
+
+    private void LoadSceneAsync()
+    {
+        _loadingOperation = SceneManager.LoadSceneAsync(_menuScene);
+        _loadingOperation.allowSceneActivation = false;
     }
 }

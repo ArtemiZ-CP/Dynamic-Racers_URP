@@ -12,9 +12,14 @@ public class MapPreset : ScriptableObject
     {
         _map.ForEach(chunkSettings =>
         {
-            if (chunkSettings.Type == ChunkType.Finish || chunkSettings.Type == ChunkType.Start)
+            if (chunkSettings.Type == ChunkType.Start)
             {
                 chunkSettings.Length = 3;
+            }
+
+            if (chunkSettings.Type == ChunkType.Finish)
+            {
+                chunkSettings.Length = 7;
             }
 
             if (chunkSettings.Length < 3)

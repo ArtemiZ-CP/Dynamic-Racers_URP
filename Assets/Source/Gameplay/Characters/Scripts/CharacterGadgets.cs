@@ -1,18 +1,22 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterMovement))]
 public class CharacterGadgets : MonoBehaviour
 {
-	private List<GadgetScriptableObject> _gadgets = new();
+	private GadgetScriptableObject _gadget;
 	private GadgetScriptableObject _activeGadget;
 	private CharacterMovement _characterMovement;
 	private float _distanceToDisactiveGadget;
-	private List<int> _usageCount = new();
+	private int _usageCount;
 	private ChunkType _currentChunkType;
 
 	public event Action<GadgetAnimationInfo> OnActiveAnimation;
+
+	public GadgetScriptableObject Gadget => _gadget;
+	public bool IsGadgetActive => _activeGadget != null;
+	public int UsageCount => _usageCount;
+	public float RemainingDistance => _distanceToDisactiveGadget - _characterMovement.Distance;
 
 	public void Init(GadgetScriptableObject gadget)
 	{
@@ -21,8 +25,8 @@ public class CharacterGadgets : MonoBehaviour
 			return;
 		}
 
-		_gadgets = new List<GadgetScriptableObject> {gadget};
-		_usageCount = new List<int>(_gadgets.Count) {0};
+		_gadget = gadget;
+		_usageCount = gadget.ActiveCount;
 	}
 
 	protected virtual void Awake()
@@ -32,43 +36,37 @@ public class CharacterGadgets : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_characterMovement.OnChangeChunkType += OnChangeChunkTypeHandler;
+		_characterMovement.OnChangeChunk += OnChangeChunkTypeHandler;
 	}
 
 	private void OnDisable()
 	{
-		_characterMovement.OnChangeChunkType -= OnChangeChunkTypeHandler;
+		_characterMovement.OnChangeChunk -= OnChangeChunkTypeHandler;
 	}
 
 	private void Update()
 	{
-		if (_activeGadget != null && _distanceToDisactiveGadget < _characterMovement.CurrentDistance)
+		if (_activeGadget != null && _distanceToDisactiveGadget < _characterMovement.Distance)
 		{
 			DisactiveGadget();
 			OnActiveAnimation.Invoke(new GadgetAnimationInfo(_currentChunkType));
 		}
 	}
 
-	private void OnChangeChunkTypeHandler(ChunkType chunkType)
+	private void OnChangeChunkTypeHandler(Chunk chunk, CharacterMovement characterMovement)
 	{
-		_currentChunkType = chunkType;
+		_currentChunkType = chunk.Type;
 
-		if (_gadgets.Count != 0)
+		if (_gadget != null)
 		{
-			if (TryContinue(chunkType))
-			{
-				return;
-			}
+			if (TryContinue(chunk.Type)) return;
 
 			if (_activeGadget != null)
 			{
 				DisactiveGadget();
 			}
 
-			if (TryActiveGadget(chunkType))
-			{
-				return;
-			}
+			if (TryActiveGadget(chunk.Type)) return;
 		}
 
 		OnActiveAnimation.Invoke(new GadgetAnimationInfo(_currentChunkType));
@@ -97,22 +95,19 @@ public class CharacterGadgets : MonoBehaviour
 			throw new Exception("Active gadget is not null");
 		}
 
-		foreach (GadgetScriptableObject gadget in _gadgets)
+		GadgetAnimationInfo gadgetAnimationInfo = _gadget.ContainsChunkType(chunkType);
+
+		if (gadgetAnimationInfo != null)
 		{
-			GadgetAnimationInfo gadgetAnimationInfo = gadget.ContainsChunkType(chunkType);
-
-			if (gadgetAnimationInfo != null)
+			if (_usageCount <= 0)
 			{
-				if (_usageCount[_gadgets.IndexOf(gadget)] >= gadget.ActiveCount)
-				{
-					continue;
-				}
-
-				ActiveGadget(gadget);
-				OnActiveAnimation.Invoke(gadgetAnimationInfo);
-
-				return true;
+				return false;
 			}
+
+			ActiveGadget(_gadget);
+			OnActiveAnimation.Invoke(gadgetAnimationInfo);
+
+			return true;
 		}
 
 		return false;
@@ -121,9 +116,14 @@ public class CharacterGadgets : MonoBehaviour
 	private void ActiveGadget(GadgetScriptableObject gadget)
 	{
 		_activeGadget = gadget;
-		_usageCount[_gadgets.IndexOf(_activeGadget)]++;
+
+		if (_usageCount != int.MaxValue)
+		{
+			_usageCount--;
+		}
+		
 		_characterMovement.AddAcceleration(_activeGadget.SpeedMultiplier);
-		_distanceToDisactiveGadget = _characterMovement.CurrentDistance + _activeGadget.DistanceToDisactive;
+		_distanceToDisactiveGadget = _characterMovement.Distance + _activeGadget.DistanceToDisactive;
 	}
 
 	private void DisactiveGadget()

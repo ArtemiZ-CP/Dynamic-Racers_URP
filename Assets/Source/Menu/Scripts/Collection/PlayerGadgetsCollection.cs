@@ -1,14 +1,14 @@
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(GadgetCellArea))]
+[RequireComponent(typeof(GadgetsCollection))]
 public class PlayerGadgetsCollection : MonoBehaviour
 {
-    private GadgetCellArea _gadgetCellArea;
+    private GadgetsCollection _gadgetCellArea;
 
     private void Awake()
     {
-        _gadgetCellArea = GetComponent<GadgetCellArea>();
+        _gadgetCellArea = GetComponent<GadgetsCollection>();
     }
 
     private void OnEnable()

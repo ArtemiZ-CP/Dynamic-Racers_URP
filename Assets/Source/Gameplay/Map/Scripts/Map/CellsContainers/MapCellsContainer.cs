@@ -7,9 +7,17 @@ public class MapCellsContainer : ScriptableObject
     [SerializeField] private GroundCellsContainer _groundCellsContainer;
     [SerializeField] private WallCellsContainer _wallCellsContainer;
     [SerializeField] private WaterpoolCellsContainer _waterpoolCellsContainer;
+    [SerializeField] private MarginCellsContainer _marginCellsContainer;
+    [SerializeField] private WallMarginCellsContainer _wallMarginCellsContainer;
+    [SerializeField] private EnvironmentContainer _environmentContainer;
+    [SerializeField] private GameObject _finishPrefab;
 
     public BasisCellsContainer BasisCellsContainer => _basisCellsContainer;
     public GroundCellsContainer GroundCellsContainer => _groundCellsContainer;
     public WallCellsContainer WallCellsContainer => _wallCellsContainer;
     public WaterpoolCellsContainer WaterpoolCellsContainer => _waterpoolCellsContainer;
+    public MarginCellsContainer MarginCellsContainer => _marginCellsContainer;
+    public WallMarginCellsContainer WallMarginCellsContainer => _wallMarginCellsContainer;
+    public EnvironmentContainer EnvironmentContainer => _environmentContainer;
+    public GameObject FinishPrefab => _finishPrefab;
 }

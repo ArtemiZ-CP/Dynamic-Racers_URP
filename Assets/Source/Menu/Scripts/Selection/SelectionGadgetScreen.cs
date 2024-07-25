@@ -4,20 +4,42 @@ using UnityEngine;
 public class SelectionGadgetScreen : MonoBehaviour
 {
     [SerializeField] private MapDrawer _mapDrawer;
-    [SerializeField] private float _experienceReward = 100;
+    [SerializeField] private int _experienceReward = 100;
+    [SerializeField] private MapCellsContainer _trainingLocation;
+    [SerializeField] private MapCellsContainer _alienLocation;
     [SerializeField] private List<MapPreset> _mapPresets = new();
+    [SerializeField] private List<MapPreset> _trainingMapPresets = new();
 
-    private void OnEnable()
+    public void SetMapPreset()
     {
         RunSettings.ExperienceReward = _experienceReward;
         RunSettings.PlayerGadget = null;
-        ChooseMapPreset();
+
+        if (PlayerProgress.PassedTrainings < GlobalSettings.Instance.TrainingLevelsCount)
+        {
+            ChooseTrainingMapPreset();
+        }
+        else
+        {
+            ChooseMapPreset();
+        }
     }
 
     private void ChooseMapPreset()
     {
         MapPreset mapPreset = _mapPresets[Random.Range(0, _mapPresets.Count)];
         RunSettings.Map = mapPreset.Map;
+        RunSettings.MapCellsContainer = _alienLocation;
+        RunSettings.PlayersCount = GlobalSettings.Instance.GameplayPlayersCount;
+        _mapDrawer.DrawMap(mapPreset);
+    }
+
+    private void ChooseTrainingMapPreset()
+    {
+        MapPreset mapPreset = _trainingMapPresets[PlayerProgress.PassedTrainings];
+        RunSettings.Map = mapPreset.Map;
+        RunSettings.MapCellsContainer = _trainingLocation;
+        RunSettings.PlayersCount = GlobalSettings.Instance.TrainingPlayersCount;
         _mapDrawer.DrawMap(mapPreset);
     }
 }

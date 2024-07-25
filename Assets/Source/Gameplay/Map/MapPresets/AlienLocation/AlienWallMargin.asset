@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6221f3ea1a764ca9813eda0a3b5e187, type: 3}
+  m_Name: AlienWallMargin
+  m_EditorClassIdentifier: 
+  _startRoadMargin: {fileID: 3848698157293380671, guid: 309c1e222ac964e1ea597ff976e7b7ca,
+    type: 3}
+  _startMiddleMargin: {fileID: 3848698157293380671, guid: 4b2c0bcf6efd94cc4aff33ea7ebf89b2,
+    type: 3}
+  _startSideMargin: {fileID: 3848698157293380671, guid: 207342569cc624729ac20b4439339dc5,
+    type: 3}
+  _middleRoadMargin: {fileID: 3848698157293380671, guid: 5f2d8c37d6fbc4894a0b5b07bb55ff5a,
+    type: 3}
+  _middleMiddleMargin: {fileID: 3848698157293380671, guid: 7faffb30c7e0f456aa761b3be9573d90,
+    type: 3}
+  _middleSideMargin: {fileID: 3848698157293380671, guid: 4022287b626e14db29a2dbf01091b3ec,
+    type: 3}
+  _endRoadMargin: {fileID: 3848698157293380671, guid: 69a5503fb7e79425bb65379ab3100e6f,
+    type: 3}
+  _endMiddleMargin: {fileID: 3848698157293380671, guid: 81f11482ca52840cea958c4ab7dce571,
+    type: 3}
+  _endSideMargin: {fileID: 3848698157293380671, guid: 19eacc27a2cd946229931ebef74cea89,
+    type: 3}

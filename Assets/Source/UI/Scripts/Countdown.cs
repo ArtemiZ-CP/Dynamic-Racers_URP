@@ -10,6 +10,8 @@ public class Countdown : MonoBehaviour
 
 	public void Run()
 	{
+		gameObject.SetActive(true);
+		_countdownText.gameObject.SetActive(true);
 		StartCoroutine(StartCountdown());
 	}
 
@@ -20,7 +22,6 @@ public class Countdown : MonoBehaviour
 
 	private IEnumerator StartCountdown()
 	{
-		_countdownText.gameObject.SetActive(true);
 		float startTime = GlobalSettings.Instance.TimeToStartRun;
 		float time = startTime;
 

@@ -122,8 +122,8 @@ Material:
     - _FoadDepth: 1.21
     - _FoamDepth: 1.5
     - _FoamFalloff: 3
-    - _FoamNoiseScale: 46.53
-    - _FoamRippltSpeed: 0.05
+    - _FoamNoiseScale: 45
+    - _FoamRippltSpeed: 0.03
     - _FoamShoreWidth: 1
     - _FoamSize: 1
     - _FoamTiling: 0.1
@@ -169,18 +169,18 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BorderColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0, g: 0.15810344, b: 0.4056604, a: 0.52156866}
+    - _DeepColor: {r: 0, g: 0.4528302, b: 0.43652064, a: 0.52156866}
     - _DistTiling: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FoadSpeed: {r: 0.05, g: 0.05, b: 0, a: 0}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
     - _MoveDirection: {r: 0, g: 0, b: 0, a: 0}
-    - _RippleColor: {r: 0.22254895, g: 0.75631565, b: 0.78113204, a: 0.49411765}
+    - _RippleColor: {r: 0.2235294, g: 0.78039217, b: 0.6813265, a: 0.49411765}
     - _RippleColor_1: {r: 0, g: 1, b: 0.8894126, a: 1}
     - _RippleColor_2: {r: 0, g: 1, b: 0.8894126, a: 1}
     - _RippleColor_3: {r: 0, g: 1, b: 0.8894126, a: 1}
     - _RippleColor_4: {r: 0.2905161, g: 0.6686194, b: 0.7584905, a: 1}
-    - _ShallowColor: {r: 0, g: 0.2877327, b: 0.9716981, a: 0.52156866}
+    - _ShallowColor: {r: 0.23456192, g: 0, b: 1, a: 0.52156866}
     - _ShoreColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tiling: {r: 1, g: 1, b: 1, a: 1}

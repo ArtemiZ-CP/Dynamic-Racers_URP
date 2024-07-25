@@ -14,4 +14,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Source/Scenes/Gameplay.unity
     guid: c850ee8c3b14cc8459e7e186857cf567
+  - enabled: 1
+    path: Assets/Source/Scenes/Trainings/Training1.unity
+    guid: 896bef454585a431ea9d4d2f132734f5
+  - enabled: 1
+    path: Assets/Source/Scenes/Trainings/Training2.unity
+    guid: 6947bc82fdcaf4e2580df06629e3d40a
+  - enabled: 1
+    path: Assets/Source/Scenes/Trainings/Training3.unity
+    guid: d3696944c2cb74db482f272cf336060e
+  - enabled: 1
+    path: Assets/Source/Scenes/Trainings/Training4.unity
+    guid: 519ddd387dc0a4b49a41a38d686f8849
   m_configObjects: {}

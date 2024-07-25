@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
@@ -13,25 +12,21 @@ public class RewardMenu : MonoBehaviour
     [SerializeField] private GameObject _mainMenu;
     [SerializeField] private ActiveMenu _activeMenu;
     [SerializeField] private float _openingDelay = 0.5f;
+    [SerializeField] private AudioSource _openBoxSound;
 
-    private Queue<BoxReward> _boxRewardQueue = new();
-    private Queue<BagReward> _bagRewardQueue = new();
     private int _openStageIndex = 0;
-    private bool _isBoxOpening = false;
     private Animator _boxAnimator;
     private Animator _bagAnimator;
     private RewardContainer _currentReward;
 
-    public void AddRewardToQueue(BoxReward levelReward)
+    public void GiveRewards()
     {
-        _activeMenu.SetActiveMenu(gameObject);
-        _boxRewardQueue.Enqueue(levelReward);
-    }
+        if (PlayerProgress.IsRewardQueueEmpty)
+        {
+            CloseRewardMenu();
+        }
 
-    public void AddRewardToQueue(BagReward bagReward)
-    {
-        _activeMenu.SetActiveMenu(gameObject);
-        _bagRewardQueue.Enqueue(bagReward);
+        GiveReward(PlayerProgress.GetReward());
     }
 
     public void HandleTouch()
@@ -66,46 +61,38 @@ public class RewardMenu : MonoBehaviour
         _rewardWindow.gameObject.SetActive(false);
     }
 
-    private void Update()
+    private void GiveReward(RewardContainer reward)
     {
-        if (_isBoxOpening == false && _boxRewardQueue.Count > 0)
+        _currentReward = reward;
+
+        if (reward is BoxReward boxReward)
         {
-            _isBoxOpening = true;
-            GiveReward(_boxRewardQueue.Dequeue());
+            GiveReward(boxReward);
         }
-        else if (_isBoxOpening == false && _bagRewardQueue.Count > 0)
+        else if (reward is BagReward bagReward)
         {
-            _isBoxOpening = true;
-            GiveReward(_bagRewardQueue.Dequeue());
-        }
-        else if (_isBoxOpening == false && _boxRewardQueue.Count == 0 && _bagRewardQueue.Count == 0)
-        {
-            CloseRewardMenu();
+            GiveReward(bagReward);
         }
     }
 
-    private void GiveReward(BoxReward levelReward)
+    private void GiveReward(BoxReward boxReward)
     {
-        _currentReward = levelReward;
-
-        foreach (GadgetReward boxReward in levelReward.RewardsQueue)
+        foreach (GadgetReward newBoxReward in boxReward.RewardsQueue)
         {
-            PlayerProgress.AddGadget(boxReward.Gadget, boxReward.Count);
+            PlayerProgress.AddGadget(new Gadget(newBoxReward.Gadget, newBoxReward.Amount));
         }
 
-        _box.Init();
+        _box.Show();
     }
 
     private void GiveReward(BagReward bagReward)
     {
-        _currentReward = bagReward;
-
         foreach (CharacteristicReward characteristic in bagReward.RewardsQueue)
         {
             PlayerProgress.AddCharacteristic(characteristic.Type, characteristic.Value);
         }
 
-        _bag.Init();
+        _bag.Show();
     }
 
     private void OpenBox()
@@ -122,6 +109,8 @@ public class RewardMenu : MonoBehaviour
         }
 
         StartCoroutine(ShowRewardsOnTime());
+
+        _openBoxSound.Play();
     }
 
     private void ShowRewards()
@@ -146,7 +135,7 @@ public class RewardMenu : MonoBehaviour
             _bagAnimator.SetTrigger(Close);
         }
 
-        _isBoxOpening = false;
+        GiveRewards();
     }
 
     private void CloseRewardMenu()

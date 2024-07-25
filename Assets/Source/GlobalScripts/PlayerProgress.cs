@@ -1,19 +1,172 @@
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 public static class PlayerProgress
 {
-    public static ReadOnlyCollection<GadgetScriptableObject> PlayerGadgets => _playerGadgets.AsReadOnly();
-    public static float Experience { get; set; }
-    public static int Level { get; set; }
+    public static IReadOnlyCollection<BoxReward> BoxRewardQueue => _boxRewardQueue;
+    public static IReadOnlyCollection<BagReward> BagRewardQueue => _bagRewardQueue;
+    public static IReadOnlyList<Gadget> PlayerGadgets => _playerGadgets;
+    public static bool IsRewardQueueEmpty => _boxRewardQueue.Count == 0 && _bagRewardQueue.Count == 0;
+    public static int Experience => _experience;
+    public static int Level => _level;
+    public static int Coins => _coins;
+    public static int Diamonds => _diamonds;
+    public static int Tickets => _tickets;
+    public static int PlayerRace => _playerRace;
+    public static int PlayerDive => _playerDive;
+    public static int PlayerAscend => _playerAscend;
+    public static int PlayerGlide => _playerGlide;
+    public static int PassedTrainings => _passedTrainings;
 
-    private static List<GadgetScriptableObject> _playerGadgets = new();
+    private static Queue<BoxReward> _boxRewardQueue = new();
+    private static Queue<BagReward> _bagRewardQueue = new();
+    private static List<Gadget> _playerGadgets = new();
+    private static int _experience;
+    private static int _level;
+    private static int _coins;
+    private static int _diamonds;
+    private static int _tickets;
+    private static int _playerRace;
+    private static int _playerDive;
+    private static int _playerAscend;
+    private static int _playerGlide;
+    private static int _passedTrainings;
 
-    public static void AddGadget(GadgetScriptableObject gadget, int amount)
+    public static event Action OnCoinsChanged;
+    public static event Action OnDiamondsChanged;
+    public static event Action OnTicketsChanged;
+
+    public static void LoadData(SaveData saveData)
     {
-        if (_playerGadgets.Contains(gadget) == false)
+        _playerGadgets = saveData.PlayerGadgets;
+        _bagRewardQueue = saveData.BagRewardQueue;
+        _boxRewardQueue = saveData.BoxRewardQueue;
+        _experience = saveData.Experience;
+        _level = saveData.Level;
+        _coins = saveData.Coins;
+        _diamonds = saveData.Diamonds;
+        _tickets = saveData.Tickets;
+        _playerRace = saveData.PlayerRace;
+        _playerDive = saveData.PlayerDive;
+        _playerAscend = saveData.PlayerAscend;
+        _playerGlide = saveData.PlayerGlide;
+        _passedTrainings = saveData.TrainingsPassed;
+
+        OnCoinsChanged?.Invoke();
+        OnDiamondsChanged?.Invoke();
+        OnTicketsChanged?.Invoke();
+    }
+
+    public static void TrainingPassed()
+    {
+        _passedTrainings++;
+    }
+
+    public static bool TryToBuyWithCoins(int price)
+    {
+        if (_coins >= price)
         {
-            _playerGadgets.Add(gadget);
+            _coins -= price;
+            OnCoinsChanged?.Invoke();
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool TryToBuyWithDiamonds(int price)
+    {
+        if (_diamonds >= price)
+        {
+            _diamonds -= price;
+            OnDiamondsChanged?.Invoke();
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool TryToSpendTicket()
+    {
+        if (_tickets > 0)
+        {
+            _tickets --;
+            OnTicketsChanged?.Invoke();
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void AddCoins(int coins)
+    {
+        _coins += coins;
+        OnCoinsChanged?.Invoke();
+    }
+
+    public static void AddDiamonds(int diamonds)
+    {
+        _diamonds += diamonds;
+        OnDiamondsChanged?.Invoke();
+    }
+
+    public static void AddTickets(int tickets)
+    {
+        _tickets += tickets;
+        OnTicketsChanged?.Invoke();
+    }
+
+    public static void AddReward(RewardContainer reward)
+    {
+        if (reward is BoxReward boxReward)
+        {
+            _boxRewardQueue.Enqueue(boxReward);
+        }
+        else if (reward is BagReward bagReward)
+        {
+            _bagRewardQueue.Enqueue(bagReward);
+        }
+    }
+
+    public static RewardContainer GetReward()
+    {
+        if (_boxRewardQueue.Count > 0)
+        {
+            return _boxRewardQueue.Dequeue();
+        }
+
+        if (_bagRewardQueue.Count > 0)
+        {
+            return _bagRewardQueue.Dequeue();
+        }
+
+        return null;
+    }
+
+    public static void AddExperience(int experience)
+    {
+        _experience += experience;
+
+        int experienceToLevelUp = GlobalSettings.Instance.XPToLevelUp;
+
+        while (_experience >= experienceToLevelUp)
+        {
+            _experience -= experienceToLevelUp;
+            _level++;
+        }
+    }
+
+    public static void AddGadget(Gadget gadget)
+    {
+        Gadget playerGadget = _playerGadgets.Find(g => g.GadgetScriptableObject == gadget.GadgetScriptableObject);
+
+        if (playerGadget == null)
+        {
+            _playerGadgets.Add(new Gadget(gadget));
+        }
+        else
+        {
+            playerGadget.AddAmount(gadget.GetAmount());
         }
     }
 
@@ -22,17 +175,34 @@ public static class PlayerProgress
         switch (characteristicType)
         {
             case CharacteristicType.Ascend:
-                PlayerCharacteristics.PlayerAscend += amount;
+                _playerAscend += amount;
                 break;
             case CharacteristicType.Dive:
-                PlayerCharacteristics.PlayerDive += amount;
+                _playerDive += amount;
                 break;
             case CharacteristicType.Glide:
-                PlayerCharacteristics.PlayerGlide += amount;
+                _playerGlide += amount;
                 break;
             case CharacteristicType.Race:
-                PlayerCharacteristics.PlayerRace += amount;
+                _playerRace += amount;
                 break;
+        }
+    }
+
+    public static int GetUpgradeAmount(ChunkType chunkType)
+    {
+        switch (chunkType)
+        {
+            case ChunkType.Ground:
+                return PlayerRace;
+            case ChunkType.Water:
+                return PlayerDive;
+            case ChunkType.Wall:
+                return PlayerAscend;
+            case ChunkType.Fly:
+                return PlayerGlide;
+            default:
+                return 0;
         }
     }
 }

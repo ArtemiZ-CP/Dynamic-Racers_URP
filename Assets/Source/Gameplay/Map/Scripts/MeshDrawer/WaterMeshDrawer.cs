@@ -1,33 +1,28 @@
 using UnityEngine;
 
+[ExecuteAlways]
+[RequireComponent(typeof(BasisMeshDrawer))]
 public class WaterMeshDrawer : ChunkMeshDrawer
 {
-	[SerializeField] private BasisMeshDrawer _basisMeshDrawer;
-	[SerializeField] private WaterpoolCellsContainer _waterpoolCellsContainer;
+	private BasisMeshDrawer _basisMeshDrawer;
 
-	public override Vector3Int SpawnMesh(Vector3Int size)
+	public override Vector3Int SpawnMesh(Vector3Int size, MapCellsContainer mapCellsContainer, bool emptyBefore, bool emptyAfter)
 	{
-		SetSetting();
-		_basisMeshDrawer.SpawnMesh(size);
-		size = base.SpawnMesh(size);
-		SpawnWaterpool(size);
+		_basisMeshDrawer.SpawnMesh(size, mapCellsContainer, emptyBefore, emptyAfter);
+		size = base.SpawnMesh(size, mapCellsContainer, emptyBefore, emptyAfter);
+		SpawnWaterpool(size, mapCellsContainer.WaterpoolCellsContainer, mapCellsContainer.MarginCellsContainer, emptyBefore, emptyAfter);
 
 		return size;
 	}
 
-	private void SetSetting()
+	private void Awake()
 	{
-		MapCellsContainer mapCellsContainer = RunSettings.MapSetting;
-
-		if (mapCellsContainer != null)
-		{
-			_waterpoolCellsContainer = RunSettings.MapSetting.WaterpoolCellsContainer;
-		}
+		_basisMeshDrawer = GetComponent<BasisMeshDrawer>();
 	}
 
-	private void SpawnWaterpool(Vector3Int size)
+	private void SpawnWaterpool(Vector3Int size, WaterpoolCellsContainer waterpoolCellsContainer, MarginCellsContainer marginCellsContainer, bool emptyBefore, bool emptyAfter)
 	{
-		int min = GlobalSettings.Instance.ChunkMargin - 1;
+		int min = GlobalSettings.Instance.ChunkMargin;
 		int max = size.x - 1 - min;
 
 		for (int x = 0; x < size.x; x++)
@@ -38,30 +33,30 @@ public class WaterMeshDrawer : ChunkMeshDrawer
 			{
 				if (x == 0)
 				{
-					SpawnMarginLine(xPosition, size.z, MarginsOffset.Side, mirror: false);
+					SpawnMarginLine(xPosition, size.z, MarginsOffset.Side, mirror: false, marginCellsContainer, emptyBefore, emptyAfter);
 				}
 				else if (x == min - 1)
 				{
-					SpawnMarginLine(xPosition, size.z, MarginsOffset.Road, mirror: false);
+					SpawnMarginLine(xPosition, size.z, MarginsOffset.Road, mirror: false, marginCellsContainer, emptyBefore, emptyAfter);
 				}
 				else
 				{
-					SpawnMarginLine(xPosition, size.z, MarginsOffset.Middle, mirror: false);
+					SpawnMarginLine(xPosition, size.z, MarginsOffset.Middle, mirror: false, marginCellsContainer, emptyBefore, emptyAfter);
 				}
 			}
 			else if (x > max)
 			{
 				if (x == size.x - 1)
 				{
-					SpawnMarginLine(xPosition, size.z, MarginsOffset.Side, mirror: true);
+					SpawnMarginLine(xPosition, size.z, MarginsOffset.Side, mirror: true, marginCellsContainer, emptyBefore, emptyAfter);
 				}
 				else if (x == max + 1)
 				{
-					SpawnMarginLine(xPosition, size.z, MarginsOffset.Road, mirror: true);
+					SpawnMarginLine(xPosition, size.z, MarginsOffset.Road, mirror: true, marginCellsContainer, emptyBefore, emptyAfter);
 				}
 				else
 				{
-					SpawnMarginLine(xPosition, size.z, MarginsOffset.Middle, mirror: true);
+					SpawnMarginLine(xPosition, size.z, MarginsOffset.Middle, mirror: true, marginCellsContainer, emptyBefore, emptyAfter);
 				}
 			}
 			else
@@ -69,44 +64,44 @@ public class WaterMeshDrawer : ChunkMeshDrawer
 				if (x == min)
 				{
 					SpawnLine(xPosition, size.z, mirror: false,
-					_waterpoolCellsContainer.StartSide,
-					_waterpoolCellsContainer.MiddleSide);
+					waterpoolCellsContainer.StartSide,
+					waterpoolCellsContainer.MiddleSide, emptyBefore, emptyAfter);
 				}
 				else if (x == max)
 				{
 					SpawnLine(xPosition, size.z, mirror: true,
-					_waterpoolCellsContainer.StartSide,
-					_waterpoolCellsContainer.MiddleSide);
+					waterpoolCellsContainer.StartSide,
+					waterpoolCellsContainer.MiddleSide, emptyBefore, emptyAfter);
 				}
 				else
 				{
 					SpawnLine(xPosition, size.z, mirror: false,
-					_waterpoolCellsContainer.StartMiddle,
-					_waterpoolCellsContainer.MiddleMiddle);
+					waterpoolCellsContainer.StartMiddle,
+					waterpoolCellsContainer.MiddleMiddle, emptyBefore, emptyAfter);
 				}
 			}
 		}
 	}
 
-	private void SpawnMarginLine(float xPosition, int lenght, MarginsOffset marginsOffset, bool mirror)
+	private void SpawnMarginLine(float xPosition, int lenght, MarginsOffset marginsOffset, bool mirror, MarginCellsContainer marginCellsContainer, bool emptyBefore, bool emptyAfter)
 	{
 		GameObject start = null;
 		GameObject middle = null;
 
 		if (marginsOffset == MarginsOffset.Road)
 		{
-			start = _waterpoolCellsContainer.StartRoadMargin;
-			middle = _waterpoolCellsContainer.RoadMargin;
+			start = marginCellsContainer.StartRoadMargin;
+			middle = marginCellsContainer.MiddleRoadMargin;
 		}
 		else if (marginsOffset == MarginsOffset.Middle)
 		{
-			start = _waterpoolCellsContainer.StartMiddleMargin;
-			middle = _waterpoolCellsContainer.MiddleMargin;
+			start = marginCellsContainer.StartMiddleMargin;
+			middle = marginCellsContainer.MiddleMiddleMargin;
 		}
 		else if (marginsOffset == MarginsOffset.Side)
 		{
-			start = _waterpoolCellsContainer.StartSideMargin;
-			middle = _waterpoolCellsContainer.SideMargin;
+			start = marginCellsContainer.StartSideMargin;
+			middle = marginCellsContainer.MiddleSideMargin;
 		}
 
 		Vector3 size = new(1, 1, 1);
@@ -120,17 +115,17 @@ public class WaterMeshDrawer : ChunkMeshDrawer
 		{
 			if (z == 0)
 			{
-				SpawnCell(start, new Vector3(xPosition, 0, z), size);
+				SpawnCell(start, new Vector3(xPosition, 0, z), size, emptyBefore, emptyAfter);
 			}
 			else if (z == lenght - 1)
 			{
 				size.z *= -1;
-				SpawnCell(start, new Vector3(xPosition, 0, z), size);
+				SpawnCell(start, new Vector3(xPosition, 0, z), size, emptyBefore, emptyAfter);
 				size.z *= -1;
 			}
 			else
 			{
-				SpawnCell(middle, new Vector3(xPosition, 0, z), size);
+				SpawnCell(middle, new Vector3(xPosition, 0, z), size, emptyBefore, emptyAfter);
 			}
 		}
 	}

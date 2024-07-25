@@ -33,7 +33,19 @@ public class MapDrawer : MonoBehaviour
     public void DrawMap(MapPreset mapPreset)
     {
         _mapPreset = mapPreset;
-        DrawMap();
+
+        if (isActiveAndEnabled)
+        {
+            DrawMap();
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (_mapPreset != null)
+        {
+            DrawMap();
+        }
     }
 
     private void ClearMap()

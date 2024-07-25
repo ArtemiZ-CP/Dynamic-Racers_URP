@@ -12,10 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 734bbbda1f2f8ee4694f66a841dca8d1, type: 3}
   m_Name: GlobalSettings
   m_EditorClassIdentifier: 
+  _XPToLevelUp: 100
+  _gameplayPlayersCount: 6
+  _maxTickets: 5
+  _trainingLevelsCount: 4
+  _trainingPlayersCount: 4
+  _gadgetsLevelProgression: 02000000050000000a000000140000003200000064000000
+  _allGadgets:
+  - {fileID: 11400000, guid: 1aabc42c94adc408886e2b8c1d1b3311, type: 2}
+  - {fileID: 11400000, guid: f93b7918fa1d440f2a0628e7dd33cda0, type: 2}
+  - {fileID: 11400000, guid: 01840f12431394904abbed67736be3ad, type: 2}
+  - {fileID: 11400000, guid: 12bd93db0530940bb89ae2eacb7a4e04, type: 2}
   _baseSpeed: 5
-  _additionalSpeedByUpgrade: 0.01
+  _additionalSpeedByUpgrade: 0.05
   _timeToStartRun: 5
   _distanceToStartPower: 15
+  _characterStartOffset: 3
   _startPowerCurve:
     serializedVersion: 2
     m_Curve:
@@ -42,7 +54,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _fallAngle: 45
   _chunkMargin: 4
+  _additionalRoadWidht: 1
   _roadsOffset: 2
   _minRoadLength: 3
   _minRoadsCount: 3
-  _halfBoardLength: 3

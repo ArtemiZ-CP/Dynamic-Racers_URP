@@ -15,9 +15,9 @@ public class UpgradeUI : MonoBehaviour
 
 	private void SetText()
 	{
-		_raceText.text = PlayerCharacteristics.PlayerRace.ToString();
-		_diveText.text = PlayerCharacteristics.PlayerDive.ToString();
-		_ascendText.text = PlayerCharacteristics.PlayerAscend.ToString();
-		_glideText.text = PlayerCharacteristics.PlayerGlide.ToString();
+		_raceText.text = PlayerProgress.PlayerRace.ToString();
+		_diveText.text = PlayerProgress.PlayerDive.ToString();
+		_ascendText.text = PlayerProgress.PlayerAscend.ToString();
+		_glideText.text = PlayerProgress.PlayerGlide.ToString();
 	}
 }

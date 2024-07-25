@@ -8,14 +8,14 @@ public class GadgetCellLine : MonoBehaviour
 
     [SerializeField] private GadgetCell _gadgetCellPrefab;
 
-    private List<GadgetScriptableObject> _gadgets;
+    private List<Gadget> _gadgets;
     private List<GadgetCell> _gadgetCells = new();
     private RectTransform _gadgetCellLine;
     private int _gadgetsCount;
 
-    public List<GadgetCell> GadgetCells => _gadgetCells;
+    public IReadOnlyList<GadgetCell> GadgetCells => _gadgetCells;
 
-    public void Init(List<GadgetScriptableObject> gadgets, ISelectableGadget clickGadget)
+    public void Init(List<Gadget> gadgets, int foundGadgetsCount, IClickableGadget clickGadget)
     {
         _gadgetCells.Clear();
         _gadgets = gadgets;
@@ -24,8 +24,16 @@ public class GadgetCellLine : MonoBehaviour
         for (int i = 0; i < _gadgets.Count; i++)
         {
             GadgetCell gadgetCell = Instantiate(_gadgetCellPrefab, transform);
-            gadgetCell.Init(_gadgets[i], clickGadget);
             _gadgetCells.Add(gadgetCell);
+
+            if (i < foundGadgetsCount)
+            {
+                gadgetCell.Init(_gadgets[i], true, clickGadget, fixVerticalSize: true);
+            }
+            else
+            {
+                gadgetCell.Init(_gadgets[i], false, clickGadget, fixVerticalSize: true);
+            }
         }
     }
 

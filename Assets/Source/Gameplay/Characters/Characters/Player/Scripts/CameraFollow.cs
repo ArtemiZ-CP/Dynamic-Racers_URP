@@ -6,7 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(CinemachineVirtualCamera))]
 public class CameraFollow : MonoBehaviour
 {
-	[SerializeField] private Transform _target;
 	[SerializeField] private PlayerMovement _playerMovement;
 	[SerializeField] private Transform _startPoint;
 	[Header("Moves")]
@@ -14,11 +13,10 @@ public class CameraFollow : MonoBehaviour
 	[SerializeField] private List<MoveData> _groundMoves;
 	[SerializeField] private List<MoveData> _wallMoves;
 	[SerializeField] private List<MoveData> _flyMoves;
-	[SerializeField] private float _distanceToFinish;
-	[SerializeField] private List<MoveData> _finishMoves;
+	[SerializeField] private MoveData _finishMove;
 
 	private CinemachineVirtualCamera _virtualCamera;
-	private ChunkType _lastChunkType;
+	private Chunk _currentChunk;
 	private bool _isFinishing = false;
 
 	public CinemachineVirtualCamera VirtualCamera => _virtualCamera;
@@ -33,40 +31,48 @@ public class CameraFollow : MonoBehaviour
 
 	private void Update()
 	{
-		if (_isFinishing == false && _playerMovement.DistanceToFinish() < _distanceToFinish)
+		if (_isFinishing == false
+		&& _playerMovement.DistanceToFinish() / _playerMovement.Speed < DistanceToFinish() / (_finishMove.Speed * _speedMultiplier))
 		{
 			_isFinishing = true;
 			StopAllCoroutines();
-			StartCoroutine(Move(_finishMoves));
+			StartCoroutine(Move(_finishMove));
 		}
 	}
 
 	private void OnEnable()
 	{
-		_playerMovement.OnChangeChunkType += OnChangeChunkType;
+		_playerMovement.OnChangeChunk += OnChangeChunk;
 	}
 
 	private void OnDisable()
 	{
-		_playerMovement.OnChangeChunkType -= OnChangeChunkType;
+		_playerMovement.OnChangeChunk -= OnChangeChunk;
+	}
+	private float DistanceToFinish()
+	{
+		return Vector3.Distance(transform.position, _finishMove.Transform.position);
 	}
 
-	private void OnChangeChunkType(ChunkType chunkType)
+	private void OnChangeChunk(Chunk newChunk, CharacterMovement characterMovement)
 	{
 		if (_isFinishing)
 		{
 			return;
 		}
 
-		if ((_lastChunkType == ChunkType.Ground || _lastChunkType == ChunkType.Water)
-			&& (chunkType == ChunkType.Ground || chunkType == ChunkType.Water))
+		if (_currentChunk != null && newChunk != null)
 		{
-			return;
+			if ((_currentChunk.Type == ChunkType.Ground || _currentChunk.Type == ChunkType.Water)
+				&& (newChunk.Type == ChunkType.Ground || newChunk.Type == ChunkType.Water))
+			{
+				return;
+			}
 		}
 
 		StopAllCoroutines();
 
-		switch (chunkType)
+		switch (newChunk.Type)
 		{
 			case ChunkType.Start:
 				break;
@@ -86,21 +92,26 @@ public class CameraFollow : MonoBehaviour
 				break;
 		}
 
-		_lastChunkType = chunkType;
+		_currentChunk = newChunk;
 	}
 
 	private IEnumerator Move(List<MoveData> moves)
 	{
 		foreach (var move in moves)
 		{
-			if (move.IsMoveImmediately)
-			{
-				transform.position = move.Transform.position;
-			}
-			else
-			{
-				yield return StartCoroutine(MoveTo(move.Transform, move.Speed * _speedMultiplier));
-			}
+			yield return Move(move);
+		}
+	}
+
+	private IEnumerator Move(MoveData move)
+	{
+		if (move.IsMoveImmediately)
+		{
+			transform.position = move.Transform.position;
+		}
+		else
+		{
+			yield return StartCoroutine(MoveTo(move.Transform, move.Speed * _speedMultiplier));
 		}
 	}
 

@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(GadgetCellArea))]
-public class SelectGadgetArea : MonoBehaviour, ISelectableGadget
+[RequireComponent(typeof(GadgetsCollection))]
+public class SelectGadgetArea : MonoBehaviour, IClickableGadget
 {
     private const string FoundTitle = "Found";
 
-    private GadgetCellArea _gadgetCellArea;
+    private GadgetsCollection _gadgetCellArea;
 
-    public void SelectGadget(GadgetScriptableObject gadget)
+    public void Click(GadgetScriptableObject gadget)
     {
         List<GadgetCellLine> gadgetLines = _gadgetCellArea.GadgetLines;
 
@@ -20,20 +20,26 @@ public class SelectGadgetArea : MonoBehaviour, ISelectableGadget
                 cell.Deselect();
             }
 
-            GadgetCellLine gadgetCellLine = gadgetLines.Find(gadgetLine => gadgetLine.GadgetCells.Exists(gadgetCell => gadgetCell.Gadget == gadget));
-            gadgetCellLine.GadgetCells.Find(gadgetCell => gadgetCell.Gadget == gadget).Select();
+            GadgetCellLine gadgetCellLine = 
+            gadgetLines.Find(gadgetLine => 
+            gadgetLine.GadgetCells.ToList().Exists(gadgetCell => 
+            gadgetCell.Gadget.GadgetScriptableObject == gadget));
+
+            gadgetCellLine.GadgetCells.ToList().Find(gadgetCell => 
+            gadgetCell.Gadget.GadgetScriptableObject == gadget).Select();
+            
             RunSettings.PlayerGadget = gadget;
         }
     }
 
     private void Awake()
     {
-        _gadgetCellArea = GetComponent<GadgetCellArea>();
+        _gadgetCellArea = GetComponent<GadgetsCollection>();
     }
 
     private void OnEnable()
     {
         _gadgetCellArea.InitCells(PlayerProgress.PlayerGadgets.ToList(), this);
-        SelectGadget(RunSettings.PlayerGadget);
+        Click(RunSettings.PlayerGadget);
     }
 }

@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class BagReward : RewardContainer
 {
-    public Queue<CharacteristicReward> RewardsQueue { get; }
+    [SerializeField] private List<CharacteristicReward> _rewards;
 
-    public BagReward(Queue<CharacteristicReward> rewards)
+    public List<CharacteristicReward> RewardsQueue => _rewards;
+
+    public BagReward(List<CharacteristicReward> rewards)
     {
-        RewardsQueue = rewards;
+        _rewards = new List<CharacteristicReward>(rewards);
     }
 }

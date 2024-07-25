@@ -2,15 +2,26 @@ using UnityEngine;
 
 public class EndGame : MonoBehaviour
 {
-    [SerializeField] private GameObject _endGamePanel;
+    [SerializeField] private EndGamePanel _endGamePanel;
 
-    public void Run()
+    public void AddPlayerFinisher(CharacterMovement characterMovement)
     {
-        _endGamePanel.SetActive(true);
+        AddFinisher(characterMovement);
+        Show();
+    }
+
+    public void AddFinisher(CharacterMovement characterMovement)
+    {
+        _endGamePanel.AddFinisher(characterMovement.name);
     }
 
     private void Awake()
     {
-        _endGamePanel.SetActive(false);
+        _endGamePanel.gameObject.SetActive(false);
+    }
+
+    private void Show()
+    {
+        _endGamePanel.gameObject.SetActive(true);
     }
 }

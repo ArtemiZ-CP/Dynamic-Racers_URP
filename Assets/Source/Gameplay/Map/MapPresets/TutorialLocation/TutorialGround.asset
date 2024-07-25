@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b168f046537144289cf2439aeaedda2, type: 3}
+  m_Name: TutorialGround
+  m_EditorClassIdentifier: 
+  _startMiddle: {fileID: 6265250116202855287, guid: af3eac7448a424d4fb4b5f52eb1515eb,
+    type: 3}
+  _middleMiddle: {fileID: 6265250116202855287, guid: f55e2e19a93474b3fba50489cefbcb14,
+    type: 3}
+  _startSide: {fileID: 6265250116202855287, guid: 11c1d788bf96e42379a2ee734d4dd70b,
+    type: 3}
+  _middleSide: {fileID: 6265250116202855287, guid: 485c24315b8e24c6c919ebd56763a980,
+    type: 3}

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6221f3ea1a764ca9813eda0a3b5e187, type: 3}
+  m_Name: TutorialWallMargin
+  m_EditorClassIdentifier: 
+  _startRoadMargin: {fileID: 3848698157293380671, guid: d4753195dacec41afade2076611aefc3,
+    type: 3}
+  _startMiddleMargin: {fileID: 3848698157293380671, guid: 5b391ac363c294a0583388c8e4efe07f,
+    type: 3}
+  _startSideMargin: {fileID: 3848698157293380671, guid: ae1309a3a901e4234ab67ff392622caf,
+    type: 3}
+  _middleRoadMargin: {fileID: 3848698157293380671, guid: 9d5a016cbd8bb4554af1710d7864e0d1,
+    type: 3}
+  _middleMiddleMargin: {fileID: 3848698157293380671, guid: 709ae5066bd724e9999c8f3a5aceee27,
+    type: 3}
+  _middleSideMargin: {fileID: 3848698157293380671, guid: 424411e1ead464ef191f8c3db47cdcfc,
+    type: 3}
+  _endRoadMargin: {fileID: 3848698157293380671, guid: e993bc94493fa4a0aa7e336993979569,
+    type: 3}
+  _endMiddleMargin: {fileID: 3848698157293380671, guid: 9b0b393f6091f434e900a8d2f344f0df,
+    type: 3}
+  _endSideMargin: {fileID: 3848698157293380671, guid: 6100e1025664c4ebc907311e0322441f,
+    type: 3}

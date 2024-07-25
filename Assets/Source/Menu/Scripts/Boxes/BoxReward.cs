@@ -5,12 +5,12 @@ using UnityEngine;
 [Serializable]
 public class BoxReward : RewardContainer
 {
-    [SerializeField] private List<GadgetReward> _boxRewards;
+    [SerializeField] private List<GadgetReward> _rewards;
 
-    public Queue<GadgetReward> RewardsQueue => new(_boxRewards);
+    public List<GadgetReward> RewardsQueue => _rewards;
 
-    public BoxReward(Queue<GadgetReward> boxRewards)
+    public BoxReward(List<GadgetReward> rewards)
     {
-        _boxRewards = new List<GadgetReward>(boxRewards);
+        _rewards = new List<GadgetReward>(rewards);
     }
 }

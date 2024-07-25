@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Box : MonoBehaviour
 {
-    public void Init()
+    public void Show()
     {
         gameObject.SetActive(true);
     }

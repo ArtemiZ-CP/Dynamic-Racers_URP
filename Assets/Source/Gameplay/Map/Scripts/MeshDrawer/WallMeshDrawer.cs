@@ -1,37 +1,30 @@
 using UnityEngine;
 
+[ExecuteAlways]
+[RequireComponent(typeof(BasisMeshDrawer))]
 public class WallMeshDrawer : ChunkMeshDrawer
 {
-	private const int CarpetOffset = 1;
-
-	[SerializeField] private BasisMeshDrawer _basisMeshDrawer;
-	[SerializeField] private WallCellsContainer _wallCellsContainer;
-
-	public override Vector3Int SpawnMesh(Vector3Int size)
+	private BasisMeshDrawer _basisMeshDrawer;
+	
+	public override Vector3Int SpawnMesh(Vector3Int size, MapCellsContainer mapCellsContainer, bool emptyBefore, bool emptyAfter)
 	{
-		size.z = 2;
-		
-		SetSetting();
-		_basisMeshDrawer.SpawnMesh(size);
-		size = base.SpawnMesh(size);
-		SpawnWall(size);
+		size.z = 3;
+
+		_basisMeshDrawer.SpawnMesh(size, mapCellsContainer, emptyBefore, emptyAfter);
+		size = base.SpawnMesh(size, mapCellsContainer, emptyBefore, emptyAfter);
+		SpawnWall(size, mapCellsContainer.WallCellsContainer, mapCellsContainer.WallMarginCellsContainer, emptyBefore, emptyAfter);
 
 		return size;
 	}
 
-    private void SetSetting()
-    {
-        MapCellsContainer mapCellsContainer = RunSettings.MapSetting;
-
-        if (mapCellsContainer != null)
-        {
-            _wallCellsContainer = RunSettings.MapSetting.WallCellsContainer;
-        }
-    }
-
-	private void SpawnWall(Vector3Int size)
+	private void Awake()
 	{
-		int min = GlobalSettings.Instance.ChunkMargin - 1;
+		_basisMeshDrawer = GetComponent<BasisMeshDrawer>();
+	}
+
+	private void SpawnWall(Vector3Int size, WallCellsContainer wallCellsContainer, WallMarginCellsContainer wallMarginCellsContainer, bool emptyBefore, bool emptyAfter)
+	{
+		int min = GlobalSettings.Instance.ChunkMargin;
 		int max = size.x - 1 - min;
 
 		for (int x = 0; x < size.x; x++)
@@ -42,30 +35,30 @@ public class WallMeshDrawer : ChunkMeshDrawer
 			{
 				if (x == 0)
 				{
-					SpawnMarginLine(xPosition, size.y, MarginsOffset.Side, mirror: false);
+					SpawnMarginLine(xPosition, size.y, MarginsOffset.Side, mirror: false, wallMarginCellsContainer, emptyBefore, emptyAfter);
 				}
 				else if (x == min - 1)
 				{
-					SpawnMarginLine(xPosition, size.y, MarginsOffset.Road, mirror: false);
+					SpawnMarginLine(xPosition, size.y, MarginsOffset.Road, mirror: false, wallMarginCellsContainer, emptyBefore, emptyAfter);
 				}
 				else
 				{
-					SpawnMarginLine(xPosition, size.y, MarginsOffset.Middle, mirror: false);
+					SpawnMarginLine(xPosition, size.y, MarginsOffset.Middle, mirror: false, wallMarginCellsContainer, emptyBefore, emptyAfter);
 				}
 			}
 			else if (x > max)
 			{
 				if (x == size.x - 1)
 				{
-					SpawnMarginLine(xPosition, size.y, MarginsOffset.Side, mirror: true);
+					SpawnMarginLine(xPosition, size.y, MarginsOffset.Side, mirror: true, wallMarginCellsContainer, emptyBefore, emptyAfter);
 				}
 				else if (x == max + 1)
 				{
-					SpawnMarginLine(xPosition, size.y, MarginsOffset.Road, mirror: true);
+					SpawnMarginLine(xPosition, size.y, MarginsOffset.Road, mirror: true, wallMarginCellsContainer, emptyBefore, emptyAfter);
 				}
 				else
 				{
-					SpawnMarginLine(xPosition, size.y, MarginsOffset.Middle, mirror: true);
+					SpawnMarginLine(xPosition, size.y, MarginsOffset.Middle, mirror: true, wallMarginCellsContainer, emptyBefore, emptyAfter);
 				}
 			}
 			else
@@ -73,29 +66,29 @@ public class WallMeshDrawer : ChunkMeshDrawer
 				if (x == min)
 				{
 					SpawnWallLine(xPosition, size.y, mirror: false,
-					_wallCellsContainer.StartSide,
-					_wallCellsContainer.MiddleSide,
-					_wallCellsContainer.EndSide);
+					wallCellsContainer.StartSide,
+					wallCellsContainer.MiddleSide,
+					wallCellsContainer.EndSide, emptyBefore, emptyAfter);
 				}
 				else if (x == max)
 				{
 					SpawnWallLine(xPosition, size.y, mirror: true,
-					_wallCellsContainer.StartSide,
-					_wallCellsContainer.MiddleSide,
-					_wallCellsContainer.EndSide);
+					wallCellsContainer.StartSide,
+					wallCellsContainer.MiddleSide,
+					wallCellsContainer.EndSide, emptyBefore, emptyAfter);
 				}
 				else
 				{
 					SpawnWallLine(xPosition, size.y, mirror: false,
-					_wallCellsContainer.StartMiddle,
-					_wallCellsContainer.MiddleMiddle,
-					_wallCellsContainer.EndMiddle);
+					wallCellsContainer.StartMiddle,
+					wallCellsContainer.MiddleMiddle,
+					wallCellsContainer.EndMiddle, emptyBefore, emptyAfter);
 				}
 			}
 		}
 	}
 
-	private void SpawnMarginLine(float xPosition, int lenght, MarginsOffset marginsOffset, bool mirror)
+	private void SpawnMarginLine(float xPosition, int lenght, MarginsOffset marginsOffset, bool mirror, WallMarginCellsContainer wallMarginCellsContainer, bool emptyBefore, bool emptyAfter)
 	{
 		GameObject start = null;
 		GameObject middle = null;
@@ -103,23 +96,23 @@ public class WallMeshDrawer : ChunkMeshDrawer
 
 		if (marginsOffset == MarginsOffset.Road)
 		{
-			start = _wallCellsContainer.StartRoadMargin;
-			middle = _wallCellsContainer.RoadMargin;
-			end = _wallCellsContainer.EndRoadMargin;
+			start = wallMarginCellsContainer.StartRoadMargin;
+			middle = wallMarginCellsContainer.MiddleRoadMargin;
+			end = wallMarginCellsContainer.EndRoadMargin;
 		}
 		else if (marginsOffset == MarginsOffset.Middle)
 		{
-			start = _wallCellsContainer.StartMiddleMargin;
-			middle = _wallCellsContainer.MiddleMargin;
-			end = _wallCellsContainer.EndMiddleMargin;
+			start = wallMarginCellsContainer.StartMiddleMargin;
+			middle = wallMarginCellsContainer.MiddleMiddleMargin;
+			end = wallMarginCellsContainer.EndMiddleMargin;
 		}
 		else if (marginsOffset == MarginsOffset.Side)
 		{
-			start = _wallCellsContainer.StartSideMargin;
-			middle = _wallCellsContainer.SideMargin;
-			end = _wallCellsContainer.EndSideMargin;
+			start = wallMarginCellsContainer.StartSideMargin;
+			middle = wallMarginCellsContainer.MiddleSideMargin;
+			end = wallMarginCellsContainer.EndSideMargin;
 		}
-		
+
 		Vector3 size = new(1, 1, 1);
 
 		if (mirror)
@@ -131,15 +124,15 @@ public class WallMeshDrawer : ChunkMeshDrawer
 		{
 			if (y == 1)
 			{
-				SpawnCell(start, new Vector3(xPosition, y, 1), size);
+				SpawnCell(start, new Vector3(xPosition, y, 1), size, emptyBefore, emptyAfter);
 			}
 			else if (y == lenght)
 			{
-				SpawnCell(end, new Vector3(xPosition, y, 1), size);
+				SpawnCell(end, new Vector3(xPosition, y, 1), size, emptyBefore, emptyAfter);
 			}
 			else
 			{
-				SpawnCell(middle, new Vector3(xPosition, y, 1), size);
+				SpawnCell(middle, new Vector3(xPosition, y, 1), size, emptyBefore, emptyAfter);
 			}
 		}
 	}
