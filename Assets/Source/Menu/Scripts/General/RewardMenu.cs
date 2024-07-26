@@ -6,8 +6,8 @@ public class RewardMenu : MonoBehaviour
     private readonly int IsTouched = Animator.StringToHash(nameof(IsTouched));
     private readonly int Close = Animator.StringToHash(nameof(Close));
 
-    [SerializeField] private Box _box;
-    [SerializeField] private Bag _bag;
+    [SerializeField] private Animator _box;
+    [SerializeField] private Animator _bag;
     [SerializeField] private RewardWindow _rewardWindow;
     [SerializeField] private GameObject _mainMenu;
     [SerializeField] private ActiveMenu _activeMenu;
@@ -15,8 +15,7 @@ public class RewardMenu : MonoBehaviour
     [SerializeField] private AudioSource _openBoxSound;
 
     private int _openStageIndex = 0;
-    private Animator _boxAnimator;
-    private Animator _bagAnimator;
+    private Animator _currentAnimator;
     private RewardContainer _currentReward;
 
     public void GiveRewards()
@@ -53,9 +52,6 @@ public class RewardMenu : MonoBehaviour
 
     private void Awake()
     {
-        _boxAnimator = _box.GetComponent<Animator>();
-        _bagAnimator = _bag.GetComponent<Animator>();
-
         _box.gameObject.SetActive(false);
         _bag.gameObject.SetActive(false);
         _rewardWindow.gameObject.SetActive(false);
@@ -82,7 +78,8 @@ public class RewardMenu : MonoBehaviour
             PlayerProgress.AddGadget(new Gadget(newBoxReward.Gadget, newBoxReward.Amount));
         }
 
-        _box.Show();
+        _box.gameObject.SetActive(true);
+        _currentAnimator = _box; 
     }
 
     private void GiveReward(BagReward bagReward)
@@ -92,21 +89,15 @@ public class RewardMenu : MonoBehaviour
             PlayerProgress.AddCharacteristic(characteristic.Type, characteristic.Value);
         }
 
-        _bag.Show();
+        _bag.gameObject.SetActive(true);
+        _currentAnimator = _bag;
     }
 
     private void OpenBox()
     {
         _openStageIndex = 1;
 
-        if (_currentReward is BoxReward)
-        {
-            _boxAnimator.SetTrigger(IsTouched);
-        }
-        else if (_currentReward is BagReward)
-        {
-            _bagAnimator.SetTrigger(IsTouched);
-        }
+        _currentAnimator.SetTrigger(IsTouched);
 
         StartCoroutine(ShowRewardsOnTime());
 
@@ -117,8 +108,7 @@ public class RewardMenu : MonoBehaviour
     {
         _openStageIndex = 2;
         _rewardWindow.ShowReward(_currentReward);
-        _box.Hide();
-        _bag.Hide();
+        _currentAnimator.gameObject.SetActive(false);
     }
 
     private void CloseBox()
@@ -126,14 +116,7 @@ public class RewardMenu : MonoBehaviour
         _openStageIndex = 0;
         _rewardWindow.Hide();
 
-        if (_currentReward is BoxReward)
-        {
-            _boxAnimator.SetTrigger(Close);
-        }
-        else if (_currentReward is BagReward)
-        {
-            _bagAnimator.SetTrigger(Close);
-        }
+        _currentAnimator.SetTrigger(Close);
 
         GiveRewards();
     }
