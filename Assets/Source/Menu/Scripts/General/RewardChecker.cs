@@ -14,7 +14,7 @@ public class RewardChecker : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerProgress.IsRewardQueueEmpty == false && _rewardMenu.gameObject.activeInHierarchy == false)
+        if (PlayerData.IsRewardQueueEmpty == false && _rewardMenu.gameObject.activeInHierarchy == false)
         {
             _activeMenu.SetActiveMenu(_rewardMenu.gameObject);
             _rewardMenu.GiveRewards();

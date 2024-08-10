@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GlobalSettings", menuName = "Settings/Global", order = 1)]
@@ -10,12 +11,17 @@ public class GlobalSettings : ScriptableObject
     [SerializeField, Min(1)] private int _XPToLevelUp;
 	[SerializeField] private int _gameplayPlayersCount; 
 	[SerializeField] private int _maxTickets;
+	[SerializeField] private int _minFPS = 30;
+	[SerializeField] private int _maxFPS = 30;
+	[Header("Shop")]
+	[SerializeField] private BoxReward.ChestSprite[] _boxSprites;
 	[Header("Training")]
 	[SerializeField] private int _trainingLevelsCount; 
 	[SerializeField] private int _trainingPlayersCount; 
 	[Header("Gadgets")]
-	[SerializeField] private List<int> _gadgetsLevelProgression;
-	[SerializeField] private List<GadgetScriptableObject> _allGadgets;
+	[SerializeField] private int[] _gadgetsLevelProgression;
+	[SerializeField] private GadgetScriptableObject[] _allGadgets;
+	[SerializeField] private Sprite[] _gadgetRareBackgrounds;
 	[Header("Character Speed")]
 	[SerializeField, Min(0)] private float _baseSpeed = 1;
 	[SerializeField, Min(0)] private float _additionalSpeedByUpgrade = 1;
@@ -35,10 +41,10 @@ public class GlobalSettings : ScriptableObject
 	public int XPToLevelUp => _XPToLevelUp;
 	public int GameplayPlayersCount => _gameplayPlayersCount;
 	public int MaxTickets => _maxTickets;
+	public int MinFPS => _minFPS;
+	public int MaxFPS => _maxFPS;
 	public int TrainingLevelsCount => _trainingLevelsCount;
 	public int TrainingPlayersCount => _trainingPlayersCount;
-	public IReadOnlyList<int> GadgetsLevelProgression => _gadgetsLevelProgression;
-	public IReadOnlyList<GadgetScriptableObject> AllGadgets => _allGadgets;
 	public float FallAngle => _fallAngle;
 	public float BaseSpeed => _baseSpeed;
 	public float AdditionalSpeedByUpgrade => _additionalSpeedByUpgrade;
@@ -63,5 +69,68 @@ public class GlobalSettings : ScriptableObject
 
 			return _instance;
 		}
+	}
+
+	public List<Gadget> GetAllGadgets()
+	{
+		return _allGadgets.Select(gadget => new Gadget(gadget)).ToList();
+	}
+
+	public List<Gadget> GetNotFoundGadgets()
+	{
+		List<Gadget> foundGadgets = PlayerData.PlayerGadgets.ToList();
+		List<Gadget> notFoundGadgets = _allGadgets.Where(gadget => 
+			!foundGadgets.Any(foundGadget => foundGadget.GadgetScriptableObject == gadget)).
+			Select(gadget => new Gadget(gadget)).ToList();
+
+		return notFoundGadgets;
+	}
+
+	public Sprite GetGadgetRareBackground(Rare rare)
+	{
+		return _gadgetRareBackgrounds[(int) rare];
+	}
+
+	public GadgetScriptableObject GetRandomGadget()
+	{
+		return _allGadgets[UnityEngine.Random.Range(0, _allGadgets.Length)];
+	}
+
+	public GadgetScriptableObject GetRandomGadget(Rare rare)
+	{
+		List<GadgetScriptableObject> gadgets = _allGadgets.Where(g => 
+			g.Rare == rare).ToList();
+
+		if (gadgets.Count == 0)
+		{
+			return null;
+		}
+
+		return gadgets[UnityEngine.Random.Range(0, gadgets.Count)];
+	}
+
+	public bool TryGetGadgetsLevelProgression(int gadgetLevel, out int gadgetsToLevelUp)
+	{
+		if (gadgetLevel < _gadgetsLevelProgression.Length)
+		{
+			gadgetsToLevelUp = _gadgetsLevelProgression[gadgetLevel];
+			return true;
+		}
+
+		gadgetsToLevelUp = 0;
+		return false;
+	}
+
+	public Sprite GetChestSprite(BoxReward.ChestType chestType)
+	{
+		foreach (BoxReward.ChestSprite chestSprite in _boxSprites)
+		{
+			if (chestSprite.ChestType == chestType)
+			{
+				return chestSprite.Sprite;
+			}
+		}
+
+		return null;
 	}
 }

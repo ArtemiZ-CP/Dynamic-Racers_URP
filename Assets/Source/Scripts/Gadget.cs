@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 public class Gadget
 {
     private GadgetScriptableObject _gadgetScriptableObject;
@@ -22,6 +20,26 @@ public class Gadget
         _amount = gadget.GetAmount();
     }
 
+    public bool TryLevelUp()
+    {
+        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(_level, out int gadgetsToLevelUp))
+        {
+            if (_amount >= gadgetsToLevelUp)
+            {
+                _amount -= gadgetsToLevelUp;
+                _level++;
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
     public void AddAmount(int amount)
     {
         _amount += amount;
@@ -29,14 +47,6 @@ public class Gadget
 
     public int GetAmount()
     {
-        int amount = _amount;
-        IReadOnlyList<int> progression = GlobalSettings.Instance.GadgetsLevelProgression;
-
-        for (int i = 0; i < _level; i++)
-        {
-            amount -= progression[i];
-        }
-
-        return amount;
+        return _amount;
     }
 }

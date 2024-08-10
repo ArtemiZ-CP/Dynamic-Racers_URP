@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ab50bf1735bec43ebac48da7f553466c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _mapDrawer: {instanceID: 0}
+  - _trainingLocation: {fileID: 11400000, guid: e5b89b49a50424b18a17c198a12baceb,
+      type: 2}
+  - _alienLocation: {fileID: 11400000, guid: 035dcd20d38504c3681116037d3c67da, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

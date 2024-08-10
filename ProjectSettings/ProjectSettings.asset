@@ -895,7 +895,8 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Purchasing: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -912,14 +913,14 @@ PlayerSettings:
   embeddedLinuxEnableGamepadInput: 1
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
-  apiCompatibilityLevel: 6
+  apiCompatibilityLevel: 3
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 559037f9-ad13-4ea5-8b53-2ec6268b4321
+  cloudProjectId: e48bd923-e0db-4cf2-b522-d1444a53e9a1
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Dynamic Racers_URP
-  organizationId: unity_jti1jrk4-xjfva
+  organizationId: alexeylogachev
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

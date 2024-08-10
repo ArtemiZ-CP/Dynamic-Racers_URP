@@ -5,6 +5,8 @@ using UnityEngine;
 
 public abstract class CharacterMovement : MonoBehaviour
 {
+	private const float _minSpeedMultiplier = 0;
+
 	private List<Chunk> _chunks;
 	private GlobalSettings _globalSettings;
 	private int _currentChunkIndex = 0;
@@ -17,7 +19,18 @@ public abstract class CharacterMovement : MonoBehaviour
 
 	public float Distance => _distance;
 	public bool IsFinished => _currentChunkIndex == _chunks.Count - 1;
-	public float Speed => _speed * _speedMultiplier;
+	public float Speed
+	{
+		get
+		{
+			if (_speedMultiplier < _minSpeedMultiplier)
+			{
+				return _speed * _minSpeedMultiplier;
+			}
+
+			return _speed * _speedMultiplier;
+		}
+	}
 
 	public float DistanceToFinish()
 	{
@@ -93,7 +106,7 @@ public abstract class CharacterMovement : MonoBehaviour
 	{
 		_distance += Speed * Time.deltaTime;
 	}
-	
+
 	private float DistanceToChunkEnd(int chunkIndex, int startPointIndex)
 	{
 		Transform from;

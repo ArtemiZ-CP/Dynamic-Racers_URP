@@ -5,14 +5,16 @@ using UnityEngine;
 public class FoundGadgetsCount : MonoBehaviour
 {
     private TMP_Text _text;
+    private GlobalSettings _globalSettings;
 
     private void Awake()
     {
         _text = GetComponent<TMP_Text>();
+        _globalSettings = GlobalSettings.Instance;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        _text.text = $"{PlayerProgress.PlayerGadgets.Count}/{GlobalSettings.Instance.AllGadgets.Count}";
+        _text.text = $"{PlayerData.PlayerGadgets.Count}/{_globalSettings.GetAllGadgets().Count}";
     }
 }

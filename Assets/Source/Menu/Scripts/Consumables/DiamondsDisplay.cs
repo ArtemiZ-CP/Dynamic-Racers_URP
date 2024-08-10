@@ -7,17 +7,17 @@ public class DiamondsDisplay : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerProgress.OnDiamondsChanged += SetDiamonds;
+        PlayerData.OnDiamondsChanged += SetDiamonds;
         SetDiamonds();
     }
 
     private void OnDisable()
     {
-        PlayerProgress.OnDiamondsChanged -= SetDiamonds;
+        PlayerData.OnDiamondsChanged -= SetDiamonds;
     }
 
     public void SetDiamonds()
     {
-        _diamondsText.text = PlayerProgress.Diamonds.ToString();
+        _diamondsText.text = PlayerData.Diamonds.ToString();
     }
 }

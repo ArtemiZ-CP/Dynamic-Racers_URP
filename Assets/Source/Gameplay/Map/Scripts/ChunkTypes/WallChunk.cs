@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WallChunk : Chunk
@@ -6,6 +7,7 @@ public class WallChunk : Chunk
 	[SerializeField] private float _heightOffset;
 	[Header("Move Points")]
 	[SerializeField] private Transform _startMovePoint;
+	[SerializeField] private List<Transform> _startMovePoints;
 	[SerializeField] private Transform _endMovePoint;
 
 	public override int SetChunkLength(int length)
@@ -24,7 +26,18 @@ public class WallChunk : Chunk
 
 		if (_startMovePoint != null)
 		{
-			_startMovePoint.position = new Vector3(0, _startMovePoint.position.y, _startMovePoint.position.z);
+			Vector3 startMovePointPosition = new(0, _startMovePoint.position.y, transform.position.z);
+
+			if (_startMovePoints != null && _startMovePoints.Count > 0)
+			{
+				foreach (Transform startMovePoint in _startMovePoints)
+				{
+					Vector3 delta = startMovePoint.position - _startMovePoint.position;
+					startMovePoint.position = delta + startMovePointPosition;
+				}
+			}
+
+			_startMovePoint.position = startMovePointPosition;
 		}
 
 		if (_endMovePoint != null)

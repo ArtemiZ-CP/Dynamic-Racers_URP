@@ -14,7 +14,7 @@ public class SetPlayerGadgets : MonoBehaviour
 
         foreach (GadgetScriptableObject gadget in _gadgets)
         {
-            PlayerProgress.AddGadget(new Gadget(gadget));
+            PlayerData.AddGadget(new Gadget(gadget));
         }
     }
 }

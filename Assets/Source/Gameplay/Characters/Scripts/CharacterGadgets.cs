@@ -1,22 +1,24 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterMovement))]
 public class CharacterGadgets : MonoBehaviour
 {
+	private CharacterMovement _characterMovement;
 	private GadgetScriptableObject _gadget;
 	private GadgetScriptableObject _activeGadget;
-	private CharacterMovement _characterMovement;
+	private ChunkType _currentChunkType;
+	private float _lastAcceleration;
 	private float _distanceToDisactiveGadget;
 	private int _usageCount;
-	private ChunkType _currentChunkType;
 
-	public event Action<GadgetAnimationInfo> OnActiveAnimation;
+	public event Action<GadgetChunkInfo, bool> OnActiveAnimation;
+	public event Action OnDisactiveAnimation;
 
 	public GadgetScriptableObject Gadget => _gadget;
-	public bool IsGadgetActive => _activeGadget != null;
-	public int UsageCount => _usageCount;
 	public float RemainingDistance => _distanceToDisactiveGadget - _characterMovement.Distance;
+	public int UsageCount => _usageCount;
 
 	public void Init(GadgetScriptableObject gadget)
 	{
@@ -46,10 +48,9 @@ public class CharacterGadgets : MonoBehaviour
 
 	private void Update()
 	{
-		if (_activeGadget != null && _distanceToDisactiveGadget < _characterMovement.Distance)
+		if (_distanceToDisactiveGadget < _characterMovement.Distance)
 		{
-			DisactiveGadget();
-			OnActiveAnimation.Invoke(new GadgetAnimationInfo(_currentChunkType));
+			TryDisactiveGadget();
 		}
 	}
 
@@ -57,30 +58,25 @@ public class CharacterGadgets : MonoBehaviour
 	{
 		_currentChunkType = chunk.Type;
 
-		if (_gadget != null)
-		{
-			if (TryContinue(chunk.Type)) return;
+		if (TryContinue()) return;
+		TryDisactiveGadget();
+		if (TryActiveGadget()) return;
 
-			if (_activeGadget != null)
-			{
-				DisactiveGadget();
-			}
-
-			if (TryActiveGadget(chunk.Type)) return;
-		}
-
-		OnActiveAnimation.Invoke(new GadgetAnimationInfo(_currentChunkType));
+		OnActiveAnimation.Invoke(new GadgetChunkInfo(_currentChunkType), false);
 	}
 
-	private bool TryContinue(ChunkType chunkType)
+	private bool TryContinue()
 	{
 		if (_activeGadget != null)
 		{
-			GadgetAnimationInfo gadgetAnimationInfo = _activeGadget.ContainsChunkType(chunkType);
+			GadgetChunkInfo gadgetChunkInfo = _activeGadget.GetChunkInfo(_currentChunkType);
 
-			if (gadgetAnimationInfo != null)
+			if (gadgetChunkInfo != null)
 			{
-				OnActiveAnimation.Invoke(gadgetAnimationInfo);
+				SubtractAcceleration();
+				AddAcceleration(gadgetChunkInfo.IsAccelerates);
+				OnActiveAnimation.Invoke(_activeGadget.GetChunkInfo(_currentChunkType), true);
+
 				return true;
 			}
 		}
@@ -88,24 +84,28 @@ public class CharacterGadgets : MonoBehaviour
 		return false;
 	}
 
-	private bool TryActiveGadget(ChunkType chunkType)
+	private bool TryActiveGadget()
 	{
 		if (_activeGadget != null)
 		{
 			throw new Exception("Active gadget is not null");
 		}
 
-		GadgetAnimationInfo gadgetAnimationInfo = _gadget.ContainsChunkType(chunkType);
+		if (_gadget == null)
+		{
+			return false;
+		}
 
-		if (gadgetAnimationInfo != null)
+		GadgetChunkInfo gadgetChunkInfo = _gadget.GetChunkInfo(_currentChunkType);
+
+		if (gadgetChunkInfo != null)
 		{
 			if (_usageCount <= 0)
 			{
 				return false;
 			}
 
-			ActiveGadget(_gadget);
-			OnActiveAnimation.Invoke(gadgetAnimationInfo);
+			ActiveGadget(_gadget, gadgetChunkInfo.IsAccelerates, gadgetChunkInfo.StartDelay, gadgetChunkInfo.SpeedMultiplierOnDelay);
 
 			return true;
 		}
@@ -113,7 +113,7 @@ public class CharacterGadgets : MonoBehaviour
 		return false;
 	}
 
-	private void ActiveGadget(GadgetScriptableObject gadget)
+	private void ActiveGadget(GadgetScriptableObject gadget, bool isAccelerates, float delay, float speedMultiplierOnDelay)
 	{
 		_activeGadget = gadget;
 
@@ -121,15 +121,61 @@ public class CharacterGadgets : MonoBehaviour
 		{
 			_usageCount--;
 		}
-		
-		_characterMovement.AddAcceleration(_activeGadget.SpeedMultiplier);
+
+		StartCoroutine(AddAcceleration(isAccelerates, delay, speedMultiplierOnDelay));
+		OnActiveAnimation.Invoke(_activeGadget.GetChunkInfo(_currentChunkType), true);
+
 		_distanceToDisactiveGadget = _characterMovement.Distance + _activeGadget.DistanceToDisactive;
 	}
 
-	private void DisactiveGadget()
+	private bool TryDisactiveGadget()
 	{
-		_characterMovement.SubtractAcceleration(_activeGadget.SpeedMultiplier);
+		if (_activeGadget == null)
+		{
+			return false;
+		}
+
+		StopAllCoroutines();
+		SubtractAcceleration();
 		_distanceToDisactiveGadget = 0;
 		_activeGadget = null;
+		OnDisactiveAnimation.Invoke();
+
+		return true;
+	}
+
+	private IEnumerator AddAcceleration(bool isAccelerates, float delay, float speedMultiplierOnDelay)
+	{
+		AddAcceleration(speedMultiplierOnDelay);
+
+		yield return new WaitForSeconds(delay);
+
+		AddAcceleration(-speedMultiplierOnDelay);
+		AddAcceleration(isAccelerates);
+	}
+
+	private void AddAcceleration(bool isAccelerates)
+	{
+		if (isAccelerates)
+		{
+			AddAcceleration(_activeGadget.SpeedMultiplier);
+		}
+		else
+		{
+			AddAcceleration(-0.5f);
+		}
+	}
+
+	private void AddAcceleration(float speedMultiplier)
+	{
+		_lastAcceleration += speedMultiplier;
+
+		_characterMovement.AddAcceleration(speedMultiplier);
+	}
+
+	private void SubtractAcceleration()
+	{
+		_characterMovement.SubtractAcceleration(_lastAcceleration);
+		_lastAcceleration = 0;
 	}
 }

@@ -40,14 +40,14 @@ public abstract class Chunk : MonoBehaviour
 	[ContextMenu("Set Chunk Size")]
 	public void SetChunkSize()
 	{
-		SetupChunk(_testSize, _mapCellsContainer);
+		SetupChunk(_testSize, _mapCellsContainer, emptyBefore: true, emptyAfter: true);
 		
 #if UNITY_EDITOR
 		UnityEditor.EditorUtility.SetDirty(this);
 #endif
 	}
 
-	public void SetupChunk(Vector3Int size, MapCellsContainer mapCellsContainer, bool emptyBefore = false, bool emptyAfter = false)
+	public void SetupChunk(Vector3Int size, MapCellsContainer mapCellsContainer, bool emptyBefore, bool emptyAfter)
 	{
 		_chunkMeshDrawer?.SpawnMesh(size, mapCellsContainer, emptyBefore, emptyAfter);
 		_environmentSpawner.SpawnEnvironment(size, _chunkType, mapCellsContainer);

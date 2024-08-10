@@ -14,19 +14,23 @@ public static class DataSaver
     {
         SaveData saveData = new()
         {
-            BoxRewardQueue = (Queue<BoxReward>)PlayerProgress.BoxRewardQueue,
-            BagRewardQueue = (Queue<BagReward>)PlayerProgress.BagRewardQueue,
-            PlayerGadgets = PlayerProgress.PlayerGadgets.ToList(),
-            Experience = PlayerProgress.Experience,
-            Level = PlayerProgress.Level,
-            Coins = PlayerProgress.Coins,
-            Diamonds = PlayerProgress.Diamonds,
-            Tickets = PlayerProgress.Tickets,
-            PlayerRace = PlayerProgress.PlayerRace,
-            PlayerDive = PlayerProgress.PlayerDive,
-            PlayerAscend = PlayerProgress.PlayerAscend,
-            PlayerGlide = PlayerProgress.PlayerGlide,
-            TrainingsPassed = PlayerProgress.PassedTrainings
+            BoxRewardQueue = (Queue<BoxReward>)PlayerData.BoxRewardQueue,
+            BagRewardQueue = (Queue<BagReward>)PlayerData.BagRewardQueue,
+            PlayerGadgets = PlayerData.PlayerGadgets.ToList(),
+            Experience = PlayerData.Experience,
+            Level = PlayerData.Level,
+            Coins = PlayerData.Coins,
+            Diamonds = PlayerData.Diamonds,
+            Tickets = PlayerData.Tickets,
+            PlayerRace = PlayerData.PlayerRace,
+            PlayerDive = PlayerData.PlayerDive,
+            PlayerAscend = PlayerData.PlayerAscend,
+            PlayerGlide = PlayerData.PlayerGlide,
+            TrainingsPassed = PlayerData.PassedTrainings,
+            FPS = PlayerData.FPS,
+            IsMusicOn = PlayerData.IsMusicOn,
+            IsSoundsOn = PlayerData.IsSoundsOn,
+            IsHapticOn = PlayerData.IsHapticOn
         };
 
         Save(saveData);
@@ -34,7 +38,7 @@ public static class DataSaver
 
     public static void LoadData()
     {
-        PlayerProgress.LoadData(Load());
+        PlayerData.LoadData(Load());
     }
 
     private static void Save(SaveData saveData)

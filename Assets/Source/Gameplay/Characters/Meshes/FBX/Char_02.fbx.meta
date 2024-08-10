@@ -83,7 +83,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 1
+  importAnimation: 0
   humanDescription:
     serializedVersion: 3
     human: []
@@ -100,7 +100,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: e1c7d8c50664e457198a7b8805566c82,
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 718a99f714870427990247aa7ba99901,
     type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2

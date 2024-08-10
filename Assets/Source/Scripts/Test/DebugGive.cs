@@ -21,25 +21,25 @@ public class DebugGive : MonoBehaviour
     [ContextMenu("Give XP")]
     public void GiveXP()
     {
-        PlayerProgress.AddExperience(_XPToGive);
+        PlayerData.AddExperience(_XPToGive);
     }
 
     [ContextMenu("Give Coins")]
     public void GiveCoins()
     {
-        PlayerProgress.AddCoins(_coinsToGive);
+        PlayerData.AddCoins(_coinsToGive);
     }
 
     [ContextMenu("Give Diamonds")]
     public void GiveDiamonds()
     {
-        PlayerProgress.AddDiamonds(_diamondsToGive);
+        PlayerData.AddDiamonds(_diamondsToGive);
     }
 
     [ContextMenu("Give Tickets")]
     public void GiveTickets()
     {
-        PlayerProgress.AddTickets(_ticketsToGive);
+        PlayerData.AddTickets(_ticketsToGive);
     }
 
     [ContextMenu("Give Upgrades")]
@@ -49,28 +49,26 @@ public class DebugGive : MonoBehaviour
         {
             new CharacteristicReward(_characteristicType, _upgradeAmount)
         };
-        PlayerProgress.AddReward(new BagReward(rewards));
+        PlayerData.AddReward(new BagReward(rewards));
     }
 
     [ContextMenu("Give Gadget")]
     public void GiveGadget()
     {
         GadgetReward gadgetReward = new(_gadgetReward);
-        PlayerProgress.AddReward(new BoxReward(new List<GadgetReward> { gadgetReward }));
+        PlayerData.AddReward(new BoxReward(new List<GadgetReward> { gadgetReward }));
     }
 
     private void Start()
     {
-#if UNITY_EDITOR
         if (_skipTutorial)
         {
             for (int i = 0; i < GlobalSettings.Instance.TrainingLevelsCount; i++)
             {
-                PlayerProgress.TrainingPassed();
+                PlayerData.TrainingPassed();
             }
         }
 
-        PlayerProgress.AddExperience(_XPToGiveOnStart);
-#endif
+        PlayerData.AddExperience(_XPToGiveOnStart);
     }
 }

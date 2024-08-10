@@ -22,7 +22,7 @@ public class InactiveButtonCondition : MonoBehaviour
 
     private void Active()
     {
-        if (PlayerProgress.Level >= _levelToActiveButton)
+        if (PlayerData.Level >= _levelToActiveButton)
         {
             _activeButton.SetActive(true);
             _inactiveButton.SetActive(false);

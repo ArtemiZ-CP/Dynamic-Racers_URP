@@ -56,7 +56,7 @@ Properties {
 SubShader {
 	Tags
 	{
-		"Queue"="Transparent"
+		"Queue"="Transparent+2"
 		"IgnoreProjector"="True"
 		"RenderType"="Transparent"
 	}

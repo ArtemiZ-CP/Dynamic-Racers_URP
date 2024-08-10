@@ -20,12 +20,12 @@ public class RewardMenu : MonoBehaviour
 
     public void GiveRewards()
     {
-        if (PlayerProgress.IsRewardQueueEmpty)
+        if (PlayerData.IsRewardQueueEmpty)
         {
             CloseRewardMenu();
         }
 
-        GiveReward(PlayerProgress.GetReward());
+        GiveReward(PlayerData.GetReward());
     }
 
     public void HandleTouch()
@@ -73,9 +73,9 @@ public class RewardMenu : MonoBehaviour
 
     private void GiveReward(BoxReward boxReward)
     {
-        foreach (GadgetReward newBoxReward in boxReward.RewardsQueue)
+        foreach (GadgetReward newBoxReward in boxReward.Rewards)
         {
-            PlayerProgress.AddGadget(new Gadget(newBoxReward.Gadget, newBoxReward.Amount));
+            PlayerData.AddGadget(new Gadget(newBoxReward.Gadget, newBoxReward.Amount));
         }
 
         _box.gameObject.SetActive(true);
@@ -86,7 +86,7 @@ public class RewardMenu : MonoBehaviour
     {
         foreach (CharacteristicReward characteristic in bagReward.RewardsQueue)
         {
-            PlayerProgress.AddCharacteristic(characteristic.Type, characteristic.Value);
+            PlayerData.AddCharacteristic(characteristic.Type, characteristic.Value);
         }
 
         _bag.gameObject.SetActive(true);

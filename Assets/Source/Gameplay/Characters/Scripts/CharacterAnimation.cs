@@ -8,23 +8,25 @@ public class CharacterAnimation : MonoBehaviour
 	private readonly int Victory = Animator.StringToHash(nameof(Victory));
 
 	[SerializeField] private MeshSpawner _meshSpawner;
-	
+
 	private RunStagesBase _runStagesBase;
 	private CharacterGadgets _characterGadgets;
 	private CharacterMovement _characterMovement;
 	private Animator _animator;
-	private Animator _gadgetAnimator;
 	private GameObject _activeGadget;
+	private Animator _gadgetAnimator;
 	private int _place = 0;
 
 	private void OnEnable()
 	{
 		_characterGadgets.OnActiveAnimation += OnActiveAnimationHandler;
+		_characterGadgets.OnDisactiveAnimation += OnDisactiveAnimationHandler;
 	}
 
 	private void OnDisable()
 	{
 		_characterGadgets.OnActiveAnimation -= OnActiveAnimationHandler;
+		_characterGadgets.OnDisactiveAnimation -= OnDisactiveAnimationHandler;
 	}
 
 	private void Awake()
@@ -33,6 +35,16 @@ public class CharacterAnimation : MonoBehaviour
 		_characterMovement = GetComponent<CharacterMovement>();
 		_characterGadgets = GetComponent<CharacterGadgets>();
 		_runStagesBase = FindObjectOfType<RunStagesBase>();
+	}
+
+	private void Start()
+	{
+		if (_characterGadgets.Gadget != null)
+		{
+			_activeGadget = Instantiate(_characterGadgets.Gadget.Prefab, _meshSpawner.transform);
+			_gadgetAnimator = _activeGadget.GetComponent<Animator>();
+			_activeGadget.SetActive(false);
+		}
 	}
 
 	private void Update()
@@ -60,9 +72,9 @@ public class CharacterAnimation : MonoBehaviour
 		}
 	}
 
-	private void OnActiveAnimationHandler(GadgetAnimationInfo gadgetAnimationInfo)
+	private void OnActiveAnimationHandler(GadgetChunkInfo gadgetChunkInfo, bool isGadgetActive)
 	{
-		if (gadgetAnimationInfo.ChunkType == ChunkType.Finish)
+		if (gadgetChunkInfo.ChunkType == ChunkType.Finish)
 		{
 			if (_place == 1)
 			{
@@ -75,18 +87,18 @@ public class CharacterAnimation : MonoBehaviour
 		}
 		else
 		{
-			_animator.SetTrigger(gadgetAnimationInfo.AnimationTrigger);
+			_animator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
 		}
 
-		if (_activeGadget != null)
+		if (isGadgetActive)
 		{
-			Destroy(_activeGadget);
+			_activeGadget.SetActive(true);
+			_gadgetAnimator.SetTrigger(gadgetChunkInfo.ChunkType.ToString());
 		}
+	}
 
-		if (gadgetAnimationInfo.Prefab != null)
-		{
-			_activeGadget = Instantiate(gadgetAnimationInfo.Prefab, _meshSpawner.transform);
-			_gadgetAnimator = _activeGadget.GetComponent<Animator>();
-		}
+	private void OnDisactiveAnimationHandler()
+	{
+		_activeGadget.SetActive(false);
 	}
 }

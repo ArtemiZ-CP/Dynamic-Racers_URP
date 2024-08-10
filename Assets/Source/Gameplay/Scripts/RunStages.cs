@@ -11,14 +11,14 @@ public class RunStages : RunStagesBase
 		_countdown.Run();
 	}
 
-   override protected int GetEnemyUpgrades(CharacteristicType characteristicType)
-    {
-		return 0;
-    }
-
-    override protected void GiveReward()
+	override protected int GetEnemyUpgrades(CharacteristicType characteristicType)
 	{
-		PlayerProgress.AddExperience(RunSettings.ExperienceReward);
+		return 0;
+	}
+
+	override protected void GiveReward()
+	{
+		PlayerData.AddExperience(RunSettings.ExperienceReward);
 		RunSettings.Reset();
 	}
 }

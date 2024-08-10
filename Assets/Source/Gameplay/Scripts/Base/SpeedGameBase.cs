@@ -11,12 +11,12 @@ public class SpeedGameBase : MonoBehaviour
     [SerializeField] private Transform _arrow;
     [SerializeField] private Transform _player;
     [Header("Hints")]
-	[SerializeField] private GameObject _playerHint;
-	[Header("Settings")]
-	[SerializeField] private float _arrowSpeed;
-	[SerializeField] private AnimationCurve _arrowMovementCurve;
-	[SerializeField] private float _dragOffset;
-	[SerializeField] private float _hintMoveDuration;
+    [SerializeField] private GameObject _playerHint;
+    [Header("Settings")]
+    [SerializeField] private float _arrowSpeed;
+    [SerializeField] private AnimationCurve _arrowMovementCurve;
+    [SerializeField] private float _dragOffset;
+    [SerializeField] private float _hintMoveDuration;
 
     public event Action<float> OnSpeedGameEnd;
 
@@ -28,41 +28,41 @@ public class SpeedGameBase : MonoBehaviour
     public float MaxPlayerOffset => _maxPlayerOffset;
     public bool IsGameActive => _isGameActive;
 
-	private float _maxPlayerOffset;
-	private Vector3 _startPlayerPosition;
-	private bool _isGameActive;
-	private float _speedMultiplier;
-	private float _startTouchPositionY;
+    private float _maxPlayerOffset;
+    private Vector3 _startPlayerPosition;
+    private bool _isGameActive;
+    private float _speedMultiplier;
+    private float _startTouchPositionY;
 
-	protected virtual void Awake()
-	{
-		_visual.SetActive(false);
+    protected virtual void Awake()
+    {
+        _visual.SetActive(false);
         _maxPlayerOffset = GlobalSettings.Instance.CharacterStartOffset;
-	}
+    }
 
-	protected virtual void Start()
-	{
-		_startPlayerPosition = _player.transform.position;
-		SortSpeedPowers();
-		ActiveGame();
-		StartCoroutine(ShowHint());
-	}
+    protected virtual void Start()
+    {
+        _startPlayerPosition = _player.transform.position;
+        SortSpeedPowers();
+        ActiveGame();
+        StartCoroutine(ShowHint());
+    }
 
     protected void FinishSpeedGame()
     {
         _isGameActive = false;
     }
 
-	protected bool IsTouchGown()
-	{
-		if (Input.touchCount > 0)
-		{
-			Touch touch = Input.GetTouch(0);
-			return touch.phase == TouchPhase.Began;
-		}
+    protected bool IsTouchGown()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            return touch.phase == TouchPhase.Began;
+        }
 
-		return Input.GetKeyDown(KeyCode.Mouse0);
-	}
+        return Input.GetKeyDown(KeyCode.Mouse0);
+    }
 
     protected bool IsTouch()
     {
@@ -75,17 +75,17 @@ public class SpeedGameBase : MonoBehaviour
         return Input.GetKey(KeyCode.Mouse0);
     }
 
-	protected bool IsTouchUp()
-	{
-		if (Input.touchCount > 0)
-		{
-			Touch touch = Input.GetTouch(0);
-			return touch.phase == TouchPhase.Ended;
-		}
+    protected bool IsTouchUp()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            return touch.phase == TouchPhase.Ended;
+        }
 
-		return Input.GetKeyUp(KeyCode.Mouse0);
-	}
-    
+        return Input.GetKeyUp(KeyCode.Mouse0);
+    }
+
     protected void SetStartTouchPosition()
     {
         if (Input.touchCount > 0)
@@ -110,6 +110,7 @@ public class SpeedGameBase : MonoBehaviour
 
     protected void StartRunning()
     {
+        HideHint();
         OnSpeedGameEnd?.Invoke(_speedMultiplier);
     }
 

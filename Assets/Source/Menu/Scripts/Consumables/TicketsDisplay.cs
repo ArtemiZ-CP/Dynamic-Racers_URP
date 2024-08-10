@@ -14,17 +14,17 @@ public class TicketsDisplay : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerProgress.OnTicketsChanged += SetTickets;
+        PlayerData.OnTicketsChanged += SetTickets;
         SetTickets();
     }
 
     private void OnDisable()
     {
-        PlayerProgress.OnTicketsChanged -= SetTickets;
+        PlayerData.OnTicketsChanged -= SetTickets;
     }
 
     public void SetTickets()
     {
-        _ticketsText.text = $"{PlayerProgress.Tickets}/{_maxTickets}";
+        _ticketsText.text = $"{PlayerData.Tickets}/{_maxTickets}";
     }
 }

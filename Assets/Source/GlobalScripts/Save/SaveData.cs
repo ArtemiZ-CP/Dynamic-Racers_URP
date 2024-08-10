@@ -19,6 +19,10 @@ public class SaveData
     public int PlayerAscend;
     public int PlayerGlide;
     public int TrainingsPassed;
+    public int FPS;
+    public bool IsMusicOn;
+    public bool IsSoundsOn;
+    public bool IsHapticOn;
 
     #endregion
 }

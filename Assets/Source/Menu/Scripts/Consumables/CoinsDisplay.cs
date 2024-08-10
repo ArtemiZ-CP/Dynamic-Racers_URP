@@ -7,17 +7,17 @@ public class CoinsDisplay : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerProgress.OnCoinsChanged += SetCoins;
+        PlayerData.OnCoinsChanged += SetCoins;
         SetCoins();
     }
 
     private void OnDisable()
     {
-        PlayerProgress.OnCoinsChanged -= SetCoins;
+        PlayerData.OnCoinsChanged -= SetCoins;
     }
 
     public void SetCoins()
     {
-        _coinsText.text = PlayerProgress.Coins.ToString();
+        _coinsText.text = PlayerData.Coins.ToString();
     }
 }

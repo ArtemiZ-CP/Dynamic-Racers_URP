@@ -27,9 +27,9 @@ public class PreloadLevel : MonoBehaviour
         string levelName;
         int playersCount;
 
-        if (PlayerProgress.PassedTrainings < GlobalSettings.Instance.TrainingLevelsCount)
+        if (PlayerData.PassedTrainings < GlobalSettings.Instance.TrainingLevelsCount)
         {
-            levelName = $"{_trainingLevelName}{PlayerProgress.PassedTrainings + _startTrainingLevelIndex}";
+            levelName = $"{_trainingLevelName}{PlayerData.PassedTrainings + _startTrainingLevelIndex}";
             playersCount = GlobalSettings.Instance.TrainingPlayersCount;
         }
         else

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RewardWindow : MonoBehaviour
 {
-    [SerializeField] private GadgetCell _gadgetCell;
+    [SerializeField] private GadgetSelectionCell _gadgetCell;
     [SerializeField] private CharacteristicCell _characteristicCell;
     [SerializeField] private RewardMenu _rewardMenu;
     [SerializeField] private AudioSource _rewardSound;
@@ -19,7 +19,7 @@ public class RewardWindow : MonoBehaviour
 
         if (reward is BoxReward boxReward)
         {
-            _rewards = new Queue<Reward>(boxReward.RewardsQueue);
+            _rewards = new Queue<Reward>(boxReward.Rewards);
         }
         else if (reward is BagReward bagReward)
         {
@@ -65,7 +65,7 @@ public class RewardWindow : MonoBehaviour
         Gadget gadget = new(gadgetReward.Gadget, gadgetReward.Amount);
         
         _gadgetCell.gameObject.SetActive(true);
-        _gadgetCell.Init(gadget, fixVerticalSize: true);
+        _gadgetCell.Init(gadget);
         _rewardSound.Play();
     }
 

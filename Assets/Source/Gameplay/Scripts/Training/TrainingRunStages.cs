@@ -12,6 +12,6 @@ public class TrainingRunStages : RunStagesBase
 
     protected override void GiveReward()
     {
-        PlayerProgress.TrainingPassed();
+        PlayerData.TrainingPassed();
     }
 }

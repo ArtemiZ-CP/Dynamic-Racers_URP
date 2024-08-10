@@ -13,13 +13,12 @@ public class GadgetBar : MonoBehaviour
     {
         float fill;
 
-        if (GlobalSettings.Instance.GadgetsLevelProgression.Count > gadget.Level)
+        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(gadget.Level, out int gadgetsToLevelUp))
         {
             int count = gadget.GetAmount();
-            int maxCount = GlobalSettings.Instance.GadgetsLevelProgression[gadget.Level];
 
-            fill = (float)count / maxCount;
-            _countText.text = $"{count}/{maxCount}";
+            fill = (float)count / gadgetsToLevelUp;
+            _countText.text = $"{count}/{gadgetsToLevelUp}";
         }
         else
         {
