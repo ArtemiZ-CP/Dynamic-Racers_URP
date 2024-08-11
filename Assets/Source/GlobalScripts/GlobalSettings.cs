@@ -6,6 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GlobalSettings", menuName = "Settings/Global", order = 1)]
 public class GlobalSettings : ScriptableObject
 {
+	public static readonly int ChunksTypeCount = 5;
+
 	private static GlobalSettings _instance;
 
     [SerializeField, Min(1)] private int _XPToLevelUp;

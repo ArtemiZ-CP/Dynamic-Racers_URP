@@ -35,11 +35,27 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1aabc42c94adc408886e2b8c1d1b3311, type: 2}
   - {fileID: 11400000, guid: f93b7918fa1d440f2a0628e7dd33cda0, type: 2}
   - {fileID: 11400000, guid: 01840f12431394904abbed67736be3ad, type: 2}
-  - {fileID: 11400000, guid: 12bd93db0530940bb89ae2eacb7a4e04, type: 2}
-  - {fileID: 11400000, guid: 89c69689f42254c0ab7439ec58cf82b6, type: 2}
-  - {fileID: 11400000, guid: 8f2fc59e4ab2843818f1ffeab1cc8fc5, type: 2}
-  - {fileID: 11400000, guid: 2fa749af67db540c1894e31eff9aae52, type: 2}
+  - {fileID: 11400000, guid: cf63df60b355e4b73b7f01346843af3e, type: 2}
+  - {fileID: 11400000, guid: a3d1d259c3c9245789c356c6f150f9a7, type: 2}
+  - {fileID: 11400000, guid: 77c8d44d535d54a96877bc4e9662cfd5, type: 2}
+  - {fileID: 11400000, guid: c0268c3e294c84fb0a7f6e3aa730f21f, type: 2}
+  - {fileID: 11400000, guid: 854119e465ad24665a3e032872a76b5f, type: 2}
+  - {fileID: 11400000, guid: e8c8c448e49d44c14a01aa72ae347b0c, type: 2}
+  - {fileID: 11400000, guid: 81e62a93df96b48f29db03809b578d73, type: 2}
+  - {fileID: 11400000, guid: 01a225e53bae04366a9e54e672280ed3, type: 2}
+  - {fileID: 11400000, guid: 97c03e74326c64cf0818eff1d0e3cf50, type: 2}
+  - {fileID: 11400000, guid: ce0e483e107a547bd85dbc6cb53ffccb, type: 2}
+  - {fileID: 11400000, guid: 0c7bdc6039147432d85ab7e2f4a11cfb, type: 2}
+  - {fileID: 11400000, guid: e753f4270bc4f4199b77d1db1aa1d55c, type: 2}
+  - {fileID: 11400000, guid: 550bab5f084284d0086f98fd8f4a26f4, type: 2}
+  - {fileID: 11400000, guid: 0a358de41167044caa31976f63e85740, type: 2}
+  - {fileID: 11400000, guid: ec3ce683ced67444aa62599774647374, type: 2}
+  - {fileID: 11400000, guid: de831156fbbc049a3b9f2d7ea41d7ba9, type: 2}
+  - {fileID: 11400000, guid: 9c89211184a72427293ac5972459b06c, type: 2}
+  - {fileID: 11400000, guid: 9e1872624acc14fffb0aa504a9dd83be, type: 2}
+  - {fileID: 11400000, guid: 11456d65fc99b42c68f115a7f740ef86, type: 2}
   - {fileID: 11400000, guid: 6dd204e1c25354befb30c775dc3fc59a, type: 2}
+  - {fileID: 11400000, guid: a91fef42d3b94471399b92914ba6262a, type: 2}
   _gadgetRareBackgrounds:
   - {fileID: 21300000, guid: c45704f4e194c4592b4f76273205616f, type: 3}
   - {fileID: 21300000, guid: d3f26c5999c8b4e77a1bb3dd31f0af38, type: 3}

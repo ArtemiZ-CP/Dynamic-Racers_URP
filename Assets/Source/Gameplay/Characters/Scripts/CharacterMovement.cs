@@ -32,6 +32,23 @@ public abstract class CharacterMovement : MonoBehaviour
 		}
 	}
 
+	private void Awake()
+	{
+		_globalSettings = GlobalSettings.Instance;
+		_speed = _globalSettings.BaseSpeed;
+	}
+
+	private void Update()
+	{
+		_distance += Speed * Time.deltaTime;
+	}
+
+	public void SetChunkSpeed(ChunkType chunkType)
+	{
+		float additionalSpeed = GetUpgradeAmount(chunkType) * _globalSettings.AdditionalSpeedByUpgrade;
+		_speed = _globalSettings.BaseSpeed + additionalSpeed;
+	}
+
 	public float DistanceToFinish()
 	{
 		if (_chunks == null || _chunks.Count == 0)
@@ -86,27 +103,6 @@ public abstract class CharacterMovement : MonoBehaviour
 
 	protected abstract int GetUpgradeAmount(ChunkType chunkType);
 
-	private void Awake()
-	{
-		_globalSettings = GlobalSettings.Instance;
-		_speed = _globalSettings.BaseSpeed;
-	}
-
-	private void OnEnable()
-	{
-		OnChangeChunk += OnChangeChunkHandler;
-	}
-
-	private void OnDisable()
-	{
-		OnChangeChunk -= OnChangeChunkHandler;
-	}
-
-	private void Update()
-	{
-		_distance += Speed * Time.deltaTime;
-	}
-
 	private float DistanceToChunkEnd(int chunkIndex, int startPointIndex)
 	{
 		Transform from;
@@ -130,12 +126,6 @@ public abstract class CharacterMovement : MonoBehaviour
 		}
 
 		return distance;
-	}
-
-	private void OnChangeChunkHandler(Chunk chunk, CharacterMovement characterMovement)
-	{
-		float additionalSpeed = GetUpgradeAmount(chunk.Type) * _globalSettings.AdditionalSpeedByUpgrade;
-		_speed = _globalSettings.BaseSpeed + additionalSpeed;
 	}
 
 	private Transform MoveToNextPoint()

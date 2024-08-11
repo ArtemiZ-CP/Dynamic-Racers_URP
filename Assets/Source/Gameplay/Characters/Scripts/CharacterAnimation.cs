@@ -17,18 +17,6 @@ public class CharacterAnimation : MonoBehaviour
 	private Animator _gadgetAnimator;
 	private int _place = 0;
 
-	private void OnEnable()
-	{
-		_characterGadgets.OnActiveAnimation += OnActiveAnimationHandler;
-		_characterGadgets.OnDisactiveAnimation += OnDisactiveAnimationHandler;
-	}
-
-	private void OnDisable()
-	{
-		_characterGadgets.OnActiveAnimation -= OnActiveAnimationHandler;
-		_characterGadgets.OnDisactiveAnimation -= OnDisactiveAnimationHandler;
-	}
-
 	private void Awake()
 	{
 		_animator = _meshSpawner.Initialize();
@@ -45,6 +33,18 @@ public class CharacterAnimation : MonoBehaviour
 			_gadgetAnimator = _activeGadget.GetComponent<Animator>();
 			_activeGadget.SetActive(false);
 		}
+	}
+
+	private void OnEnable()
+	{
+		_characterGadgets.OnActiveAnimation += OnActiveAnimationHandler;
+		_characterGadgets.OnDisactiveAnimation += OnDisactiveAnimationHandler;
+	}
+
+	private void OnDisable()
+	{
+		_characterGadgets.OnActiveAnimation -= OnActiveAnimationHandler;
+		_characterGadgets.OnDisactiveAnimation -= OnDisactiveAnimationHandler;
 	}
 
 	private void Update()
@@ -87,18 +87,24 @@ public class CharacterAnimation : MonoBehaviour
 		}
 		else
 		{
-			_animator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
-		}
-
-		if (isGadgetActive)
-		{
-			_activeGadget.SetActive(true);
-			_gadgetAnimator.SetTrigger(gadgetChunkInfo.ChunkType.ToString());
+			if (isGadgetActive)
+			{
+				// _activeGadget.SetActive(true);
+				// _gadgetAnimator.SetTrigger(gadgetChunkInfo.ChunkType.ToString());
+				// _animator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
+				_animator.SetTrigger(gadgetChunkInfo.ChunkType.ToString());
+				Debug.LogWarning("Temporarily solution");
+			}
+			else
+			{
+				_animator.SetTrigger(gadgetChunkInfo.ChunkType.ToString());
+			}
 		}
 	}
 
-	private void OnDisactiveAnimationHandler()
+	private void OnDisactiveAnimationHandler(ChunkType chunkType)
 	{
 		_activeGadget.SetActive(false);
+		_animator.SetTrigger(chunkType.ToString());
 	}
 }

@@ -11,29 +11,22 @@ public class CharacterGadgets : MonoBehaviour
 	private ChunkType _currentChunkType;
 	private float _lastAcceleration;
 	private float _distanceToDisactiveGadget;
-	private int _usageCount;
+	private int[] _usageCounts;
+	private bool _isUsageSplited;
+	private bool _isSpeedIncresing;
 
 	public event Action<GadgetChunkInfo, bool> OnActiveAnimation;
-	public event Action OnDisactiveAnimation;
+	public event Action<ChunkType> OnDisactiveAnimation;
 
 	public GadgetScriptableObject Gadget => _gadget;
 	public float RemainingDistance => _distanceToDisactiveGadget - _characterMovement.Distance;
-	public int UsageCount => _usageCount;
-
-	public void Init(GadgetScriptableObject gadget)
-	{
-		if (gadget == null)
-		{
-			return;
-		}
-
-		_gadget = gadget;
-		_usageCount = gadget.ActiveCount;
-	}
+	public int[] UsageCounts => _usageCounts;
+	public bool IsUsageSplited => _isUsageSplited;
 
 	protected virtual void Awake()
 	{
 		_characterMovement = GetComponent<CharacterMovement>();
+		_usageCounts = new int[GlobalSettings.ChunksTypeCount];
 	}
 
 	private void OnEnable()
@@ -54,6 +47,19 @@ public class CharacterGadgets : MonoBehaviour
 		}
 	}
 
+	public void Init(GadgetScriptableObject gadget)
+	{
+		if (gadget == null)
+		{
+			return;
+		}
+
+		_gadget = gadget;
+		_isSpeedIncresing = gadget.IsSpeedIncreasing;
+		_isUsageSplited = gadget.IsUsageSplited;
+		Array.Fill(_usageCounts, gadget.UsageCount);
+	}
+
 	private void OnChangeChunkTypeHandler(Chunk chunk, CharacterMovement characterMovement)
 	{
 		_currentChunkType = chunk.Type;
@@ -63,6 +69,7 @@ public class CharacterGadgets : MonoBehaviour
 		if (TryActiveGadget()) return;
 
 		OnActiveAnimation.Invoke(new GadgetChunkInfo(_currentChunkType), false);
+		_characterMovement.SetChunkSpeed(chunk.Type);
 	}
 
 	private bool TryContinue()
@@ -73,9 +80,14 @@ public class CharacterGadgets : MonoBehaviour
 
 			if (gadgetChunkInfo != null)
 			{
-				SubtractAcceleration();
-				AddAcceleration(gadgetChunkInfo.IsAccelerates);
+				if (_isSpeedIncresing == false)
+				{
+					SubtractAcceleration();
+					AddAcceleration(gadgetChunkInfo.IsAccelerates);
+				}
+
 				OnActiveAnimation.Invoke(_activeGadget.GetChunkInfo(_currentChunkType), true);
+				_characterMovement.SetChunkSpeed(gadgetChunkInfo.PowerUsing);
 
 				return true;
 			}
@@ -100,12 +112,13 @@ public class CharacterGadgets : MonoBehaviour
 
 		if (gadgetChunkInfo != null)
 		{
-			if (_usageCount <= 0)
+			if (_usageCounts[(int)_currentChunkType] <= 0)
 			{
 				return false;
 			}
 
 			ActiveGadget(_gadget, gadgetChunkInfo.IsAccelerates, gadgetChunkInfo.StartDelay, gadgetChunkInfo.SpeedMultiplierOnDelay);
+			_characterMovement.SetChunkSpeed(gadgetChunkInfo.PowerUsing);
 
 			return true;
 		}
@@ -117,12 +130,30 @@ public class CharacterGadgets : MonoBehaviour
 	{
 		_activeGadget = gadget;
 
-		if (_usageCount != int.MaxValue)
+		if (_usageCounts[(int)_currentChunkType] != int.MaxValue)
 		{
-			_usageCount--;
+			if (_isUsageSplited)
+			{
+				_usageCounts[(int)_currentChunkType]--;
+			}
+			else
+			{
+				for (int i = 0; i < _usageCounts.Length; i++)
+				{
+					_usageCounts[i]--;
+				}
+			}
 		}
 
-		StartCoroutine(AddAcceleration(isAccelerates, delay, speedMultiplierOnDelay));
+		if (_isSpeedIncresing)
+		{
+			StartCoroutine(AddAccelerationWithIncreasing(delay, speedMultiplierOnDelay));
+		}
+		else
+		{
+			StartCoroutine(AddAcceleration(isAccelerates, delay, speedMultiplierOnDelay));
+		}
+
 		OnActiveAnimation.Invoke(_activeGadget.GetChunkInfo(_currentChunkType), true);
 
 		_distanceToDisactiveGadget = _characterMovement.Distance + _activeGadget.DistanceToDisactive;
@@ -139,9 +170,38 @@ public class CharacterGadgets : MonoBehaviour
 		SubtractAcceleration();
 		_distanceToDisactiveGadget = 0;
 		_activeGadget = null;
-		OnDisactiveAnimation.Invoke();
+		OnDisactiveAnimation.Invoke(_currentChunkType);
 
 		return true;
+	}
+
+	private IEnumerator AddAccelerationWithIncreasing(float delay, float speedMultiplierOnDelay)
+	{
+		AddAcceleration(speedMultiplierOnDelay);
+
+		yield return new WaitForSeconds(delay);
+
+		SubtractAcceleration();
+		AddAcceleration(_activeGadget.SpeedMultiplier / 4);
+		print(1);
+
+		while (IsDistancePassed(0.25f) == false)
+		{
+			yield return null;
+		}
+
+		SubtractAcceleration();
+		AddAcceleration(_activeGadget.SpeedMultiplier / 2);
+		print(2);
+
+		while (IsDistancePassed(0.5f) == false)
+		{
+			yield return null;
+		}
+
+		SubtractAcceleration();
+		AddAcceleration(_activeGadget.SpeedMultiplier);
+		print(3);
 	}
 
 	private IEnumerator AddAcceleration(bool isAccelerates, float delay, float speedMultiplierOnDelay)
@@ -150,7 +210,7 @@ public class CharacterGadgets : MonoBehaviour
 
 		yield return new WaitForSeconds(delay);
 
-		AddAcceleration(-speedMultiplierOnDelay);
+		SubtractAcceleration();
 		AddAcceleration(isAccelerates);
 	}
 
@@ -177,5 +237,14 @@ public class CharacterGadgets : MonoBehaviour
 	{
 		_characterMovement.SubtractAcceleration(_lastAcceleration);
 		_lastAcceleration = 0;
+	}
+
+	private bool IsDistancePassed(float percentage)
+	{
+		float endPoint = _distanceToDisactiveGadget;
+		float startPoint = _distanceToDisactiveGadget - _activeGadget.DistanceToDisactive;
+		float curentDistance = _characterMovement.Distance;
+
+		return (curentDistance - startPoint) / (endPoint - startPoint) >= percentage;
 	}
 }

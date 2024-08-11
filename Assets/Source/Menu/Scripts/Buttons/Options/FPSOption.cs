@@ -10,6 +10,7 @@ public class FPSOption : OptionButton
 
     protected override void TurnOff()
     {
+        base.TurnOff();
         PlayerData.SetFPS(_globalSettings.MinFPS);
     }
 

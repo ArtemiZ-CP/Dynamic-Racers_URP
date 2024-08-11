@@ -8,11 +8,6 @@ public static class RunSettings
     public static int PlayersCount { get; set; }
     public static int ExperienceReward { get; set; }
 
-    public static void Initialize()
-    {
-        
-    }
-
     public static void Reset()
     {
         PlayerGadget = null;

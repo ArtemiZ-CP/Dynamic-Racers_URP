@@ -27,13 +27,13 @@ public class SelectedGadgetInfo : MonoBehaviour
         _gadgetDescription.text = gadget.Description;
         _gadgetAcceleration.text = (int)(gadget.SpeedMultiplier * 100) + "%";
 
-        if (gadget.ActiveCount == int.MaxValue)
+        if (gadget.UsageCount == int.MaxValue)
         {
             _gadgetApplications.text = "Infinity";
         }
         else
         {
-            _gadgetApplications.text = gadget.ActiveCount.ToString();
+            _gadgetApplications.text = gadget.UsageCount.ToString();
         }
 
         if (gadget.DistanceToDisactive == float.MaxValue)

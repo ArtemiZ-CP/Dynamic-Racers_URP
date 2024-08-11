@@ -48,6 +48,11 @@ public static class PlayerData
     public static event Action OnSoundsChanged;
     public static event Action OnHapticChanged;
 
+    static PlayerData()
+    {
+        DataSaver.LoadData();
+    }
+
     public static void LoadData(SaveData saveData)
     {
         if (saveData == null)
