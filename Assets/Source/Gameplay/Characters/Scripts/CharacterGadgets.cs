@@ -166,11 +166,11 @@ public class CharacterGadgets : MonoBehaviour
 			return false;
 		}
 
+		OnDisactiveAnimation.Invoke(_currentChunkType);
 		StopAllCoroutines();
 		SubtractAcceleration();
 		_distanceToDisactiveGadget = 0;
 		_activeGadget = null;
-		OnDisactiveAnimation.Invoke(_currentChunkType);
 
 		return true;
 	}
@@ -183,7 +183,6 @@ public class CharacterGadgets : MonoBehaviour
 
 		SubtractAcceleration();
 		AddAcceleration(_activeGadget.SpeedMultiplier / 4);
-		print(1);
 
 		while (IsDistancePassed(0.25f) == false)
 		{
@@ -192,7 +191,6 @@ public class CharacterGadgets : MonoBehaviour
 
 		SubtractAcceleration();
 		AddAcceleration(_activeGadget.SpeedMultiplier / 2);
-		print(2);
 
 		while (IsDistancePassed(0.5f) == false)
 		{
@@ -201,7 +199,6 @@ public class CharacterGadgets : MonoBehaviour
 
 		SubtractAcceleration();
 		AddAcceleration(_activeGadget.SpeedMultiplier);
-		print(3);
 	}
 
 	private IEnumerator AddAcceleration(bool isAccelerates, float delay, float speedMultiplierOnDelay)

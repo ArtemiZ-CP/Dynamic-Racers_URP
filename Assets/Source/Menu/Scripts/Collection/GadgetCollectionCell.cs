@@ -56,6 +56,7 @@ public class GadgetCollectionCell : MonoBehaviour
         if (isFound)
         {
             _countBar.gameObject.SetActive(true);
+            _levelText.gameObject.SetActive(true);
             _notFound.SetActive(false);
             _countBar.SetFill(Gadget);
             _levelText.text = $"Level {Gadget.Level + 1}";
@@ -63,6 +64,7 @@ public class GadgetCollectionCell : MonoBehaviour
         else
         {
             _countBar.gameObject.SetActive(false);
+            _levelText.gameObject.SetActive(false);
             _notFound.SetActive(true);
         }
     }

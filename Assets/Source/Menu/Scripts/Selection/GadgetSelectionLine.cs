@@ -1,36 +1,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
 {
     [SerializeField] private RectTransform _gadgetCellsParent;
     [SerializeField] private GadgetSelectionCell _gadgetCellPrefab;
     [SerializeField] private SelectedGadgetInfo _selectedGadgetInfo;
+    [SerializeField] private Button _startButton;
 
     private List<GadgetSelectionCell> _gadgetCells = new();
     private GlobalSettings _globalSettings;
     private float _contentWidth;
 
-    public void Click(GadgetScriptableObject gadget)
-    {
-        _selectedGadgetInfo.Select(gadget);
-
-        if (gadget != null && _gadgetCells.Count > 0)
-        {
-            foreach (GadgetSelectionCell cell in _gadgetCells)
-            {
-                cell.Deselect();
-            }
-
-            _gadgetCells.Find(gadgetCell => gadgetCell.Gadget.GadgetScriptableObject == gadget)?.Select();
-            RunSettings.PlayerGadget = gadget;
-        }
-    }
-
     private void Awake()
     {
         _globalSettings = GlobalSettings.Instance;
+
+        if (PlayerData.PlayerGadgets.Count == 0)
+        {
+            _startButton.interactable = true;
+        }
+        else
+        {
+            _startButton.interactable = false;
+        }
     }
 
     private void Update()
@@ -45,6 +40,23 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
     {
         InitCells();
         Click(RunSettings.PlayerGadget);
+    }
+
+    public void Click(GadgetScriptableObject gadget)
+    {
+        _selectedGadgetInfo.Select(gadget);
+
+        if (gadget != null && _gadgetCells.Count > 0)
+        {
+            foreach (GadgetSelectionCell cell in _gadgetCells)
+            {
+                cell.Deselect();
+            }
+
+            _gadgetCells.Find(gadgetCell => gadgetCell.Gadget.GadgetScriptableObject == gadget)?.Select();
+            RunSettings.PlayerGadget = gadget;
+            _startButton.interactable = true;
+        }
     }
 
     private void InitCells()

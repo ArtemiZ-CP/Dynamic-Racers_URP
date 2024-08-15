@@ -5,6 +5,7 @@ public class DebugGive : MonoBehaviour
 {
     [Header("Start")]
     [SerializeField] private bool _skipTutorial;
+    [SerializeField] private bool _unfreezeFPS;
     [Space(20)]
     [SerializeField] private int _XPToGiveOnStart;
     [Header("On Click")]
@@ -70,5 +71,10 @@ public class DebugGive : MonoBehaviour
         }
 
         PlayerData.AddExperience(_XPToGiveOnStart);
+
+        if (_unfreezeFPS)
+        {
+            PlayerData.UnfreezeFPS();
+        }
     }
 }

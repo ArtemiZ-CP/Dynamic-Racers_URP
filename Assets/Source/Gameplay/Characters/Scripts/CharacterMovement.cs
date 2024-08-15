@@ -14,6 +14,7 @@ public abstract class CharacterMovement : MonoBehaviour
 	private float _speed;
 	private float _speedMultiplier = 1;
 	private float _distance;
+	private float _startOffset;
 
 	public event Action<Chunk, CharacterMovement> OnChangeChunk;
 
@@ -30,6 +31,11 @@ public abstract class CharacterMovement : MonoBehaviour
 
 			return _speed * _speedMultiplier;
 		}
+	}
+	public float CurrentOffset
+	{
+		get => _startOffset;
+		set => _startOffset = value;
 	}
 
 	private void Awake()

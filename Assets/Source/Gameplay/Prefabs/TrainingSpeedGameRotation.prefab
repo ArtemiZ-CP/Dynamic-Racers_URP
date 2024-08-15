@@ -812,7 +812,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6112444294983862361
 RectTransform:
   m_ObjectHideFlags: 0
@@ -849,28 +849,28 @@ MonoBehaviour:
   _speedPowers:
   - _left: {fileID: 7199458184820989534}
     _right: {fileID: 767528133891578785}
-    _speedMultiplier: 1.5
+    _speedMultiplier: 1
   - _left: {fileID: 767528133891578785}
     _right: {fileID: 2689105962137304184}
-    _speedMultiplier: 1.7
+    _speedMultiplier: 1.2
   - _left: {fileID: 2689105962137304184}
     _right: {fileID: 863618849842313791}
-    _speedMultiplier: 2
+    _speedMultiplier: 1.5
   - _left: {fileID: 863618849842313791}
     _right: {fileID: 6050145680688859250}
-    _speedMultiplier: 2.5
+    _speedMultiplier: 2
   - _left: {fileID: 6050145680688859250}
     _right: {fileID: 8486873048199772544}
-    _speedMultiplier: 2
+    _speedMultiplier: 1.5
   - _left: {fileID: 8486873048199772544}
     _right: {fileID: 8448937156577727493}
-    _speedMultiplier: 1.7
+    _speedMultiplier: 1.2
   - _left: {fileID: 8448937156577727493}
     _right: {fileID: 1900080930612020472}
-    _speedMultiplier: 1.5
+    _speedMultiplier: 1
   _visual: {fileID: 8232834256605268914}
   _arrow: {fileID: 2586370367135238885}
-  _player: {fileID: 0}
+  _playerMovement: {fileID: 0}
   _playerHint: {fileID: 0}
   _arrowSpeed: 0.5
   _arrowMovementCurve:
@@ -900,7 +900,7 @@ MonoBehaviour:
   _dragOffset: 200
   _hintMoveDuration: 0.5
   _fingerHint: {fileID: 2855240320525429363}
-  _showHintDelay: 0.5
+  _showHintDelay: 0
   _startDelay: 0.5
 --- !u!1 &8232834256605268914
 GameObject:

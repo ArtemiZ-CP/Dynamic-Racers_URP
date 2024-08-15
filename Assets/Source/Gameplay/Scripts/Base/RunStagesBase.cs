@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,7 @@ public abstract class RunStagesBase : MonoBehaviour
     private List<CharacterMovement> _finished = new();
     private bool _isRunning = false;
 
+    public SpeedGameBase SpeedGame => _speedGame;
     public bool IsRunning => _isRunning;
     public int CharactersCount => _enemies.Count + 1;
 
@@ -61,7 +63,7 @@ public abstract class RunStagesBase : MonoBehaviour
     {
         if (_speedGame != null)
         {
-            _speedGame.OnSpeedGameEnd += StartRunning;
+            _speedGame.EndedSpeedGame += StartRunning;
         }
 
         _playerMovement.OnChangeChunk += CheckEndChunk;
@@ -76,7 +78,7 @@ public abstract class RunStagesBase : MonoBehaviour
     {
         if (_speedGame != null)
         {
-            _speedGame.OnSpeedGameEnd -= StartRunning;
+            _speedGame.EndedSpeedGame -= StartRunning;
         }
 
         _playerMovement.OnChangeChunk -= CheckEndChunk;

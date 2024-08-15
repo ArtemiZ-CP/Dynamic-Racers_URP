@@ -1,16 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(RectTransform))]
+[RequireComponent(typeof(HorizontalLayoutGroup))]
 public class GadgetCollectionLine : MonoBehaviour
 {
-    public static readonly int GadgetsCount = 4;
-
     [SerializeField] private GadgetCollectionCell _gadgetCellPrefab;
 
+    private HorizontalLayoutGroup _layoutGroup;
     private List<GadgetCollectionCell> _gadgetCells = new();
+    private float _gadgetsWidth;
 
     public IReadOnlyList<GadgetCollectionCell> GadgetCells => _gadgetCells;
+    public int GadgetsCount { get; private set; }
+
+    private void Awake()
+    {
+        _layoutGroup = GetComponent<HorizontalLayoutGroup>();
+        _gadgetsWidth = _gadgetCellPrefab.GetComponent<RectTransform>().sizeDelta.x;
+        GadgetsCount = GetGadgetsCountInLine();
+    }
 
     public void Init(List<Gadget> gadgets, int foundGadgetsCount)
     {
@@ -38,5 +48,28 @@ public class GadgetCollectionLine : MonoBehaviour
                 gadgetCell.Init();
             }
         }
+    }
+
+    private int GetGadgetsCountInLine()
+    {
+        float screenWidth = Screen.width;
+        int gadgetsCount = 1;
+
+        while (GetGadgetsWidth(gadgetsCount) < screenWidth)
+        {
+            gadgetsCount++;
+        }
+
+        return gadgetsCount;
+    }
+    
+    private float GetGadgetsWidth(int gadgetsCount)
+    {
+        float width = 0;
+        width += _layoutGroup.padding.left;
+        width += _layoutGroup.padding.right;
+        width += _layoutGroup.spacing * (gadgetsCount - 1);
+        width += gadgetsCount * _gadgetsWidth;
+        return width;
     }
 }

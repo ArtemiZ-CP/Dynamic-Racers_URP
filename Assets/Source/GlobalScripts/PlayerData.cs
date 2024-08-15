@@ -41,6 +41,8 @@ public static class PlayerData
     private static bool _isSoundsOn;
     private static bool _isHapticOn;
 
+    private static bool _unfreezeFPS = false;
+
     public static event Action OnCoinsChanged;
     public static event Action OnDiamondsChanged;
     public static event Action OnTicketsChanged;
@@ -53,6 +55,12 @@ public static class PlayerData
         DataSaver.LoadData();
     }
 
+    public static void UnfreezeFPS()
+    {
+        Application.targetFrameRate = 1000;
+        _unfreezeFPS = true;
+    }
+
     public static void LoadData(SaveData saveData)
     {
         if (saveData == null)
@@ -60,6 +68,7 @@ public static class PlayerData
             SetMusic(true);
             SetSounds(true);
             SetHaptic(true);
+
             SetFPS(GlobalSettings.Instance.MinFPS);
 
             return;
@@ -106,6 +115,8 @@ public static class PlayerData
 
     public static void SetFPS(int fps)
     {
+        if (_unfreezeFPS) return;
+
         _fps = fps;
         Application.targetFrameRate = fps;
     }

@@ -9,21 +9,19 @@ public class SpeedGameBase : MonoBehaviour
     [SerializeField] private List<SpeedPower> _speedPowers = new();
     [SerializeField] private GameObject _visual;
     [SerializeField] private Transform _arrow;
-    [SerializeField] private Transform _player;
+    [SerializeField] private PlayerMovement _playerMovement;
     [Header("Hints")]
     [SerializeField] private GameObject _playerHint;
     [Header("Settings")]
     [SerializeField] private float _arrowSpeed;
     [SerializeField] private AnimationCurve _arrowMovementCurve;
     [SerializeField] private float _dragOffset;
-    [SerializeField] private float _hintMoveDuration;
 
-    public event Action<float> OnSpeedGameEnd;
+    public event Action<float> EndedSpeedGame;
 
-    public Transform Player => _player;
+    public PlayerMovement PlayerMovement => _playerMovement;
     public Vector3 StartPlayerPosition => _startPlayerPosition;
     public float RandomSpeedMultiplier => _speedPowers[UnityEngine.Random.Range(0, _speedPowers.Count)].SpeedMultiplier;
-    public float MinMultiplier => _speedPowers.Min(x => x.SpeedMultiplier);
     public float DragOffset => _dragOffset;
     public float MaxPlayerOffset => _maxPlayerOffset;
     public bool IsGameActive => _isGameActive;
@@ -42,15 +40,54 @@ public class SpeedGameBase : MonoBehaviour
 
     protected virtual void Start()
     {
-        _startPlayerPosition = _player.transform.position;
+        _startPlayerPosition = _playerMovement.transform.position;
         SortSpeedPowers();
         ActiveGame();
-        StartCoroutine(ShowHint());
     }
 
-    protected void FinishSpeedGame()
+    private void Update()
+    {
+        ProcessTouch();
+    }
+
+    protected virtual void SetStartTouchPosition()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            _startTouchPositionY = touch.position.y;
+        }
+        else
+        {
+            _startTouchPositionY = Input.mousePosition.y;
+        }
+    }
+
+    protected virtual void FinishSpeedGame()
     {
         _isGameActive = false;
+    }
+
+    protected void ProcessTouch()
+    {
+		if (IsTouchGown() && IsGameActive == false)
+		{
+			SetStartTouchPosition();
+		}
+		else if (IsTouch() && IsGameActive == false)
+		{
+			float t = Mathf.Clamp01(GetTouchOffset() / DragOffset);
+			PlayerMovement.CurrentOffset = MaxPlayerOffset * t;
+
+			if (GetTouchOffset() > DragOffset)
+			{
+				StartGame();
+			}
+		}
+		else if (IsTouchUp() && IsGameActive)
+		{
+			FinishSpeedGame();
+		}
     }
 
     protected bool IsTouchGown()
@@ -86,19 +123,6 @@ public class SpeedGameBase : MonoBehaviour
         return Input.GetKeyUp(KeyCode.Mouse0);
     }
 
-    protected void SetStartTouchPosition()
-    {
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            _startTouchPositionY = touch.position.y;
-        }
-        else
-        {
-            _startTouchPositionY = Input.mousePosition.y;
-        }
-    }
-
     protected void StartGame()
     {
         _speedMultiplier = 1;
@@ -111,7 +135,7 @@ public class SpeedGameBase : MonoBehaviour
     protected void StartRunning()
     {
         HideHint();
-        OnSpeedGameEnd?.Invoke(_speedMultiplier);
+        EndedSpeedGame?.Invoke(_speedMultiplier);
     }
 
     protected float GetTouchOffset()
@@ -125,20 +149,9 @@ public class SpeedGameBase : MonoBehaviour
         return -Input.mousePosition.y + _startTouchPositionY;
     }
 
-    private IEnumerator ShowHint()
+    protected void ShowHint()
     {
-        _playerHint.transform.position = _startPlayerPosition;
-
-        Vector3 playerHintPosition = _player.position + Vector3.back * _maxPlayerOffset;
-        float speed = Vector3.Distance(_playerHint.transform.position, playerHintPosition) / _hintMoveDuration;
-
-        while (_playerHint.transform.position.z > playerHintPosition.z)
-        {
-            _playerHint.transform.position += speed * Time.deltaTime * Vector3.back;
-            yield return null;
-        }
-
-        _playerHint.transform.position = playerHintPosition;
+        _playerHint.SetActive(true);
     }
 
     private void HideHint()

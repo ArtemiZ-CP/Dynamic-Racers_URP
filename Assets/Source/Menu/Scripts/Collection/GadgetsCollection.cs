@@ -90,7 +90,7 @@ public class GadgetsCollection : MonoBehaviour
             {
                 gadgetCellLine.Init(gadgetsInLine, foundGadgetsCount);
             }
-            else if (spawnedGadgets % GadgetCollectionLine.GadgetsCount == GadgetCollectionLine.GadgetsCount - 1)
+            else if (spawnedGadgets % gadgetCellLine.GadgetsCount == gadgetCellLine.GadgetsCount - 1)
             {
                 gadgetCellLine.Init(gadgetsInLine, foundGadgetsCount);
                 _gadgetCells.AddRange(gadgetCellLine.GadgetCells);

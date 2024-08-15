@@ -9,7 +9,7 @@ public class TrainingSpeedGame : SpeedGameBase
 
     override protected void Awake()
     {
-        _fingerHint.SetActive(false);
+        HideFingerHint();
         base.Awake();
     }
 
@@ -19,29 +19,23 @@ public class TrainingSpeedGame : SpeedGameBase
         Invoke(nameof(ShowFingerHint), _showHintDelay);
     }
 
-    private void Update()
+    protected override void SetStartTouchPosition()
     {
-        if (IsTouchGown() && IsGameActive == false)
-        {
-            CancelInvoke(nameof(ShowFingerHint));
-            SetStartTouchPosition();
-            _fingerHint.SetActive(false);
-        }
-        else if (IsTouch() && IsGameActive == false)
-        {
-            float t = Mathf.Clamp01(GetTouchOffset() / DragOffset);
-            Player.position = StartPlayerPosition + MaxPlayerOffset * t * Vector3.back;
+        base.SetStartTouchPosition();
+        CancelInvoke(nameof(ShowFingerHint));
+        HideFingerHint();
+        ShowHint();
+    }
 
-            if (GetTouchOffset() > DragOffset)
-            {
-                StartGame();
-            }
-        }
-        else if (IsTouchUp() && IsGameActive)
-        {
-            Invoke(nameof(StartRunning), _startDelay);
-            FinishSpeedGame();
-        }
+    protected override void FinishSpeedGame()
+    {
+        Invoke(nameof(StartRunning), _startDelay);
+        base.FinishSpeedGame();
+    }
+
+    private void HideFingerHint()
+    {
+        _fingerHint.SetActive(false);
     }
 
     private void ShowFingerHint()

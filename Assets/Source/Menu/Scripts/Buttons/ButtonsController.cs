@@ -2,20 +2,35 @@ using UnityEngine;
 
 public class ButtonsController : MonoBehaviour
 {
+    [SerializeField] private ButtonObjectsSwap _startActiveButton;
     [SerializeField] private ButtonObjectsSwap[] _buttons;
-    
-    public void SelectButton(ButtonObjectsSwap button)
+
+    private ButtonObjectsSwap _currentButton;
+
+    private void Start()
     {
-        foreach (ButtonObjectsSwap b in _buttons)
+        SetButtonActive(_startActiveButton);
+    }
+
+    public void SetButtonActive(ButtonObjectsSwap buttonToActivate)
+    {
+        if (_currentButton == buttonToActivate)
         {
-            if (b == button)
+            return;
+        }
+
+        foreach (ButtonObjectsSwap button in _buttons)
+        {
+            if (button == buttonToActivate)
             {
-                b.Select();
+                button.Select();
             }
             else
             {
-                b.Deselect();
+                button.Deselect();
             }
         }
+
+        _currentButton = buttonToActivate;
     }
 }
