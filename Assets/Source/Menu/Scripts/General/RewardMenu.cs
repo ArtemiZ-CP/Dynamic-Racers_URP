@@ -61,7 +61,7 @@ public class RewardMenu : MonoBehaviour
     {
         _currentReward = reward;
 
-        if (reward is BoxReward boxReward)
+        if (reward is ChestReward boxReward)
         {
             GiveReward(boxReward);
         }
@@ -71,7 +71,7 @@ public class RewardMenu : MonoBehaviour
         }
     }
 
-    private void GiveReward(BoxReward boxReward)
+    private void GiveReward(ChestReward boxReward)
     {
         foreach (GadgetReward newBoxReward in boxReward.Rewards)
         {

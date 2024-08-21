@@ -1,14 +1,18 @@
 public class ChestShopReward : ShopReward
 {
-    public BoxReward Chests { get; private set; }
+    public ChestReward Chests { get; private set; }
 
-    public ChestShopReward(BoxReward.ChestType chestsType)
+    public ChestShopReward(ChestReward.ChestType chestsType, int amount = 1)
     {
-        Chests = new(chestsType);;
+        Chests = new(chestsType);
+        Amount = amount;
     }
 
     public override void ApplyReward()
     {
-        PlayerData.AddReward(Chests);
+        for (int i = 0; i < Amount; i++)
+        {
+            PlayerData.AddReward(Chests);
+        }
     }
 }

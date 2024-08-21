@@ -23,10 +23,13 @@ MonoBehaviour:
     _isAccelerates: 1
     _animationTriggerName: PropellerBackpackFly
   _speedMultiplier: 0.1
+  _isSpeedIncreasing: 0
   _distanceToDisactive: -1
   _isInfiniteDistance: 1
   _activeCount: 1
   _isInfiniteActiveCounts: 1
+  _isUsageSplited: 0
   _name: Propeller Backpack
   _sprite: {fileID: 21300000, guid: 6d981669e26a7431a8e6d23a7a0c9032, type: 3}
   _description: 
+  _id: 12

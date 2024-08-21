@@ -12,20 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 877db2fbb19117e4084e6e96afbc5de5, type: 3}
   m_Name: Bull
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 919132149155446097, guid: eefa839d8fc854c4a9c5c602cdc75684, type: 3}
+  _prefab: {fileID: 361341571312253833, guid: b8cf4ec5e94324d68afa6a00ea685801, type: 3}
   _group: 1
   _rare: 1
   _gadgetAnimationInfos:
   - _chunkType: 0
+    _powerUsing: 0
     _startDelay: 0
     _speedMultiplierOnDelay: 0
     _isAccelerates: 1
     _animationTriggerName: BullGround
   _speedMultiplier: 1
+  _isSpeedIncreasing: 0
   _distanceToDisactive: 20
   _isInfiniteDistance: 0
   _activeCount: 3
   _isInfiniteActiveCounts: 0
+  _isUsageSplited: 0
   _name: Bull
   _sprite: {fileID: 21300000, guid: 7b05dbd7d453f44f48f585726abf9661, type: 3}
   _description: 
+  _id: 0

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Gadget", menuName = "Gadget")]
+[Serializable]
 public class GadgetScriptableObject : ScriptableObject
 {
 	[Header("Settings")]
@@ -21,6 +23,7 @@ public class GadgetScriptableObject : ScriptableObject
 	[SerializeField] private Sprite _sprite;
 	[Header("Info")]
 	[SerializeField] private string _description;
+	[SerializeField] private int _id;
 
 	public GameObject Prefab => _prefab;
 	public Group Group => _group;

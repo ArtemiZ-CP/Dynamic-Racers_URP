@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 877db2fbb19117e4084e6e96afbc5de5, type: 3}
   m_Name: Plungers
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 4654591429510769051, guid: 4b3286aa69d6747c7b8d84c12b0121ee, type: 3}
+  _prefab: {fileID: 5032770071611398438, guid: 364894aa574c54969883e2c2ef7ef1db, type: 3}
   _group: 2
   _rare: 0
   _gadgetAnimationInfos:
@@ -23,10 +23,13 @@ MonoBehaviour:
     _isAccelerates: 1
     _animationTriggerName: PlungersWall
   _speedMultiplier: 0.1
+  _isSpeedIncreasing: 0
   _distanceToDisactive: -1
   _isInfiniteDistance: 1
   _activeCount: 1
   _isInfiniteActiveCounts: 1
+  _isUsageSplited: 0
   _name: Plungers
   _sprite: {fileID: 21300000, guid: 6d981669e26a7431a8e6d23a7a0c9032, type: 3}
   _description: "\u0414\u0430, \u0432\u0430\u043D\u0442\u0443\u0437. \u0410 \u0447\u0442\u043E?"
+  _id: 11

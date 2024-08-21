@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 877db2fbb19117e4084e6e96afbc5de5, type: 3}
   m_Name: Boots
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 2119092854821998363, guid: 9516a2fc70bcc46679e8ce3be953d73c, type: 3}
+  _prefab: {fileID: 6309370478925360801, guid: 351d4d2ffa5224869ac093d4b4cf6261, type: 3}
   _group: 3
   _rare: 0
   _gadgetAnimationInfos:
@@ -28,6 +28,8 @@ MonoBehaviour:
   _isInfiniteDistance: 1
   _activeCount: 1
   _isInfiniteActiveCounts: 1
+  _isUsageSplited: 0
   _name: Boots
   _sprite: {fileID: 21300000, guid: 8cacb1c187ced40e1889352069344641, type: 3}
   _description: "\u041D\u0430\u0439\u043A\u0438"
+  _id: 19

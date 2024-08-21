@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 
 [Serializable]
 public class SaveData
 {
-    #region PlayerProgress
-
-    public Queue<BoxReward> BoxRewardQueue;
-    public Queue<BagReward> BagRewardQueue;
-    public List<Gadget> PlayerGadgets;
+    public ChestRewardSaveInfo[] BoxRewardQueue;
+    public BagRewardSaveInfo[] BagRewardQueue;
+    public PlayerGadgetSaveInfo[] PlayerGadgets;
     public int Experience;
     public int Level;
     public int Coins;
@@ -23,6 +20,40 @@ public class SaveData
     public bool IsMusicOn;
     public bool IsSoundsOn;
     public bool IsHapticOn;
+    public MyData LastTimeBattlePassBought;
+    public MyData LastUpdateShopDay;
+    public int ShopRandomSeed;
+}
 
-    #endregion
+[Serializable]
+public class PlayerGadgetSaveInfo
+{
+    public string GadgetName;
+    public int Amount;
+    public int Level;
+}
+
+[Serializable]
+public class BagRewardSaveInfo
+{
+    [Serializable]
+    public class CharacteristicRewardSaveInfo
+    {
+        public int TypeInt;
+        public int Value;
+    }
+
+    public CharacteristicRewardSaveInfo[] RewardsQueue;
+}
+
+[Serializable]
+public class ChestRewardSaveInfo
+{
+    public PlayerGadgetSaveInfo[] GadgetRewards;
+}
+
+[Serializable]
+public class MyData
+{
+    public DateTime DateTimeValue { get; set; }
 }

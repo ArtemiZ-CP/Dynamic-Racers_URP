@@ -1,7 +1,7 @@
 public enum CharacteristicType
 {
-    Race,
-    Dive,
-    Ascend,
-    Glide
+    Run,
+    Swim,
+    Climb,
+    Fly
 }

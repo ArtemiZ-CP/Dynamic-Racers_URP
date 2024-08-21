@@ -16,6 +16,6 @@ public class ProfileButton : MonoBehaviour
 
     private void OnEnable()
     {
-        CloseProfilePanel();
+        _profilePanel.SetActive(false);
     }
 }

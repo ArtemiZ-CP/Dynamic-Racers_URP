@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -131,10 +130,10 @@ public abstract class RunStagesBase : MonoBehaviour
             foreach (EnemyMovement enemy in _enemies)
             {
                 enemy.SetUpgrades(
-                    GetEnemyUpgrades(CharacteristicType.Race),
-                    GetEnemyUpgrades(CharacteristicType.Dive),
-                    GetEnemyUpgrades(CharacteristicType.Ascend),
-                    GetEnemyUpgrades(CharacteristicType.Glide));
+                    GetEnemyUpgrades(CharacteristicType.Run),
+                    GetEnemyUpgrades(CharacteristicType.Swim),
+                    GetEnemyUpgrades(CharacteristicType.Climb),
+                    GetEnemyUpgrades(CharacteristicType.Fly));
                 enemy.StartMove(chunks, _speedGame.RandomSpeedMultiplier);
             }
         }

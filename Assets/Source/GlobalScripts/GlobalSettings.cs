@@ -10,16 +10,33 @@ public class GlobalSettings : ScriptableObject
 
 	private static GlobalSettings _instance;
 
-    [SerializeField, Min(1)] private int _XPToLevelUp;
-	[SerializeField] private int _gameplayPlayersCount; 
+	[Serializable]
+	private class ChestOpeningInfo
+	{
+		[SerializeField] private ChestReward.ChestType _type;
+		[SerializeField] private int _openingTimeInSeconds;
+		[SerializeField] private int _openingTimeInMinuts;
+		[SerializeField] private int _openingTimeInHours;
+
+		public ChestReward.ChestType Type => _type;
+		public TimeSpan GetOpeningTime()
+		{
+			return new TimeSpan(0, _openingTimeInHours, _openingTimeInMinuts, _openingTimeInSeconds, 0);
+		}
+	}
+
+	[SerializeField, Min(1)] private int _XPToLevelUp;
+	[SerializeField] private int _gameplayPlayersCount;
 	[SerializeField] private int _maxTickets;
 	[SerializeField] private int _minFPS = 30;
 	[SerializeField] private int _maxFPS = 30;
+	[Header("Opening Chests")]
+	[SerializeField] private List<ChestOpeningInfo> _openingChests = new();
 	[Header("Shop")]
-	[SerializeField] private BoxReward.ChestSprite[] _boxSprites;
+	[SerializeField] private ChestReward.ChestSprite[] _boxSprites;
 	[Header("Training")]
-	[SerializeField] private int _trainingLevelsCount; 
-	[SerializeField] private int _trainingPlayersCount; 
+	[SerializeField] private int _trainingLevelsCount;
+	[SerializeField] private int _trainingPlayersCount;
 	[Header("Gadgets")]
 	[SerializeField] private int[] _gadgetsLevelProgression;
 	[SerializeField] private GadgetScriptableObject[] _allGadgets;
@@ -39,7 +56,7 @@ public class GlobalSettings : ScriptableObject
 	[SerializeField, Min(1)] private int _roadsOffset = 1;
 	[SerializeField, Min(1)] private int _minRoadLength = 1;
 	[SerializeField, Min(1)] private int _minRoadsCount = 1;
-	
+
 	public int XPToLevelUp => _XPToLevelUp;
 	public int GameplayPlayersCount => _gameplayPlayersCount;
 	public int MaxTickets => _maxTickets;
@@ -73,6 +90,23 @@ public class GlobalSettings : ScriptableObject
 		}
 	}
 
+	public GadgetScriptableObject GetGadgetByName(string name)
+	{
+		return _allGadgets.FirstOrDefault(gadget => gadget.Name == name);
+	}
+
+	public TimeSpan GetOpeningTime(ChestReward.ChestType chestType)
+	{
+		ChestOpeningInfo chestOpeningInfo = _openingChests.Find(info => info.Type == chestType);
+
+		if (chestOpeningInfo == null)
+		{
+			return TimeSpan.Zero;
+		}
+
+		return chestOpeningInfo.GetOpeningTime();
+	}
+
 	public List<Gadget> GetAllGadgets()
 	{
 		return _allGadgets.Select(gadget => new Gadget(gadget)).ToList();
@@ -81,7 +115,7 @@ public class GlobalSettings : ScriptableObject
 	public List<Gadget> GetNotFoundGadgets()
 	{
 		List<Gadget> foundGadgets = PlayerData.PlayerGadgets.ToList();
-		List<Gadget> notFoundGadgets = _allGadgets.Where(gadget => 
+		List<Gadget> notFoundGadgets = _allGadgets.Where(gadget =>
 			!foundGadgets.Any(foundGadget => foundGadget.GadgetScriptableObject == gadget)).
 			Select(gadget => new Gadget(gadget)).ToList();
 
@@ -90,7 +124,7 @@ public class GlobalSettings : ScriptableObject
 
 	public Sprite GetGadgetRareBackground(Rare rare)
 	{
-		return _gadgetRareBackgrounds[(int) rare];
+		return _gadgetRareBackgrounds[(int)rare];
 	}
 
 	public GadgetScriptableObject GetRandomGadget()
@@ -98,9 +132,9 @@ public class GlobalSettings : ScriptableObject
 		return _allGadgets[UnityEngine.Random.Range(0, _allGadgets.Length)];
 	}
 
-	public GadgetScriptableObject GetRandomGadget(Rare rare)
+	public GadgetScriptableObject GetRandomGadget(Rare rare, System.Random random)
 	{
-		List<GadgetScriptableObject> gadgets = _allGadgets.Where(g => 
+		List<GadgetScriptableObject> gadgets = _allGadgets.Where(g =>
 			g.Rare == rare).ToList();
 
 		if (gadgets.Count == 0)
@@ -108,7 +142,7 @@ public class GlobalSettings : ScriptableObject
 			return null;
 		}
 
-		return gadgets[UnityEngine.Random.Range(0, gadgets.Count)];
+		return gadgets[random.Next(gadgets.Count)];
 	}
 
 	public bool TryGetGadgetsLevelProgression(int gadgetLevel, out int gadgetsToLevelUp)
@@ -123,9 +157,9 @@ public class GlobalSettings : ScriptableObject
 		return false;
 	}
 
-	public Sprite GetChestSprite(BoxReward.ChestType chestType)
+	public Sprite GetChestSprite(ChestReward.ChestType chestType)
 	{
-		foreach (BoxReward.ChestSprite chestSprite in _boxSprites)
+		foreach (ChestReward.ChestSprite chestSprite in _boxSprites)
 		{
 			if (chestSprite.ChestType == chestType)
 			{

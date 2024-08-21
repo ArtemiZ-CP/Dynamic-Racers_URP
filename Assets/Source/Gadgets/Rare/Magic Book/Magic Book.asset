@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 877db2fbb19117e4084e6e96afbc5de5, type: 3}
   m_Name: Magic Book
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 919132149155446097, guid: eefa839d8fc854c4a9c5c602cdc75684, type: 3}
+  _prefab: {fileID: 2016776823788826863, guid: 285eca822d9584650a5f4b7b7e2db958, type: 3}
   _group: 0
   _rare: 1
   _gadgetAnimationInfos:
@@ -23,10 +23,13 @@ MonoBehaviour:
     _isAccelerates: 1
     _animationTriggerName: MagicBookFly
   _speedMultiplier: 0.2
+  _isSpeedIncreasing: 0
   _distanceToDisactive: -1
   _isInfiniteDistance: 1
   _activeCount: 2
   _isInfiniteActiveCounts: 0
+  _isUsageSplited: 0
   _name: Magic Book
   _sprite: {fileID: 21300000, guid: 7b05dbd7d453f44f48f585726abf9661, type: 3}
   _description: Forever yours... But only twice.
+  _id: 0

@@ -17,7 +17,7 @@ public class RewardWindow : MonoBehaviour
         IsActive = true;
         gameObject.SetActive(true);
 
-        if (reward is BoxReward boxReward)
+        if (reward is ChestReward boxReward)
         {
             _rewards = new Queue<Reward>(boxReward.Rewards);
         }

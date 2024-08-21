@@ -17,6 +17,27 @@ MonoBehaviour:
   _maxTickets: 5
   _minFPS: 30
   _maxFPS: 60
+  _openingChests:
+  - _type: 0
+    _openingTimeInSeconds: 5
+    _openingTimeInMinuts: 0
+    _openingTimeInHours: 0
+  - _type: 1
+    _openingTimeInSeconds: 0
+    _openingTimeInMinuts: 10
+    _openingTimeInHours: 0
+  - _type: 2
+    _openingTimeInSeconds: 0
+    _openingTimeInMinuts: 0
+    _openingTimeInHours: 1
+  - _type: 3
+    _openingTimeInSeconds: 0
+    _openingTimeInMinuts: 0
+    _openingTimeInHours: 6
+  - _type: 4
+    _openingTimeInSeconds: 0
+    _openingTimeInMinuts: 0
+    _openingTimeInHours: 20
   _boxSprites:
   - ChestType: 0
     Sprite: {fileID: 1016734939, guid: 861ad289352f5458c972607110983f31, type: 3}

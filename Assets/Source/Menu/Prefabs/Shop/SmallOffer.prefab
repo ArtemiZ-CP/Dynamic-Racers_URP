@@ -32,10 +32,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4331348744131743272}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.12900001, y: 0.277}
-  m_AnchorMax: {x: 0.87200004, y: 0.9156845}
-  m_AnchoredPosition: {x: -0.5, y: 3.5}
-  m_SizeDelta: {x: -35.134598, y: -41.7679}
+  m_AnchorMin: {x: 0.15, y: 0.26}
+  m_AnchorMax: {x: 0.85, y: 0.77}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0.000006914139, y: -0.0000019073486}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8348224995061257765
 CanvasRenderer:
@@ -275,7 +275,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dd7b008c2deb749f582d1674be705c70, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 95238d549b3184a49897a99ead5f9bcb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -656,10 +656,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nameText: {fileID: 537517579300897095}
   _amountText: {fileID: 5087325068848037725}
+  _lastPriceText: {fileID: 0}
+  _saleText: {fileID: 0}
   _priceText: {fileID: 7513832556164260001}
-  _button: {fileID: 5884813554328728160}
   _offerImage: {fileID: 6374057503342522757}
-  _soldoutImage: {fileID: 8964312260134666565}
+  _soldoutImages:
+  - {fileID: 8964312260134666565}
+  _imagesToHideOnSoldout:
+  - {fileID: 5307387556307666067}
 --- !u!1 &8391978982261537957
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,7 +805,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dd7b008c2deb749f582d1674be705c70, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 95238d549b3184a49897a99ead5f9bcb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

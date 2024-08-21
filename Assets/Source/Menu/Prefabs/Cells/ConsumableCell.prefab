@@ -109,8 +109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 37.16, y: 0.019226074}
-  m_SizeDelta: {x: -133.53, y: -54.96}
+  m_AnchoredPosition: {x: 36.84249, y: 0.019226074}
+  m_SizeDelta: {x: -147.28497, y: -72.47}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1932362189259994578
 CanvasRenderer:
@@ -168,14 +168,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
+  m_fontSize: 38.95
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 10
-  m_fontSizeMax: 45
+  m_fontSizeMax: 40.2
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -219,8 +219,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6802662648351848098}
-  - component: {fileID: 1798316793710118036}
-  - component: {fileID: 1517610016555803672}
   m_Layer: 5
   m_Name: ConsumableCell
   m_TagString: Untagged
@@ -250,32 +248,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 359.5592, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1798316793710118036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8741288757102891433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69261d2949cbb44d3a586afdf7437c85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ticketsText: {fileID: 5501763971423911450}
---- !u!114 &1517610016555803672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8741288757102891433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8332713bb63794f87b3a8e4fa4fe35ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _coinsText: {fileID: 5501763971423911450}
 --- !u!1 &8846841413200018188
 GameObject:
   m_ObjectHideFlags: 0

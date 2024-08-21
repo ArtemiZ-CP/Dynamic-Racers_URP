@@ -161,7 +161,7 @@ public class CharacterAnimation : MonoBehaviour
 
 	private void DisactiveAnimationHandler(ChunkType chunkType)
 	{
-		_gadgetAnimator.SetTrigger(End);
+		_activeGadget.SetActive(false);
 		_animator.SetTrigger(chunkType.ToString());
 	}
 }

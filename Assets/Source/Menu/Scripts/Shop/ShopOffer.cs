@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class ShopOffer : MonoBehaviour
 {
     private const string DiamondIcon = "<sprite=\"Diamond\" index=0>";
@@ -11,35 +12,20 @@ public class ShopOffer : MonoBehaviour
 
     [SerializeField] private TMP_Text _nameText;
     [SerializeField] private TMP_Text _amountText;
+    [SerializeField] private TMP_Text _lastPriceText;
+    [SerializeField] private TMP_Text _saleText;
     [SerializeField] private TMP_Text _priceText;
-    [SerializeField] private Button _button;
     [SerializeField] private Image _offerImage;
-    [SerializeField] private GameObject _soldoutImage;
+    [SerializeField] private GameObject[] _soldoutImages;
+    [SerializeField] private GameObject[] _imagesToHideOnSoldout;
 
+    private Button _button;
     private ShopItem _item;
     private bool _isInfinityToSell;
 
-    public void SetFreeOffer(string name, Sprite sprite, ShopReward shopReward)
+    private void Awake()
     {
-        SetOffer(name, 0, ShopItem.Currency.Coin, sprite, shopReward, isInfinityToSell: false);
-    }
-
-    public void SetADSOffer(string name, Sprite sprite, ShopReward shopReward, bool isInfinityToSell = true)
-    {
-        SetOffer(name, 0, ShopItem.Currency.ADS, sprite, shopReward, isInfinityToSell);
-    }
-
-    public void SetOffer(string name, int price, ShopItem.Currency currency, Sprite sprite, ShopReward shopReward, bool isInfinityToSell = true)
-    {
-        ActiveOffer();
-        _item = new ShopItem(price, currency, shopReward);
-
-        _isInfinityToSell = isInfinityToSell;
-        _nameText.text = name;
-        _offerImage.sprite = sprite;
-
-        SetAmountText(shopReward.Amount);
-        SetPriceText(currency, price);
+        _button = GetComponent<Button>();
     }
 
     private void OnEnable()
@@ -52,8 +38,78 @@ public class ShopOffer : MonoBehaviour
         _button.onClick.RemoveListener(OnClickHandler);
     }
 
+    public void SetPersonalOffer(float salePersantage, float price, float lastPrice, Sprite sprite, ShopReward[] shopRewards)
+    {
+        ActiveOffer();
+        _item = new ShopItem(price, shopRewards);
+
+        _offerImage.sprite = sprite;
+
+        _nameText.text = $"{(int)(salePersantage * 100)}%\nSale";
+
+        SetPriceText(ShopItem.Currency.USD, lastPrice, _lastPriceText);
+        SetPriceText(ShopItem.Currency.USD, price, _priceText);
+    }
+
+    public void SetFreeOffer(string name, Sprite sprite, ShopReward shopReward)
+    {
+        SetOffer(name, 0, ShopItem.Currency.Coin, sprite, shopReward, isInfinityToSell: false);
+    }
+
+    public void SetADSOffer(string name, Sprite sprite, ShopReward shopReward, bool isInfinityToSell = true)
+    {
+        SetOffer(name, 0, ShopItem.Currency.ADS, sprite, shopReward, isInfinityToSell);
+    }
+
+    public void SetOffer(string name, float price, Sprite sprite, ShopReward shopReward, bool isInfinityToSell = true)
+    {
+        ActiveOffer();
+        _item = new ShopItem(price, shopReward);
+
+        _isInfinityToSell = isInfinityToSell;
+
+        if (_offerImage != null)
+        {
+            _offerImage.sprite = sprite;
+        }
+
+        if (_nameText != null)
+        {
+            _nameText.text = name;
+        }
+
+        SetAmountText(shopReward.Amount);
+        SetPriceText(ShopItem.Currency.USD, price, _priceText);
+    }
+
+    public void SetOffer(string name, int price, ShopItem.Currency currency, Sprite sprite, ShopReward shopReward, bool isInfinityToSell = true)
+    {
+        ActiveOffer();
+        _item = new ShopItem(price, currency, shopReward);
+
+        _isInfinityToSell = isInfinityToSell;
+
+        if (_offerImage != null)
+        {
+            _offerImage.sprite = sprite;
+        }
+
+        if (_nameText != null)
+        {
+            _nameText.text = name;
+        }
+
+        SetAmountText(shopReward.Amount);
+        SetPriceText(currency, price, _priceText);
+    }
+
     private void SetAmountText(int amount)
     {
+        if (_amountText == null)
+        {
+            return;
+        }
+
         if (amount > 1)
         {
             _amountText.text = $"x{amount}";
@@ -64,11 +120,17 @@ public class ShopOffer : MonoBehaviour
         }
     }
 
-    private void SetPriceText(ShopItem.Currency currency, int price)
+    private void SetPriceText(ShopItem.Currency currency, float price, TMP_Text priceText)
     {
         if (currency == ShopItem.Currency.ADS)
         {
-            _priceText.text = $"get:{ADSIcon}";
+            priceText.text = $"get:{ADSIcon}";
+            return;
+        }
+
+        if (currency == ShopItem.Currency.USD)
+        {
+            priceText.text = $"${price}";
             return;
         }
 
@@ -76,17 +138,16 @@ public class ShopOffer : MonoBehaviour
         {
             ShopItem.Currency.Diamond => DiamondIcon,
             ShopItem.Currency.Coin => CoinIcon,
-            ShopItem.Currency.Real => RubIcon,
             _ => string.Empty,
         };
 
         if (price == 0)
         {
-            _priceText.text = "Free";
+            priceText.text = "Free";
         }
         else
         {
-            _priceText.text = $"{price}{currencyIcon}";
+            priceText.text = $"{price}{currencyIcon}";
         }
     }
 
@@ -101,18 +162,30 @@ public class ShopOffer : MonoBehaviour
     private void ActiveOffer()
     {
         _button.interactable = true;
-        _soldoutImage.SetActive(false);
-        _nameText.gameObject.SetActive(true);
-        _amountText.gameObject.SetActive(true);
-        _priceText.gameObject.SetActive(true);
+
+        foreach (var image in _imagesToHideOnSoldout)
+        {
+            image.SetActive(true);
+        }
+
+        foreach (var soldoutImage in _soldoutImages)
+        {
+            soldoutImage.SetActive(false);
+        }
     }
 
     private void DisactiveOffer()
     {
         _button.interactable = false;
-        _soldoutImage.SetActive(true);
-        _nameText.gameObject.SetActive(false);
-        _amountText.gameObject.SetActive(false);
-        _priceText.gameObject.SetActive(false);
+
+        foreach (var image in _imagesToHideOnSoldout)
+        {
+            image.SetActive(false);
+        }
+
+        foreach (var soldoutImage in _soldoutImages)
+        {
+            soldoutImage.SetActive(true);
+        }
     }
 }

@@ -1,3 +1,6 @@
+using System;
+
+[Serializable]
 public class Gadget
 {
     private GadgetScriptableObject _gadgetScriptableObject;
@@ -7,11 +10,11 @@ public class Gadget
     public GadgetScriptableObject GadgetScriptableObject => _gadgetScriptableObject;
     public int Level => _level;
 
-    public Gadget(GadgetScriptableObject gadgetScriptableObject, int amount = 1)
+    public Gadget(GadgetScriptableObject gadgetScriptableObject, int amount = 1, int level = 0)
     {
         _gadgetScriptableObject = gadgetScriptableObject;
         _amount = amount;
-        _level = 0;
+        _level = level;
     }
 
     public Gadget(Gadget gadget)
@@ -28,6 +31,7 @@ public class Gadget
             {
                 _amount -= gadgetsToLevelUp;
                 _level++;
+                DataSaver.SaveData();
                 
                 return true;
             }
