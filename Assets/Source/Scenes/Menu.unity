@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: da9167267987b4e4faf922f8073be9cf,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -31267,6 +31268,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 73843079252078549, guid: d78ce4f7224e746808b2c2af121bb9bc,
         type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 73843079252078549, guid: d78ce4f7224e746808b2c2af121bb9bc,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 96d14b6e4601f41b9bc1b2fa23510d36, type: 2}
@@ -31324,6 +31330,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Skin2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4841440311600841644, guid: d78ce4f7224e746808b2c2af121bb9bc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4841440311600841644, guid: d78ce4f7224e746808b2c2af121bb9bc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4841440311600841644, guid: d78ce4f7224e746808b2c2af121bb9bc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4841440311600841644, guid: d78ce4f7224e746808b2c2af121bb9bc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5126019704319134908, guid: d78ce4f7224e746808b2c2af121bb9bc,
         type: 3}
@@ -32192,7 +32218,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.87853974, y: 1}
   m_AnchorMax: {x: 0.97, y: 1}
-  m_AnchoredPosition: {x: 0, y: -58.704956}
+  m_AnchoredPosition: {x: 0, y: -58.70508}
   m_SizeDelta: {x: -1.3659992, y: 117.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1345659312
@@ -39022,7 +39048,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -39981,7 +40007,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -68.21002, y: 68.21008}
+  m_AnchoredPosition: {x: -68.20996, y: 68.20996}
   m_SizeDelta: {x: 136.42, y: 136.42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1751624314
@@ -48663,7 +48689,7 @@ PrefabInstance:
     - target: {fileID: 6175205355435280925, guid: b41720697118f4f5e9af5ba707f1352a,
         type: 3}
       propertyPath: m_fontSize
-      value: 36.3
+      value: 34.4
       objectReference: {fileID: 0}
     - target: {fileID: 6235274701883685532, guid: b41720697118f4f5e9af5ba707f1352a,
         type: 3}
