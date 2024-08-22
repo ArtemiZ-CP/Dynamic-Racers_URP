@@ -8,7 +8,7 @@ public class ActiveMenu : MonoBehaviour
 
     private GameObject _currentMenu;
 
-    private void Awake()
+    private void OnEnable()
     {
         SetActiveMenu(_startActiveMenu);
     }

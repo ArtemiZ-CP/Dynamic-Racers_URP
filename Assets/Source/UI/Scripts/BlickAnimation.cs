@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BlickAnimation : MonoBehaviour
@@ -13,7 +12,7 @@ public class BlickAnimation : MonoBehaviour
 
     private float _offset;
 
-    private void Start()
+    private void OnEnable()
     {
         StartCoroutine(Animate());
     }

@@ -7,6 +7,8 @@ public class TilesBackground : MonoBehaviour
     [SerializeField] private BackgroundTile _tilePrefab;
     [SerializeField] private Vector2Int _tilesCountInGrid;
     [SerializeField] private float _moveSpeed;
+    [SerializeField] private bool _isCanvasOverlay;
+    [SerializeField] private bool _toggleBlicks;
     [Header("Blick Duration")]
     [SerializeField] private float _startBlickDuration;
     [SerializeField] private float _middleBlickDuration;
@@ -27,14 +29,14 @@ public class TilesBackground : MonoBehaviour
     private void Awake()
     {
         _tileSize = _tilePrefab.GetComponent<RectTransform>().sizeDelta;
+        SpawnTiles();
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        SpawnTiles();
         StartCoroutine(MoveTiles());
-        StartCoroutine(BlickTiles());
         StartCoroutine(ReverseSpeedCoroutine());
+        if (_toggleBlicks) StartCoroutine(BlickTiles());
     }
 
     private void SpawnTiles()
@@ -166,7 +168,17 @@ public class TilesBackground : MonoBehaviour
 
     private bool IsTileInsideScreen(BackgroundTile tile)
     {
-        Vector3 screenPosition = Camera.main.WorldToScreenPoint(tile.transform.position);
+        Vector3 screenPosition;
+
+        if (_isCanvasOverlay)
+        {
+            screenPosition = tile.transform.position;
+        }
+        else
+        {
+            screenPosition = Camera.main.WorldToScreenPoint(tile.transform.position);
+        }
+
         return screenPosition.x > 0 && screenPosition.x < Screen.width && screenPosition.y > 0 && screenPosition.y < Screen.height;
     }
 }

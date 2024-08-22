@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class SelectedGadgetInfo : MonoBehaviour
 {
-    [SerializeField] private GameObject _withoutGadgetWindow;
     [SerializeField] private GameObject _withGadgetWindow;
     [SerializeField] private TMP_Text _gadgetName;
     [SerializeField] private TMP_Text _gadgetDescription;
@@ -15,12 +14,10 @@ public class SelectedGadgetInfo : MonoBehaviour
     {
         if (gadget == null)
         {
-            _withoutGadgetWindow.SetActive(true);
             _withGadgetWindow.SetActive(false);
             return;
         }
 
-        _withoutGadgetWindow.SetActive(false);
         _withGadgetWindow.SetActive(true);
 
         _gadgetName.text = gadget.Name;
