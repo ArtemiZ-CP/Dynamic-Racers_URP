@@ -6,11 +6,9 @@ public class AddRunGadget : MonoBehaviour
 
     private void Awake()
     {
-#if UNITY_EDITOR
-        if (_gadgetScriptableObject != null)
+        if (_gadgetScriptableObject != null && RunSettings.PlayerGadget == null)
         {
             RunSettings.PlayerGadget = _gadgetScriptableObject;
         }
-#endif
     }
 }

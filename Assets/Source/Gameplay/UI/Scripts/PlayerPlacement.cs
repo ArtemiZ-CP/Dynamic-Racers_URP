@@ -8,7 +8,7 @@ public class PlayerPlacement : MonoBehaviour
     public void SetPlace(int place)
     {
         string placeText = place.ToString();
-        placeText += "<sup>-";
+        placeText += "<sup>";
 
         placeText += place switch
         {

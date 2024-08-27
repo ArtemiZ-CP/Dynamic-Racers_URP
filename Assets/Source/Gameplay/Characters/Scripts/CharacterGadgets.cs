@@ -20,6 +20,7 @@ public class CharacterGadgets : MonoBehaviour
 
 	public GadgetScriptableObject Gadget => _gadget;
 	public float RemainingDistance => _distanceToDisactiveGadget - _characterMovement.Distance;
+	public float DistanceToDisactiveGadget => _distanceToDisactiveGadget;
 	public int[] UsageCounts => _usageCounts;
 	public bool IsUsageSplited => _isUsageSplited;
 
