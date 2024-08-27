@@ -8,6 +8,7 @@ public class MapDrawer : MonoBehaviour
     [SerializeField] private Vector2 _tileSize;
     [SerializeField] private Vector2 _mapOffset;
     [SerializeField, Min(0)] private float _maxTileSize;
+    [SerializeField] private float _mapScale = 1;
     [Header("Tiles")]
     [SerializeField] private List<MapTile> _startMapTiles = new();
     [SerializeField] private List<MapTile> _middleMapTiles = new();
@@ -91,14 +92,17 @@ public class MapDrawer : MonoBehaviour
             {
                 minX = position.x;
             }
+
             if (position.x > maxX)
             {
                 maxX = position.x;
             }
+
             if (position.y < minY)
             {
                 minY = position.y;
             }
+
             if (position.y > maxY)
             {
                 maxY = position.y;
@@ -112,18 +116,18 @@ public class MapDrawer : MonoBehaviour
             _tilesParent.GetChild(i).localPosition -= center;
         }
 
-        Vector2 resize = new()
+        Vector2 newTileSize = new()
         {
             x = (_tilesParent.rect.width - _mapOffset.x * 2 * _tileSize.x) / (maxX - minX + _tileSize.x),
             y = (_tilesParent.rect.height - _mapOffset.y * 2 * _tileSize.y) / (maxY - minY + _tileSize.y)
         };
 
-        ResizeMap(resize);
+        ResizeMap(newTileSize);
     }
 
-    private void ResizeMap(Vector2 resize)
+    private void ResizeMap(Vector2 newTileSize)
     {
-        float scale = Mathf.Min(resize.x, resize.y);
+        float scale = Mathf.Min(newTileSize.x, newTileSize.y);
         scale = Mathf.Min(scale, _maxTileSize);
 
         foreach (Transform tile in _tilesParent)
@@ -135,7 +139,20 @@ public class MapDrawer : MonoBehaviour
 
     private Vector2Int SpawnChunk(Vector2Int startPosition, ChunkSettings chunkSettings)
     {
-        Vector2Int size = chunkSettings.Size;
+        Vector2Int size = new(
+            Mathf.RoundToInt(chunkSettings.Size.x * _mapScale),
+            Mathf.RoundToInt(chunkSettings.Size.y * _mapScale));
+
+        if (chunkSettings.Size.x > 0 && size.x < 2)
+        {
+            size.x = 2;
+        }
+
+        if (chunkSettings.Size.y > 0 && size.y < 2)
+        {
+            size.y = 2;
+        }
+
         ChunkType chunkType = chunkSettings.Type;
 
         if (chunkType == ChunkType.Fly)
@@ -147,6 +164,7 @@ public class MapDrawer : MonoBehaviour
         {
             startPosition.x += 1;
             SpawnTiles(startPosition, Vector2Int.zero, chunkSettings);
+            return chunkSettings.Size;
         }
         else if (chunkType == ChunkType.Wall)
         {

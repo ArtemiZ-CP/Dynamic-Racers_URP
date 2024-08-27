@@ -25,19 +25,15 @@ public class Gadget
 
     public bool TryLevelUp()
     {
-        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(_level, out int gadgetsToLevelUp))
+        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(_level, out int gadgetsToLevelUp, out int coinsCost))
         {
-            if (_amount >= gadgetsToLevelUp)
+            if (_amount >= gadgetsToLevelUp && PlayerData.TryToSpendCoins(coinsCost))
             {
                 _amount -= gadgetsToLevelUp;
                 _level++;
                 DataSaver.SaveData();
-                
+
                 return true;
-            }
-            else
-            {
-                return false;
             }
         }
 

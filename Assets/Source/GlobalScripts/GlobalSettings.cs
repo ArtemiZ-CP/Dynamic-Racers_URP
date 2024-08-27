@@ -25,6 +25,16 @@ public class GlobalSettings : ScriptableObject
 		}
 	}
 
+	[Serializable]
+	private class GadgetsLevelProgression
+	{
+		[SerializeField] private int _gadgetsToLevelUp;
+		[SerializeField] private int _coinsCost;
+
+		public int GadgetsToLevelUp => _gadgetsToLevelUp;
+		public int CoinsCost => _coinsCost;
+	}
+
 	[SerializeField, Min(1)] private int _XPToLevelUp;
 	[SerializeField] private int _gameplayPlayersCount;
 	[SerializeField] private int _maxTickets;
@@ -38,9 +48,10 @@ public class GlobalSettings : ScriptableObject
 	[SerializeField] private int _trainingLevelsCount;
 	[SerializeField] private int _trainingPlayersCount;
 	[Header("Gadgets")]
-	[SerializeField] private int[] _gadgetsLevelProgression;
+	[SerializeField] private GadgetsLevelProgression[] _gadgetsLevelProgression;
 	[SerializeField] private GadgetScriptableObject[] _allGadgets;
 	[SerializeField] private Sprite[] _gadgetRareBackgrounds;
+	[SerializeField] private Color[] _gadgetRareColor;
 	[Header("Character Speed")]
 	[SerializeField, Min(0)] private float _baseSpeed = 1;
 	[SerializeField, Min(0)] private float _additionalSpeedByUpgrade = 1;
@@ -127,6 +138,11 @@ public class GlobalSettings : ScriptableObject
 		return _gadgetRareBackgrounds[(int)rare];
 	}
 
+	public Color GetGadgetRareColor(Rare rare)
+	{
+		return _gadgetRareColor[(int)rare];
+	}
+
 	public GadgetScriptableObject GetRandomGadget()
 	{
 		return _allGadgets[UnityEngine.Random.Range(0, _allGadgets.Length)];
@@ -145,15 +161,17 @@ public class GlobalSettings : ScriptableObject
 		return gadgets[random.Next(gadgets.Count)];
 	}
 
-	public bool TryGetGadgetsLevelProgression(int gadgetLevel, out int gadgetsToLevelUp)
+	public bool TryGetGadgetsLevelProgression(int gadgetLevel, out int gadgetsToLevelUp, out int coinsCost)
 	{
 		if (gadgetLevel < _gadgetsLevelProgression.Length)
 		{
-			gadgetsToLevelUp = _gadgetsLevelProgression[gadgetLevel];
+			gadgetsToLevelUp = _gadgetsLevelProgression[gadgetLevel].GadgetsToLevelUp;
+			coinsCost = _gadgetsLevelProgression[gadgetLevel].CoinsCost;
 			return true;
 		}
 
 		gadgetsToLevelUp = 0;
+		coinsCost = 0;
 		return false;
 	}
 

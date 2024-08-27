@@ -4,12 +4,13 @@ using UnityEngine.UI;
 
 public class GadgetSelectionCell : MonoBehaviour
 {
-    [SerializeField] private GameObject _glow;
+    [SerializeField] private GameObject[] _select;
     [SerializeField] private Image _image;
     [SerializeField] private Button _button;
     [SerializeField] private GameObject _notFound;
     [SerializeField] private Image _background;
     [SerializeField] private TMP_Text _levelText;
+    [SerializeField] private GameObject _recomendedWindow;
 
     public Gadget Gadget { get; private set; }
 
@@ -17,6 +18,7 @@ public class GadgetSelectionCell : MonoBehaviour
     {
         _background.gameObject.SetActive(false);
         _notFound.SetActive(false);
+        _recomendedWindow.SetActive(false);
         Deselect();
     }
 
@@ -28,6 +30,7 @@ public class GadgetSelectionCell : MonoBehaviour
         ActiveBackground(gadget.GadgetScriptableObject.Rare);
 
         _notFound.SetActive(false);
+        _recomendedWindow.SetActive(false);
     }
 
     public void Init(Gadget gadget, bool isFound, IClickableGadget clickableGadget)
@@ -52,12 +55,23 @@ public class GadgetSelectionCell : MonoBehaviour
 
     public void Select()
     {
-        _glow?.SetActive(true);
+        foreach (var item in _select)
+        {
+            item?.SetActive(true);
+        }
     }
 
     public void Deselect()
     {
-        _glow?.SetActive(false);
+        foreach (var item in _select)
+        {
+            item?.SetActive(false);
+        }
+    }
+
+    public void SetRecomended()
+    {
+        _recomendedWindow.SetActive(true);
     }
 
     private void ActiveBackground(Rare rare)

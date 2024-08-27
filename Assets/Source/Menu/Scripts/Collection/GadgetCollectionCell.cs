@@ -16,6 +16,16 @@ public class GadgetCollectionCell : MonoBehaviour
     public bool IsFound { get; private set; }
     public event Action<GadgetCollectionCell> OnClick;
 
+    private void OnEnable()
+    {
+        _button.onClick.AddListener(Select);
+    }
+
+    private void OnDisable()
+    {
+        _button.onClick.RemoveListener(Select);
+    }
+
     public void Init()
     {
         _background.gameObject.SetActive(false);
@@ -34,16 +44,6 @@ public class GadgetCollectionCell : MonoBehaviour
     public void UpdateGadget()
     {
         SetFill(IsFound);
-    }
-
-    private void OnEnable()
-    {
-        _button.onClick.AddListener(Select);
-    }
-
-    private void OnDisable()
-    {
-        _button.onClick.RemoveListener(Select);
     }
 
     private void Select()

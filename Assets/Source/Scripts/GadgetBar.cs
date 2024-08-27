@@ -14,7 +14,7 @@ public class GadgetBar : MonoBehaviour
     {
         float fill;
 
-        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(gadget.Level, out int gadgetsToLevelUp))
+        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(gadget.Level, out int gadgetsToLevelUp, out _))
         {
             int count = gadget.GetAmount();
 

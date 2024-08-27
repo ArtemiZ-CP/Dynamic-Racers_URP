@@ -248,6 +248,19 @@ public static class PlayerData
         return false;
     }
 
+    public static bool TryToSpendCoins(int coins)
+    {
+        if (_coins >= coins)
+        {
+            _coins -= coins;
+            OnCoinsChanged?.Invoke();
+            DataSaver.SaveData();
+            return true;
+        }
+
+        return false;
+    }
+
     public static bool TryToSpendTicket()
     {
         if (_tickets > 0)

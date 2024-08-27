@@ -8,11 +8,9 @@ public class LoadAnimation : MonoBehaviour
     [Header("Text")]
     [SerializeField] private int _pointsCount;
     [SerializeField] private TMP_Text _text;
-    [Header("Rotation")]
-    [SerializeField] private float _rotationSpeed;
-    [SerializeField] private Transform _rotationPoint;
     [Header("Players load")]
     [SerializeField] private float _playersLoadDelay;
+    [SerializeField] private float _gameLoadDelay;
     [SerializeField] private GameObject _playerPrefab;
     [SerializeField] private RectTransform _viewport;
     [SerializeField] private RectTransform _playersParent;
@@ -25,7 +23,6 @@ public class LoadAnimation : MonoBehaviour
 
     private void Update()
     {
-        _rotationPoint.Rotate(Vector3.forward, _rotationSpeed * Time.deltaTime);
         MovePlayersParent();
     }
 
@@ -51,6 +48,7 @@ public class LoadAnimation : MonoBehaviour
     {
         ClearPlayers();
         var delay = new WaitForSeconds(_playersLoadDelay);
+        var lastDelay = new WaitForSeconds(_gameLoadDelay);
 
         for (int i = 0; i < playersCount; i++)
         {
@@ -58,7 +56,7 @@ public class LoadAnimation : MonoBehaviour
             Instantiate(_playerPrefab, _playersParent);
         }
 
-        yield return delay;
+        yield return lastDelay;
     }
 
     private void ClearPlayers()

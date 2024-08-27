@@ -17,6 +17,11 @@ public class BlickAnimation : MonoBehaviour
         StartCoroutine(Animate());
     }
 
+    public void StopAnimation()
+    {
+        StopAllCoroutines();
+    }
+
     private IEnumerator Animate()
     {
         while (true)
