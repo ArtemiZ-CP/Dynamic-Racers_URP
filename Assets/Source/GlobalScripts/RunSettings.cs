@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public static class RunSettings
 {
-    public static GadgetScriptableObject PlayerGadget { get; set; }
+    public static Gadget PlayerGadget { get; set; }
     public static List<ChunkSettings> Map { get; set; }
     public static MapCellsContainer MapCellsContainer { get; set; }
     public static int PlayersCount { get; set; }

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 877db2fbb19117e4084e6e96afbc5de5, type: 3}
+  m_Name: Flamingo
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 8491624571586928644, guid: 9b5249e05fe274f6cb4f33f0fcb4c290, type: 3}
+  _group: 3
+  _rare: 0
+  _gadgetAnimationInfos:
+  - _chunkType: 1
+    _powerUsing: 1
+    _startDelay: 0
+    _speedMultiplierOnDelay: 0
+    _isAccelerates: 1
+    _animationTriggerName: FlamingoWater
+  _speedMultiplier: 0.1
+  _isSpeedIncreasing: 0
+  _distanceToDisactive: -1
+  _isInfiniteDistance: 1
+  _activeCount: 1
+  _isInfiniteActiveCounts: 1
+  _isUsageSplited: 0
+  _name: Flamingo
+  _bigSprite: {fileID: 21300000, guid: 3307e06a3d10e46adbc8ed2d71b5c6ad, type: 3}
+  _smallSprite: {fileID: 21300000, guid: 7695020504e9a4226805907534f3245e, type: 3}
+  _description: <sprite="Swim" index=0><color=#18F5DF>Swimmig</color> accelerates
+    for the entire race

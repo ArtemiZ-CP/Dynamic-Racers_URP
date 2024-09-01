@@ -49,6 +49,8 @@ public class GlobalSettings : ScriptableObject
 	[SerializeField] private int _trainingPlayersCount;
 	[Header("Gadgets")]
 	[SerializeField] private GadgetsLevelProgression[] _gadgetsLevelProgression;
+	[SerializeField] private int[] _gadgetsLevelProgressionCostMultiplier;
+	[SerializeField] private int[] _gadgetsLevelProgressionStartLevel;
 	[SerializeField] private GadgetScriptableObject[] _allGadgets;
 	[SerializeField] private Sprite[] _gadgetRareBackgrounds;
 	[SerializeField] private Color[] _gadgetRareColor;
@@ -127,7 +129,7 @@ public class GlobalSettings : ScriptableObject
 	{
 		List<Gadget> foundGadgets = PlayerData.PlayerGadgets.ToList();
 		List<Gadget> notFoundGadgets = _allGadgets.Where(gadget =>
-			!foundGadgets.Any(foundGadget => foundGadget.GadgetScriptableObject == gadget)).
+			!foundGadgets.Any(foundGadget => foundGadget.ScriptableObject == gadget)).
 			Select(gadget => new Gadget(gadget)).ToList();
 
 		return notFoundGadgets;
@@ -161,17 +163,27 @@ public class GlobalSettings : ScriptableObject
 		return gadgets[random.Next(gadgets.Count)];
 	}
 
-	public bool TryGetGadgetsLevelProgression(int gadgetLevel, out int gadgetsToLevelUp, out int coinsCost)
+	public int GetStartGadgetLevel(Gadget gadget)
 	{
-		if (gadgetLevel < _gadgetsLevelProgression.Length)
+		return _gadgetsLevelProgressionStartLevel[(int)gadget.ScriptableObject.Rare] - 1;
+	}
+
+	public bool TryGetGadgetsLevelProgression(Gadget gadget, out int gadgetsToLevelUp, out int coinsCost)
+	{
+		if (gadget.Level < _gadgetsLevelProgression.Length)
 		{
-			gadgetsToLevelUp = _gadgetsLevelProgression[gadgetLevel].GadgetsToLevelUp;
-			coinsCost = _gadgetsLevelProgression[gadgetLevel].CoinsCost;
+			int startLevel = GetStartGadgetLevel(gadget);
+			int rareGadgetCostMultiplier = _gadgetsLevelProgressionCostMultiplier[(int)gadget.ScriptableObject.Rare];
+
+			gadgetsToLevelUp = _gadgetsLevelProgression[gadget.Level - startLevel].GadgetsToLevelUp;
+			coinsCost = _gadgetsLevelProgression[gadget.Level - startLevel].CoinsCost * rareGadgetCostMultiplier;
+
 			return true;
 		}
 
 		gadgetsToLevelUp = 0;
 		coinsCost = 0;
+
 		return false;
 	}
 

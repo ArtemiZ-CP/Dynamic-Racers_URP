@@ -130,13 +130,13 @@ public class GadgetsCollection : MonoBehaviour
 
         for (int i = 0; i < allGadgets.Count; i++)
         {
-            if (foundGadgets.Any(g => g.GadgetScriptableObject == allGadgets[i].GadgetScriptableObject) == false)
+            if (foundGadgets.Any(g => g.ScriptableObject == allGadgets[i].ScriptableObject) == false)
             {
                 notFoundIndex++;
 
                 if (notFoundIndex == gadgetIndex)
                 {
-                    return allGadgets[i].GadgetScriptableObject;
+                    return allGadgets[i].ScriptableObject;
                 }
             }
         }

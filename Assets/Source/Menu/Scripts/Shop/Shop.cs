@@ -395,7 +395,7 @@ public class Shop : MonoBehaviour
         int gadgetsAmount = gadgetOfferInfo.GetGadgetsCount(isOfferFree: true, _random, out _, out _);
         GadgetShopReward gadgetShopReward = new(gadget, gadgetsAmount);
 
-        _dailyOffers[offerIndex].SetFreeOffer(gadget.Name, gadget.Sprite, gadgetShopReward);
+        _dailyOffers[offerIndex].SetFreeOffer(gadget.Name, gadget.BigSprite, gadgetShopReward);
     }
 
     private void SetADSGadgetOffer(int offerIndex)
@@ -405,7 +405,7 @@ public class Shop : MonoBehaviour
         int gadgetsAmount = gadgetOfferInfo.GetGadgetsCount(isOfferFree: true, _random, out _, out _);
         GadgetShopReward gadgetShopReward = new(gadget, gadgetsAmount);
 
-        _dailyOffers[offerIndex].SetADSOffer(gadget.Name, gadget.Sprite, gadgetShopReward, isInfinityToSell: false);
+        _dailyOffers[offerIndex].SetADSOffer(gadget.Name, gadget.BigSprite, gadgetShopReward, isInfinityToSell: false);
     }
 
     private void SetGadgetOffer(int offerIndex, Rare rare)
@@ -415,7 +415,7 @@ public class Shop : MonoBehaviour
         int gadgetsAmount = gadgetOfferInfo.GetGadgetsCount(isOfferFree: false, _random, out int price, out ShopItem.Currency currency);
         GadgetShopReward gadgetShopReward = new(gadget, gadgetsAmount);
 
-        _dailyOffers[offerIndex].SetOffer(gadget.Name, price, currency, gadget.Sprite, gadgetShopReward, isInfinityToSell: false);
+        _dailyOffers[offerIndex].SetOffer(gadget.Name, price, currency, gadget.BigSprite, gadgetShopReward, isInfinityToSell: false);
     }
 
     private void SetChestOffer(int offerIndex, int price, ShopItem.Currency currency, ChestReward.ChestType chestType)

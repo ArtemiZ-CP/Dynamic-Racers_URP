@@ -10,6 +10,8 @@ public class UpgradePanel : MonoBehaviour
     private const string ClimbIcon = "<sprite=\"Climb\" index=0>";
     private const string FlyIcon = "<sprite=\"Fly\" index=0>";
 
+    private readonly int SpeedMultiplier = Animator.StringToHash(nameof(SpeedMultiplier));
+
     [SerializeField] private TMP_Text _itemName;
     [SerializeField] private TMP_Text _itemSpeedBonus;
     [SerializeField] private TMP_Text _itemDescription;
@@ -20,8 +22,14 @@ public class UpgradePanel : MonoBehaviour
     [SerializeField] private Image _itemRareImage;
     [SerializeField] private TMP_Text _itemRareText;
     [SerializeField] private TMP_Text _itemCategoryText;
+    [SerializeField] private Animator _playerAnimator;
+    [SerializeField] private Material _playerMaterial;
+    [SerializeField] private UpgradeGadget _upgradeGadget;
 
     private GlobalSettings _globalSettings;
+    private GadgetScriptableObject _gadget;
+    private Animator _gadgetAnimator;
+    private GadgetChunkInfo _gadgetChunkInfo;
 
     private void Awake()
     {
@@ -30,20 +38,69 @@ public class UpgradePanel : MonoBehaviour
 
     private void OnEnable()
     {
+        if (_gadgetAnimator != null)
+        {
+            Destroy(_gadgetAnimator.gameObject);
+            _gadgetAnimator = null;
+        }
+
+        _playerAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
+        _playerAnimator.transform.GetComponentInChildren<SkinnedMeshRenderer>().material = _playerMaterial;
+        ActivePlayerAnimation();
+        
         if (RunSettings.PlayerGadget != null)
         {
-            ShowGadgetInfo(PlayerData.PlayerGadgets.First(g => g.GadgetScriptableObject == RunSettings.PlayerGadget));
+            ShowGadgetInfo(RunSettings.PlayerGadget);
         }
+
+        _upgradeGadget.LevelUp += ShowGadgetInfo;
+    }
+
+    private void OnDisable()
+    {
+        _upgradeGadget.LevelUp -= ShowGadgetInfo;
+    }
+
+    public void SetPlayerAnimation(GadgetScriptableObject gadget, GadgetChunkInfo gadgetChunkInfo)
+    {
+        _gadget = gadget;
+        _gadgetChunkInfo = gadgetChunkInfo;
+    }
+
+    private void ActivePlayerAnimation()
+    {
+        if (Instantiate(_gadget.Prefab, _playerAnimator.transform).TryGetComponent(out _gadgetAnimator))
+        {
+            _gadgetAnimator.SetTrigger(_gadgetChunkInfo.AnimationTriggerName);
+            _gadgetAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
+            SkinnedMeshRenderer skinnedMeshRenderer = _gadgetAnimator.transform.GetComponentInChildren<SkinnedMeshRenderer>();
+
+            if (skinnedMeshRenderer != null)
+            {
+                skinnedMeshRenderer.material = _playerMaterial;
+            }
+        }
+
+        _playerAnimator.SetTrigger(_gadgetChunkInfo.AnimationTriggerName);
     }
 
     private void ShowGadgetInfo(Gadget gadget)
     {
-        _itemName.text = gadget.GadgetScriptableObject.Name;
+        _itemName.text = gadget.ScriptableObject.Name;
         ShowSpeedBonus(gadget);
-        _itemDescription.text = gadget.GadgetScriptableObject.Description;
-        _itemDistance.text = gadget.GadgetScriptableObject.DistanceToDisactive == float.MaxValue ? "Infinity" : $"{gadget.GadgetScriptableObject.DistanceToDisactive}m";
-        _itemUses.text = gadget.GadgetScriptableObject.UsageCount == int.MaxValue ? "Infinity" : gadget.GadgetScriptableObject.UsageCount.ToString();
-        _itemSpeedBoost.text = $"{(int)(gadget.GadgetScriptableObject.SpeedMultiplier * 100)}%";
+        _itemDescription.text = gadget.ScriptableObject.Description;
+        _itemDistance.text = gadget.ScriptableObject.DistanceToDisactive == float.MaxValue ? "Infinity" : $"{gadget.ScriptableObject.DistanceToDisactive}m";
+        _itemUses.text = gadget.ScriptableObject.UsageCount == int.MaxValue ? "Infinity" : gadget.ScriptableObject.UsageCount.ToString();
+
+        if (gadget.TryGetAdditionalSpeed(out float additionalSpeed))
+        {
+            _itemSpeedBoost.text = $"{gadget.SpeedMultiplier * 100}% + <color=green>+{additionalSpeed * 100}%</color>";
+        }
+        else
+        {
+            _itemSpeedBoost.text = $"{gadget.SpeedMultiplier * 100}%";
+        }
+
         ShowGadget(gadget);
         ShowGadgetRare(gadget);
         ShowGadgetCategory(gadget);
@@ -51,19 +108,19 @@ public class UpgradePanel : MonoBehaviour
 
     private void ShowGadgetCategory(Gadget gadget)
     {
-        _itemCategoryText.text = gadget.GadgetScriptableObject.Group.ToString();
+        _itemCategoryText.text = gadget.ScriptableObject.Group.ToString();
     }
 
     private void ShowGadgetRare(Gadget gadget)
     {
-        _itemRareImage.sprite = _globalSettings.GetGadgetRareBackground(gadget.GadgetScriptableObject.Rare);
-        _itemRareText.text = gadget.GadgetScriptableObject.Rare.ToString();
-        _itemRareText.color = _globalSettings.GetGadgetRareColor(gadget.GadgetScriptableObject.Rare);
+        _itemRareImage.sprite = _globalSettings.GetGadgetRareBackground(gadget.ScriptableObject.Rare);
+        _itemRareText.text = gadget.ScriptableObject.Rare.ToString();
+        _itemRareText.color = _globalSettings.GetGadgetRareColor(gadget.ScriptableObject.Rare);
     }
 
     private void ShowGadget(Gadget gadget)
     {
-        _gadgetCollectionCell.Init(gadget, PlayerData.PlayerGadgets.Any(g => g.GadgetScriptableObject == gadget.GadgetScriptableObject));
+        _gadgetCollectionCell.Init(gadget, PlayerData.PlayerGadgets.Any(g => g.ScriptableObject == gadget.ScriptableObject));
     }
 
     private void ShowSpeedBonus(Gadget gadget)
@@ -93,7 +150,7 @@ public class UpgradePanel : MonoBehaviour
 
     private bool IsGadgetAccelerates(Gadget gadget, ChunkType chunkType)
     {
-        GadgetChunkInfo chunkInfo = gadget.GadgetScriptableObject.GetChunkInfo(chunkType);
+        GadgetChunkInfo chunkInfo = gadget.ScriptableObject.GetChunkInfo(chunkType);
 
         return chunkInfo != null && chunkInfo.IsAccelerates;
     }

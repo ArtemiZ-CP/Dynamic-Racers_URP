@@ -9,42 +9,39 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
     private readonly int SpeedMultiplier = Animator.StringToHash(nameof(SpeedMultiplier));
 
     [SerializeField] private Animator _playerAnimator;
+    [SerializeField] private Material _playerMaterial;
+    [SerializeField] private UpgradePanel _upgradePanel;
     [SerializeField] private RectTransform _gadgetCellsParent;
     [SerializeField] private GadgetSelectionCell _gadgetCellPrefab;
+    [SerializeField] private GadgetCollectionCell _gadgetCellInfo;
     [SerializeField] private SelectedGadgetInfo _selectedGadgetInfo;
     [SerializeField] private Button _startButton;
-    [SerializeField] private Material _playerMaterial;
+    [SerializeField] private BlickAnimation _startButtonAnimation;
+    [SerializeField] private bool _showAllGadgets;
 
     private List<GadgetSelectionCell> _gadgetCells = new();
     private GlobalSettings _globalSettings;
     private float _contentWidth;
     private Animator _gadgetAnimator;
-    private GadgetScriptableObject _selectedGadget;
+    private Gadget _selectedGadget;
 
     private void Awake()
     {
-        _globalSettings = GlobalSettings.Instance;
+        _globalSettings = GlobalSettings.Instance; 
+    }
 
+    private void OnEnable()
+    {
         if (PlayerData.PlayerGadgets.Count == 0)
         {
             _startButton.interactable = true;
         }
         else
         {
+            _startButtonAnimation.DisactiveButton();
             _startButton.interactable = false;
         }
-    }
 
-    private void Update()
-    {
-        if (IsContentWindowResized())
-        {
-            SetContentPosition();
-        }
-    }
-
-    private void OnEnable()
-    {
         if (_gadgetAnimator != null)
         {
             Destroy(_gadgetAnimator.gameObject);
@@ -61,13 +58,22 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
         _playerAnimator.transform.GetComponentInChildren<SkinnedMeshRenderer>().material = _playerMaterial;
     }
 
-    public void Click(GadgetScriptableObject gadget)
+    private void Update()
+    {
+        if (IsContentWindowResized())
+        {
+            SetContentPosition();
+        }
+    }
+
+    public void Click(Gadget gadget)
     {
         if (_selectedGadget == gadget)
         {
             return;
         }
 
+        _gadgetCellInfo.Init(gadget);
         _selectedGadgetInfo.Select(gadget);
         _selectedGadget = gadget;
 
@@ -80,17 +86,18 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
                 cell.Deselect();
             }
 
-            _gadgetCells.Find(gadgetCell => gadgetCell.Gadget.GadgetScriptableObject == gadget)?.Select();
+            _gadgetCells.Find(gadgetCell => gadgetCell.Gadget == gadget)?.Select();
             RunSettings.PlayerGadget = gadget;
+            _startButtonAnimation.ActiveButton();
             _startButton.interactable = true;
         }
     }
 
-    private void ActivePlayerAnimation(GadgetScriptableObject gadget)
+    private void ActivePlayerAnimation(Gadget gadget)
     {
         for (int i = 0; i < Enum.GetNames(typeof(ChunkType)).Length; i++)
         {
-            GadgetChunkInfo gadgetChunkInfo = gadget.GetChunkInfo((ChunkType)(i));
+            GadgetChunkInfo gadgetChunkInfo = gadget.ScriptableObject.GetChunkInfo((ChunkType)(i));
 
             if (gadgetChunkInfo != null)
             {
@@ -100,9 +107,9 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
                     _gadgetAnimator = null;
                 }
 
-                if (gadget.Prefab != null)
+                if (gadget.ScriptableObject.Prefab != null)
                 {
-                    if (Instantiate(gadget.Prefab, _playerAnimator.transform).TryGetComponent(out _gadgetAnimator))
+                    if (Instantiate(gadget.ScriptableObject.Prefab, _playerAnimator.transform).TryGetComponent(out _gadgetAnimator))
                     {
                         _gadgetAnimator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
                         _gadgetAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
@@ -116,6 +123,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
                 }
 
                 _playerAnimator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
+                _upgradePanel.SetPlayerAnimation(gadget.ScriptableObject, gadgetChunkInfo);
                 return;
             }
         }
@@ -136,16 +144,19 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
         for (int i = 0; i < _foundGadgets.Count; i++)
         {
             GadgetSelectionCell gadgetCell = Instantiate(_gadgetCellPrefab, _gadgetCellsParent);
-            gadgetCell.Init(_foundGadgets[i], isFound: true, clickableGadget: this);
+            gadgetCell.Init(_foundGadgets[_foundGadgets.Count - i - 1], isFound: true, clickableGadget: this);
             _gadgetCells.Add(gadgetCell);
         }
 
-        for (int i = 0; i < _notFoundGadgets.Count; i++)
+        if (_showAllGadgets)
         {
-            GadgetSelectionCell gadgetCell = Instantiate(_gadgetCellPrefab, _gadgetCellsParent);
-            gadgetCell.Init(_notFoundGadgets[i], isFound: false, clickableGadget: null);
+            for (int i = 0; i < _notFoundGadgets.Count; i++)
+            {
+                GadgetSelectionCell gadgetCell = Instantiate(_gadgetCellPrefab, _gadgetCellsParent);
+                gadgetCell.Init(_notFoundGadgets[_notFoundGadgets.Count - i - 1], isFound: false, clickableGadget: null);
+            }
         }
-
+        
         _contentWidth = 0;
 
         Click(RunSettings.PlayerGadget);

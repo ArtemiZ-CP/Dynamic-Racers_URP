@@ -5,9 +5,10 @@ using UnityEngine.UI;
 public class InactiveButtonCondition : MonoBehaviour
 {
     [SerializeField] private int _levelToActiveButton;
+    [SerializeField] private bool _setInactive;
     [SerializeField] private GameObject _activeButton;
     [SerializeField] private GameObject _inactiveButton;
-    
+
     private Button _button;
 
     private void Awake()
@@ -22,17 +23,20 @@ public class InactiveButtonCondition : MonoBehaviour
 
     private void Active()
     {
-        if (PlayerData.Level >= _levelToActiveButton)
+        if (_setInactive == false && PlayerData.Level >= _levelToActiveButton)
         {
-            _activeButton.SetActive(true);
-            _inactiveButton.SetActive(false);
-            _button.interactable = true;
+            SetActive(true);
         }
         else
         {
-            _activeButton.SetActive(false);
-            _inactiveButton.SetActive(true);
-            _button.interactable = false;
+            SetActive(false);
         }
+    }
+
+    private void SetActive(bool isActive)
+    {
+        _activeButton.SetActive(isActive);
+        _inactiveButton.SetActive(isActive == false);
+        _button.interactable = isActive;
     }
 }

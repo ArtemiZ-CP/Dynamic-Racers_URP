@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class GadgetCollectionCell : MonoBehaviour
 {
     [SerializeField] private Button _button;
-    [SerializeField] private Image _background;
     [SerializeField] private Image _gadget;
     [SerializeField] private GameObject _notFound;
     [SerializeField] private GadgetBar _countBar;
@@ -28,11 +27,10 @@ public class GadgetCollectionCell : MonoBehaviour
 
     public void Init()
     {
-        _background.gameObject.SetActive(false);
         _countBar.gameObject.SetActive(false);
     }
 
-    public void Init(Gadget gadget, bool isFound)
+    public void Init(Gadget gadget, bool isFound = true)
     {
         SetGadget(gadget);
 
@@ -72,7 +70,6 @@ public class GadgetCollectionCell : MonoBehaviour
     private void SetGadget(Gadget gadget)
     {
         Gadget = gadget;
-        _gadget.sprite = gadget.GadgetScriptableObject.Sprite;
-        _background.sprite = GlobalSettings.Instance.GetGadgetRareBackground(gadget.GadgetScriptableObject.Rare);
+        _gadget.sprite = gadget.ScriptableObject.SmallSprite;
     }
 }

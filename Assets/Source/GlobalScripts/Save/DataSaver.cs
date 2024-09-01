@@ -34,7 +34,7 @@ public static class DataSaver
 
             PlayerGadgets = PlayerData.PlayerGadgets.Select(gadget => new PlayerGadgetSaveInfo
             {
-                GadgetName = gadget.GadgetScriptableObject.Name,
+                GadgetName = gadget.ScriptableObject.Name,
                 Amount = gadget.GetAmount(),
                 Level = gadget.Level
             }).ToArray(),

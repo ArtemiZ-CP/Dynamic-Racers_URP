@@ -10,7 +10,7 @@ public class AddGadgets : MonoBehaviour
     {
         foreach (Gadget gadget in GlobalSettings.Instance.GetAllGadgets())
         {
-            PlayerData.AddGadget(new Gadget(gadget.GadgetScriptableObject, _gadgetCount));
+            PlayerData.AddGadget(new Gadget(gadget.ScriptableObject, _gadgetCount));
         }
     }
 
@@ -20,7 +20,7 @@ public class AddGadgets : MonoBehaviour
         {
             foreach (Gadget gadget in GlobalSettings.Instance.GetAllGadgets())
             {
-                PlayerData.AddGadget(new Gadget(gadget.GadgetScriptableObject, gadgetCount));
+                PlayerData.AddGadget(new Gadget(gadget.ScriptableObject, gadgetCount));
             }
         }
         else

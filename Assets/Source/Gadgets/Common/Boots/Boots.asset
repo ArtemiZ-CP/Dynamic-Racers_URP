@@ -30,6 +30,7 @@ MonoBehaviour:
   _isInfiniteActiveCounts: 1
   _isUsageSplited: 0
   _name: Boots
-  _sprite: {fileID: 21300000, guid: 8cacb1c187ced40e1889352069344641, type: 3}
-  _description: "\u041D\u0430\u0439\u043A\u0438"
-  _id: 19
+  _bigSprite: {fileID: 21300000, guid: 82b587b7f4cee43438ec42f3f69ffca7, type: 3}
+  _smallSprite: {fileID: 21300000, guid: c1c65719be7bf4a29b85cda18b3eeb0c, type: 3}
+  _description: <sprite="Run" index=0><color=#18F5DF>Run</color> accelerates for
+    the entire race

@@ -30,6 +30,7 @@ MonoBehaviour:
   _isInfiniteActiveCounts: 0
   _isUsageSplited: 0
   _name: Bull
-  _sprite: {fileID: 21300000, guid: 7b05dbd7d453f44f48f585726abf9661, type: 3}
-  _description: 
-  _id: 0
+  _bigSprite: {fileID: 21300000, guid: 0ae33243e1ac24ca19b90e56002d4b2e, type: 3}
+  _smallSprite: {fileID: 21300000, guid: d798b27881bb04272a28fe0960bedb1b, type: 3}
+  _description: Gives a short acceleration for a few sections with <sprite="Run"
+    index=0><color=#18F5DF>Run</color>

@@ -6,8 +6,8 @@ using UnityEngine;
 public class CharacterGadgets : MonoBehaviour
 {
 	private CharacterMovement _characterMovement;
-	private GadgetScriptableObject _gadget;
-	private GadgetScriptableObject _activeGadget;
+	private Gadget _gadget;
+	private Gadget _activeGadget;
 	private ChunkType _currentChunkType;
 	private float _lastAcceleration;
 	private float _distanceToDisactiveGadget;
@@ -18,7 +18,7 @@ public class CharacterGadgets : MonoBehaviour
 	public event Action<GadgetChunkInfo, bool> OnActiveAnimation;
 	public event Action<ChunkType> OnDisactiveAnimation;
 
-	public GadgetScriptableObject Gadget => _gadget;
+	public Gadget Gadget => _gadget;
 	public float RemainingDistance => _distanceToDisactiveGadget - _characterMovement.Distance;
 	public float DistanceToDisactiveGadget => _distanceToDisactiveGadget;
 	public int[] UsageCounts => _usageCounts;
@@ -48,7 +48,7 @@ public class CharacterGadgets : MonoBehaviour
 		}
 	}
 
-	public void Init(GadgetScriptableObject gadget)
+	public void Init(Gadget gadget)
 	{
 		if (gadget == null)
 		{
@@ -56,9 +56,9 @@ public class CharacterGadgets : MonoBehaviour
 		}
 
 		_gadget = gadget;
-		_isSpeedIncresing = gadget.IsSpeedIncreasing;
-		_isUsageSplited = gadget.IsUsageSplited;
-		Array.Fill(_usageCounts, gadget.UsageCount);
+		_isSpeedIncresing = gadget.ScriptableObject.IsSpeedIncreasing;
+		_isUsageSplited = gadget.ScriptableObject.IsUsageSplited;
+		Array.Fill(_usageCounts, gadget.ScriptableObject.UsageCount);
 	}
 
 	private void OnChangeChunkTypeHandler(Chunk chunk, CharacterMovement characterMovement)
@@ -77,7 +77,7 @@ public class CharacterGadgets : MonoBehaviour
 	{
 		if (_activeGadget != null)
 		{
-			GadgetChunkInfo gadgetChunkInfo = _activeGadget.GetChunkInfo(_currentChunkType);
+			GadgetChunkInfo gadgetChunkInfo = _activeGadget.ScriptableObject.GetChunkInfo(_currentChunkType);
 
 			if (gadgetChunkInfo != null)
 			{
@@ -87,7 +87,7 @@ public class CharacterGadgets : MonoBehaviour
 					AddAcceleration(gadgetChunkInfo.IsAccelerates);
 				}
 
-				OnActiveAnimation.Invoke(_activeGadget.GetChunkInfo(_currentChunkType), true);
+				OnActiveAnimation.Invoke(_activeGadget.ScriptableObject.GetChunkInfo(_currentChunkType), true);
 				_characterMovement.SetChunkSpeed(gadgetChunkInfo.PowerUsing);
 
 				return true;
@@ -109,7 +109,7 @@ public class CharacterGadgets : MonoBehaviour
 			return false;
 		}
 
-		GadgetChunkInfo gadgetChunkInfo = _gadget.GetChunkInfo(_currentChunkType);
+		GadgetChunkInfo gadgetChunkInfo = _gadget.ScriptableObject.GetChunkInfo(_currentChunkType);
 
 		if (gadgetChunkInfo != null)
 		{
@@ -127,7 +127,7 @@ public class CharacterGadgets : MonoBehaviour
 		return false;
 	}
 
-	private void ActiveGadget(GadgetScriptableObject gadget, bool isAccelerates, float delay, float speedMultiplierOnDelay)
+	private void ActiveGadget(Gadget gadget, bool isAccelerates, float delay, float speedMultiplierOnDelay)
 	{
 		_activeGadget = gadget;
 
@@ -155,9 +155,9 @@ public class CharacterGadgets : MonoBehaviour
 			StartCoroutine(AddAcceleration(isAccelerates, delay, speedMultiplierOnDelay));
 		}
 
-		OnActiveAnimation.Invoke(_activeGadget.GetChunkInfo(_currentChunkType), true);
+		OnActiveAnimation.Invoke(_activeGadget.ScriptableObject.GetChunkInfo(_currentChunkType), true);
 
-		_distanceToDisactiveGadget = _characterMovement.Distance + _activeGadget.DistanceToDisactive;
+		_distanceToDisactiveGadget = _characterMovement.Distance + _activeGadget.ScriptableObject.DistanceToDisactive;
 	}
 
 	private bool TryDisactiveGadget()
@@ -240,7 +240,7 @@ public class CharacterGadgets : MonoBehaviour
 	private bool IsDistancePassed(float percentage)
 	{
 		float endPoint = _distanceToDisactiveGadget;
-		float startPoint = _distanceToDisactiveGadget - _activeGadget.DistanceToDisactive;
+		float startPoint = _distanceToDisactiveGadget - _activeGadget.ScriptableObject.DistanceToDisactive;
 		float curentDistance = _characterMovement.Distance;
 
 		return (curentDistance - startPoint) / (endPoint - startPoint) >= percentage;

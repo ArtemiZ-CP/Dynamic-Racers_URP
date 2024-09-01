@@ -341,12 +341,16 @@ public static class PlayerData
 
     public static void AddGadget(Gadget gadget)
     {
-        Gadget playerGadget = _playerGadgets.Find(g => g.GadgetScriptableObject == gadget.GadgetScriptableObject);
+        Gadget playerGadget = _playerGadgets.Find(g => g.ScriptableObject == gadget.ScriptableObject);
 
         if (playerGadget == null)
         {
-            _playerGadgets.Add(new Gadget(gadget));
-            _playerGadgets.Sort((g1, g2) => g1.GadgetScriptableObject.Rare.CompareTo(g2.GadgetScriptableObject.Rare));
+            _playerGadgets.Add(new Gadget(gadget, GlobalSettings.Instance.GetStartGadgetLevel(gadget)));
+
+            if (_playerGadgets.Count > 1)
+            {
+                _playerGadgets.Sort((g1, g2) => g1.ScriptableObject.Rare.CompareTo(g2.ScriptableObject.Rare));
+            }
         }
         else
         {

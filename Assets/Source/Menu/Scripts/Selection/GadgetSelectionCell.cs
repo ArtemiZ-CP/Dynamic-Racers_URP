@@ -8,7 +8,6 @@ public class GadgetSelectionCell : MonoBehaviour
     [SerializeField] private Image _image;
     [SerializeField] private Button _button;
     [SerializeField] private GameObject _notFound;
-    [SerializeField] private Image _background;
     [SerializeField] private TMP_Text _levelText;
     [SerializeField] private GameObject _recomendedWindow;
 
@@ -16,7 +15,7 @@ public class GadgetSelectionCell : MonoBehaviour
 
     public void Init()
     {
-        _background.gameObject.SetActive(false);
+        _image.gameObject.SetActive(false);
         _notFound.SetActive(false);
         _recomendedWindow.SetActive(false);
         Deselect();
@@ -25,9 +24,8 @@ public class GadgetSelectionCell : MonoBehaviour
     public void Init(Gadget gadget)
     {
         Gadget = gadget;
-        _image.sprite = gadget.GadgetScriptableObject.Sprite;
+        _image.sprite = gadget.ScriptableObject.BigSprite;
         Deselect();
-        ActiveBackground(gadget.GadgetScriptableObject.Rare);
 
         _notFound.SetActive(false);
         _recomendedWindow.SetActive(false);
@@ -39,7 +37,7 @@ public class GadgetSelectionCell : MonoBehaviour
 
         if (clickableGadget != null)
         {
-            _button.onClick.AddListener(() => clickableGadget.Click(gadget.GadgetScriptableObject));
+            _button.onClick.AddListener(() => clickableGadget.Click(gadget));
         }
         if (isFound)
         {
@@ -72,10 +70,5 @@ public class GadgetSelectionCell : MonoBehaviour
     public void SetRecomended()
     {
         _recomendedWindow.SetActive(true);
-    }
-
-    private void ActiveBackground(Rare rare)
-    {
-        _background.sprite = GlobalSettings.Instance.GetGadgetRareBackground(rare);
     }
 }

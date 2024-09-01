@@ -3,23 +3,32 @@ using UnityEngine;
 
 public class BlickAnimation : MonoBehaviour
 {
-    [SerializeField] Material _blickMaterial;
+    [SerializeField] private Material _blickMaterial;
     [SerializeField] private float _speed = 1f;
     [SerializeField] private float _delay = 0f;
     [SerializeField] private float _fromOffset;
     [SerializeField] private float _toOffset;
     [SerializeField] private float _yOffset;
+    [SerializeField] private Sprite _upgradeButtonSprite;
+    [SerializeField] private Sprite _disactiveUpgradeButtonSprite;
 
     private float _offset;
 
     private void OnEnable()
     {
-        StartCoroutine(Animate());
+        ActiveButton();
     }
 
-    public void StopAnimation()
+    public void DisactiveButton()
     {
+        _blickMaterial.SetTexture("_Texture2D", _disactiveUpgradeButtonSprite.texture);
         StopAllCoroutines();
+    }
+
+    public void ActiveButton()
+    {
+        _blickMaterial.SetTexture("_Texture2D", _upgradeButtonSprite.texture);
+        StartCoroutine(Animate());
     }
 
     private IEnumerator Animate()

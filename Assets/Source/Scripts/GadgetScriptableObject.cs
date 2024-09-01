@@ -20,8 +20,10 @@ public class GadgetScriptableObject : ScriptableObject
 	[SerializeField] private bool _isUsageSplited;
 	[Header("Visuals")]
 	[SerializeField] private string _name;
-	[SerializeField] private Sprite _sprite;
+	[SerializeField] private Sprite _bigSprite;
+	[SerializeField] private Sprite _smallSprite;
 	[Header("Info")]
+	[TextArea]
 	[SerializeField] private string _description;
 
 	public GameObject Prefab => _prefab;
@@ -32,7 +34,8 @@ public class GadgetScriptableObject : ScriptableObject
 	public float DistanceToDisactive => _isInfiniteDistance ? float.MaxValue : _distanceToDisactive;
 	public int UsageCount => _isInfiniteActiveCounts ? int.MaxValue : _activeCount;
 	public bool IsUsageSplited => _isUsageSplited;
-	public Sprite Sprite => _sprite;
+	public Sprite BigSprite => _bigSprite;
+	public Sprite SmallSprite => _smallSprite;
 	public string Description => _description;
 	public string Name => _name;
 

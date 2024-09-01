@@ -8,7 +8,7 @@ public class AddRunGadget : MonoBehaviour
     {
         if (_gadgetScriptableObject != null && RunSettings.PlayerGadget == null)
         {
-            RunSettings.PlayerGadget = _gadgetScriptableObject;
+            RunSettings.PlayerGadget = new Gadget(_gadgetScriptableObject);
         }
     }
 }

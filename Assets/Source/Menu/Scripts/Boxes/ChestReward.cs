@@ -34,7 +34,7 @@ public class ChestReward : RewardContainer
 
         int randomIndex = UnityEngine.Random.Range(0, gadgets.Count);
         int amount = (int)Mathf.Pow(2, (int)chestType);
-        GadgetReward reward = new(gadgets[randomIndex].GadgetScriptableObject, amount);
+        GadgetReward reward = new(gadgets[randomIndex].ScriptableObject, amount);
         _rewards = new List<GadgetReward>() { reward };
     }
 

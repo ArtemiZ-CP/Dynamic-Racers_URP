@@ -8,37 +8,38 @@ public class SelectedGadgetInfo : MonoBehaviour
     [SerializeField] private TMP_Text _gadgetAcceleration;
     [SerializeField] private TMP_Text _gadgetApplications;
     [SerializeField] private TMP_Text _gadgetDistance;
+    [SerializeField] private GameObject _selectedGadgetInfo;
 
-    public void Select(GadgetScriptableObject gadget)
+    public void Select(Gadget gadget)
     {
         if (gadget == null)
         {
-            gameObject.SetActive(false);
+            _selectedGadgetInfo.SetActive(false);
             return;
         }
 
-        gameObject.SetActive(true);
+        _selectedGadgetInfo.SetActive(true);
 
-        _gadgetName.text = gadget.Name;
-        _gadgetDescription.text = gadget.Description;
+        _gadgetName.text = gadget.ScriptableObject.Name;
+        _gadgetDescription.text = gadget.ScriptableObject.Description;
         _gadgetAcceleration.text = (int)(gadget.SpeedMultiplier * 100) + "%";
 
-        if (gadget.UsageCount == int.MaxValue)
+        if (gadget.ScriptableObject.UsageCount == int.MaxValue)
         {
             _gadgetApplications.text = "Infinity";
         }
         else
         {
-            _gadgetApplications.text = gadget.UsageCount.ToString();
+            _gadgetApplications.text = gadget.ScriptableObject.UsageCount.ToString();
         }
 
-        if (gadget.DistanceToDisactive == float.MaxValue)
+        if (gadget.ScriptableObject.DistanceToDisactive == float.MaxValue)
         {
             _gadgetDistance.text = "Infinity";
         }
         else
         {
-            _gadgetDistance.text = gadget.DistanceToDisactive + "m";
+            _gadgetDistance.text = gadget.ScriptableObject.DistanceToDisactive + "m";
         }
     }
 }

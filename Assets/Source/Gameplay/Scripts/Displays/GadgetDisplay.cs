@@ -1,8 +1,10 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GadgetDisplay : MonoBehaviour
 {
+    [SerializeField] private Image _gadget;
     [SerializeField] private TMP_Text _usageCountText;
     [SerializeField] private GameObject _usageCount;
     [SerializeField] private TMP_Text[] _splitedUsageCountTexts;
@@ -20,7 +22,9 @@ public class GadgetDisplay : MonoBehaviour
 
         if (_playerGadgets != null && _playerGadgets.Gadget != null)
         {
-            if (_playerGadgets.Gadget.DistanceToDisactive == float.MaxValue)
+            _gadget.sprite = _playerGadgets.Gadget.ScriptableObject.SmallSprite;
+            
+            if (_playerGadgets.Gadget.ScriptableObject.DistanceToDisactive == float.MaxValue)
             {
                 foreach (var item in _energyBarDisplay)
                 {
@@ -91,7 +95,7 @@ public class GadgetDisplay : MonoBehaviour
 
         if (_playerGadgets.DistanceToDisactiveGadget > 0)
         {
-            persent = _playerGadgets.RemainingDistance / _playerGadgets.Gadget.DistanceToDisactive;
+            persent = _playerGadgets.RemainingDistance / _playerGadgets.Gadget.ScriptableObject.DistanceToDisactive;
         }
         else
         {

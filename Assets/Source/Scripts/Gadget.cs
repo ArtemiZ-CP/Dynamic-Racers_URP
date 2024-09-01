@@ -3,29 +3,43 @@ using System;
 [Serializable]
 public class Gadget
 {
-    private GadgetScriptableObject _gadgetScriptableObject;
+    private GadgetScriptableObject _scriptableObject;
     private int _amount;
     private int _level;
 
-    public GadgetScriptableObject GadgetScriptableObject => _gadgetScriptableObject;
+    public GadgetScriptableObject ScriptableObject => _scriptableObject;
     public int Level => _level;
+    public float SpeedMultiplier => _scriptableObject.SpeedMultiplier * (1 + 0.1f * _level);
 
     public Gadget(GadgetScriptableObject gadgetScriptableObject, int amount = 1, int level = 0)
     {
-        _gadgetScriptableObject = gadgetScriptableObject;
+        _scriptableObject = gadgetScriptableObject;
         _amount = amount;
         _level = level;
     }
 
-    public Gadget(Gadget gadget)
+    public Gadget(Gadget gadget, int level = 0)
     {
-        _gadgetScriptableObject = gadget.GadgetScriptableObject;
+        _scriptableObject = gadget.ScriptableObject;
         _amount = gadget.GetAmount();
+        _level = level;
+    }
+
+    public bool TryGetAdditionalSpeed(out float additionalSpeed)
+    {
+        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(this, out _, out _))
+        {
+            additionalSpeed = _scriptableObject.SpeedMultiplier * 0.1f;
+            return true;
+        }
+
+        additionalSpeed = 0;
+        return false;
     }
 
     public bool TryLevelUp()
     {
-        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(_level, out int gadgetsToLevelUp, out int coinsCost))
+        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(this, out int gadgetsToLevelUp, out int coinsCost))
         {
             if (_amount >= gadgetsToLevelUp && PlayerData.TryToSpendCoins(coinsCost))
             {

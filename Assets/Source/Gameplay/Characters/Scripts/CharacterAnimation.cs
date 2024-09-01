@@ -41,7 +41,7 @@ public class CharacterAnimation : MonoBehaviour
 	{
 		if (_characterGadgets.Gadget != null)
 		{
-			_activeGadget = Instantiate(_characterGadgets.Gadget.Prefab, _meshSpawner.transform);
+			_activeGadget = Instantiate(_characterGadgets.Gadget.ScriptableObject.Prefab, _meshSpawner.transform);
 			_gadgetAnimator = _activeGadget.GetComponent<Animator>();
 			_activeGadget.SetActive(false);
 		}
