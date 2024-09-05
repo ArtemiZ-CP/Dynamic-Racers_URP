@@ -16,8 +16,11 @@ public class SpeedGameBase : MonoBehaviour
     [SerializeField] private float _arrowSpeed;
     [SerializeField] private AnimationCurve _arrowMovementCurve;
     [SerializeField] private float _dragOffset;
+    [SerializeField] private string _startTextOnNotTouch;
+    [SerializeField] private Color _startTextColorOnNotTouch;
 
     public event Action<float> EndedSpeedGame;
+    public event Action<string, Color> ShowStartText;
 
     public PlayerMovement PlayerMovement => _playerMovement;
     public Vector3 StartPlayerPosition => _startPlayerPosition;
@@ -30,12 +33,16 @@ public class SpeedGameBase : MonoBehaviour
     private Vector3 _startPlayerPosition;
     private bool _isGameActive;
     private float _speedMultiplier;
+    private string _startText;
+    private Color _startTextColor;
     private float _startTouchPositionY;
 
     protected virtual void Awake()
     {
         _visual.SetActive(false);
         _maxPlayerOffset = GlobalSettings.Instance.CharacterStartOffset;
+        _startText = _startTextOnNotTouch;
+        _startTextColor = _startTextColorOnNotTouch;
     }
 
     protected virtual void Start()
@@ -136,6 +143,7 @@ public class SpeedGameBase : MonoBehaviour
     {
         HideHint();
         EndedSpeedGame?.Invoke(_speedMultiplier);
+        ShowStartText?.Invoke(_startText, _startTextColor);
     }
 
     protected float GetTouchOffset()
@@ -167,16 +175,18 @@ public class SpeedGameBase : MonoBehaviour
     private void ActiveGame()
     {
         _isGameActive = false;
-        _arrow.rotation = Quaternion.Euler(0, 0, SpeedPower.GetRotationZ(_speedPowers[0].LeftPosition, _arrow.position));
+        _arrow.localRotation = Quaternion.Euler(0, 0, SpeedPower.GetRotationZ(_speedPowers[0].LeftPosition, _arrow.position));
         gameObject.SetActive(true);
     }
 
-    private float GetMultiplierRotation(float rotationZ)
+    private float GetMultiplierRotation(float rotationZ, out string startText, out Color startTextColor)
     {
         foreach (SpeedPower speedPower in _speedPowers)
         {
-            if (speedPower.IsBetween(rotationZ, _arrow.position))
+            if (speedPower.IsBetween(rotationZ, _arrow.localPosition))
             {
+                startText = speedPower.StartText;
+                startTextColor = speedPower.StartTextColor;
                 return speedPower.SpeedMultiplier;
             }
         }
@@ -187,8 +197,8 @@ public class SpeedGameBase : MonoBehaviour
     private IEnumerator MoveArrow()
     {
         float t = 0;
-        float leftPosition = SpeedPower.GetRotationZ(_speedPowers[0].LeftPosition, _arrow.position);
-        float rightPosition = SpeedPower.GetRotationZ(_speedPowers[^1].RightPosition, _arrow.position);
+        float leftPosition = SpeedPower.GetRotationZ(_speedPowers[0].LeftPosition, _arrow.localPosition);
+        float rightPosition = SpeedPower.GetRotationZ(_speedPowers[^1].RightPosition, _arrow.localPosition);
         float currentPositionX = 0;
 
         while (_isGameActive)
@@ -197,10 +207,10 @@ public class SpeedGameBase : MonoBehaviour
             float pingPongValue = Mathf.PingPong(t, 1);
             float curvedValue = _arrowMovementCurve.Evaluate(pingPongValue);
             currentPositionX = Mathf.Lerp(leftPosition, rightPosition, curvedValue);
-            _arrow.rotation = Quaternion.Euler(0, 0, currentPositionX);
+            _arrow.localRotation = Quaternion.Euler(0, 0, currentPositionX);
             yield return null;
         }
 
-        _speedMultiplier = GetMultiplierRotation(currentPositionX);
+        _speedMultiplier = GetMultiplierRotation(currentPositionX, out _startText, out _startTextColor);
     }
 }

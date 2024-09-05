@@ -16,20 +16,19 @@ public static class DataSaver
         {
             BoxRewardQueue = PlayerData.BoxRewardQueue.Select(boxReward => new ChestRewardSaveInfo
             {
-                GadgetRewards = boxReward.Rewards.Select(reward => new PlayerGadgetSaveInfo
+                GadgetRewards = boxReward.GadgetRewards.Select(reward => new PlayerGadgetSaveInfo
                 {
                     GadgetName = reward.Gadget.Name,
                     Amount = reward.Amount,
-                }).ToArray()
-            }).ToArray(),
+                }).ToArray(),
 
-            BagRewardQueue = PlayerData.BagRewardQueue.Select(bagReward => new BagRewardSaveInfo
-            {
-                RewardsQueue = bagReward.RewardsQueue.Select(reward => new BagRewardSaveInfo.CharacteristicRewardSaveInfo
+                CharacteristicRewards = boxReward.CharacteristicRewards.Select(reward => new CharacteristicRewardSaveInfo
                 {
                     TypeInt = (int)reward.Type,
-                    Value = reward.Value
-                }).ToArray()
+                    Amount = reward.Amount,
+                }).ToArray(),
+
+                CoinsReward = boxReward.CoinsReward
             }).ToArray(),
 
             PlayerGadgets = PlayerData.PlayerGadgets.Select(gadget => new PlayerGadgetSaveInfo
@@ -63,22 +62,23 @@ public static class DataSaver
 
     public static void ResetData()
     {
+        GlobalSettings globalSettings = GlobalSettings.Instance;
+
         SaveData saveData = new()
         {
             BoxRewardQueue = new ChestRewardSaveInfo[0],
-            BagRewardQueue = new BagRewardSaveInfo[0],
             PlayerGadgets = new PlayerGadgetSaveInfo[0],
             Experience = 0,
             Level = 0,
             Coins = 0,
             Diamonds = 0,
-            Tickets = 0,
-            PlayerRace = 0,
-            PlayerDive = 0,
-            PlayerAscend = 0,
-            PlayerGlide = 0,
+            Tickets = globalSettings.MaxTickets,
+            PlayerRace = 1,
+            PlayerDive = 1,
+            PlayerAscend = 1,
+            PlayerGlide = 1,
             TrainingsPassed = 0,
-            FPS = 0,
+            FPS = globalSettings.MinFPS,
             IsMusicOn = true,
             IsSoundsOn = true,
             IsHapticOn = true,

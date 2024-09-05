@@ -6,10 +6,15 @@ public class EndGamePanel : MonoBehaviour
     [SerializeField] private RectTransform _board;
     [SerializeField] private RectTransform _viewport;
 
-    public void AddFinisher(string text)
+    public void AddFinisher(string name, int placement, Sprite gadgetSprite, bool isPlayerFinished)
     {
         Place place = Instantiate(_placePrefab, _board);
-        place.SetPlace(text);
+        place.SetPlace(name, placement, gadgetSprite);
+
+        if (isPlayerFinished)
+        {
+            place.SetPlayerOutline();
+        }
     }
 
     private void Update()

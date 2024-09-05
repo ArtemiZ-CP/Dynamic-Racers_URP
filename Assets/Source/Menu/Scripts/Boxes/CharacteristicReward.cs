@@ -1,11 +1,11 @@
 public class CharacteristicReward : Reward
 {
     public CharacteristicType Type { get; }
-    public int Value { get; }
+    public int Amount { get; }
 
-    public CharacteristicReward(CharacteristicType type, int value)
+    public CharacteristicReward(CharacteristicType type, int amount)
     {
         Type = type;
-        Value = value;
+        Amount = amount;
     }
 }

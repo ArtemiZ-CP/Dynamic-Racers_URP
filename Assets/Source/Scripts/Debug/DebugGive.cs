@@ -12,24 +12,18 @@ public class DebugGive : MonoBehaviour
     [SerializeField, Min(1)] private int _value;
     [Space(20)]
     [SerializeField] private GadgetReward _gadgetReward;
-
-    [ContextMenu("Add Characteristic Reward")]
-    public void AddBagReward()
-    {
-        List<CharacteristicReward> rewards = new()
-        {
-            new CharacteristicReward(_characteristicType, _value),
-        };
-
-        BagReward bagReward = new(rewards);
-        PlayerData.AddReward(bagReward);
-    }
+    [Space(20)]
+    [SerializeField] private int _coins;
 
     [ContextMenu("Give Gadget Reward")]
     public void GiveGadget()
     {
         GadgetReward gadgetReward = new(_gadgetReward);
-        PlayerData.AddReward(new ChestReward(new List<GadgetReward> { gadgetReward }));
+        CharacteristicReward characteristicReward = new(_characteristicType, _value);
+
+        PlayerData.AddReward(new ChestReward(
+            new List<GadgetReward> { gadgetReward },
+            new List<CharacteristicReward> { characteristicReward }, _coins));
     }
 
     private void Start()

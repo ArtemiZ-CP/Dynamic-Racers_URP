@@ -4,7 +4,6 @@ using System;
 public class SaveData
 {
     public ChestRewardSaveInfo[] BoxRewardQueue;
-    public BagRewardSaveInfo[] BagRewardQueue;
     public PlayerGadgetSaveInfo[] PlayerGadgets;
     public int Experience;
     public int Level;
@@ -34,22 +33,18 @@ public class PlayerGadgetSaveInfo
 }
 
 [Serializable]
-public class BagRewardSaveInfo
+public class CharacteristicRewardSaveInfo
 {
-    [Serializable]
-    public class CharacteristicRewardSaveInfo
-    {
-        public int TypeInt;
-        public int Value;
-    }
-
-    public CharacteristicRewardSaveInfo[] RewardsQueue;
+    public int TypeInt;
+    public int Amount;
 }
 
 [Serializable]
 public class ChestRewardSaveInfo
 {
     public PlayerGadgetSaveInfo[] GadgetRewards;
+    public CharacteristicRewardSaveInfo[] CharacteristicRewards;
+    public int CoinsReward;
 }
 
 [Serializable]

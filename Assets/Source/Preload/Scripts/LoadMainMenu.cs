@@ -10,8 +10,11 @@ public class LoadMainMenu : MonoBehaviour
     [SerializeField] private Slider _progressBar;
     [SerializeField] private string _menuScene;
     [SerializeField] private TMP_Text _loadingPercentage;
+    [SerializeField] private float _minLoadTime;
+    [SerializeField] private string _trainingName = "Training";
 
     private AsyncOperation _loadingOperation;
+    private float _loadTime = 0;
 
     private void Start()
     {
@@ -20,11 +23,12 @@ public class LoadMainMenu : MonoBehaviour
 
     private void Update()
     {
-        float progress = Mathf.Clamp01(_loadingOperation.progress / ActivationProgress);
+        _loadTime += Time.deltaTime;
+        float progress = Mathf.Clamp01(Mathf.Min(_loadingOperation.progress / ActivationProgress, _loadTime / _minLoadTime));
         _progressBar.value = progress;
         _loadingPercentage.text = $"{(int)(progress * 100)}%";
 
-        if (_loadingOperation.progress >= ActivationProgress)
+        if (_loadingOperation.progress >= ActivationProgress && _loadTime >= _minLoadTime)
         {
             _loadingOperation.allowSceneActivation = true;
         }
@@ -32,7 +36,15 @@ public class LoadMainMenu : MonoBehaviour
 
     private void LoadSceneAsync()
     {
-        _loadingOperation = SceneManager.LoadSceneAsync(_menuScene);
+        if (PlayerData.PassedTrainings < GlobalSettings.Instance.TrainingLevelsCount)
+        {
+            _loadingOperation = SceneManager.LoadSceneAsync($"{_trainingName}{PlayerData.PassedTrainings + 1}");
+        }
+        else
+        {
+            _loadingOperation = SceneManager.LoadSceneAsync(_menuScene);
+        }
+
         _loadingOperation.allowSceneActivation = false;
     }
 }

@@ -7,14 +7,16 @@ public abstract class CharacterMovement : MonoBehaviour
 {
 	private const float _minSpeedMultiplier = 0;
 
+	protected GlobalSettings _globalSettings;
+
 	private List<Chunk> _chunks;
-	private GlobalSettings _globalSettings;
 	private int _currentChunkIndex = 0;
 	private int _currentMovePointIndex = 0;
 	private float _speed;
 	private float _speedMultiplier = 1;
 	private float _distance;
 	private float _startOffset;
+	private Vector3 _startPositionOffset;
 
 	public event Action<Chunk, CharacterMovement> OnChangeChunk;
 
@@ -76,6 +78,8 @@ public abstract class CharacterMovement : MonoBehaviour
 
 	public void StartMove(List<Chunk> chunks, float multiplier)
 	{
+		_startPositionOffset = transform.position - chunks[0].MovePoints[0].position; 
+		_startPositionOffset.x = 0;
 		_chunks = chunks;
 		_distance = 0;
 		StartCoroutine(AddAcceleration(multiplier, _globalSettings.DistanceToStartPower, _globalSettings.StartPowerCurve));
@@ -107,7 +111,7 @@ public abstract class CharacterMovement : MonoBehaviour
 		}
 	}
 
-	protected abstract int GetUpgradeAmount(ChunkType chunkType);
+	protected abstract float GetUpgradeAmount(ChunkType chunkType);
 
 	private float DistanceToChunkEnd(int chunkIndex, int startPointIndex)
 	{
@@ -183,7 +187,7 @@ public abstract class CharacterMovement : MonoBehaviour
 
 		while (target != null)
 		{
-			Vector3 targetPosition = GetPosition(target.position);
+			Vector3 targetPosition = GetPosition(target.position) + _startPositionOffset;
 			Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, Speed * Time.deltaTime);
 			transform.position = newPosition;
 

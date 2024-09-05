@@ -1,7 +1,9 @@
+using UnityEngine;
+
 public class PlayerMovement : CharacterMovement
 {
-	protected override int GetUpgradeAmount(ChunkType chunkType)
+	protected override float GetUpgradeAmount(ChunkType chunkType)
 	{
-		return PlayerData.GetUpgradeAmount(chunkType);
+		return Mathf.Max(PlayerData.GetUpgradeAmount(chunkType) - _globalSettings.ReduseUpgradesByLevel * PlayerData.Level, 0);
 	}
 }

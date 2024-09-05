@@ -49,8 +49,8 @@ MonoBehaviour:
   _enemyMovement: {fileID: 1488375312837763096}
   _minTimeDelay: 4
   _maxTimeDelay: 5
-  _minTimeToOffset: 0.3
-  _maxTimeToOffset: 0.5
+  _minTimeToOffset: 1
+  _maxTimeToOffset: 2
 --- !u!1001 &8102722628365059449
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -155,11 +155,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sling_rig
       objectReference: {fileID: 0}
-    - target: {fileID: 1739983698387328425, guid: 260dd0b2481314e84973b4137a71ac8d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -3.5550911
-      objectReference: {fileID: 0}
     - target: {fileID: 2276079510665618907, guid: 260dd0b2481314e84973b4137a71ac8d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -208,21 +203,6 @@ PrefabInstance:
     - target: {fileID: 2276079510665618907, guid: 260dd0b2481314e84973b4137a71ac8d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4023680107914420873, guid: 260dd0b2481314e84973b4137a71ac8d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -3.5550911
-      objectReference: {fileID: 0}
-    - target: {fileID: 7099650904266725997, guid: 260dd0b2481314e84973b4137a71ac8d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 6.006304e-15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8813568337849030335, guid: 260dd0b2481314e84973b4137a71ac8d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

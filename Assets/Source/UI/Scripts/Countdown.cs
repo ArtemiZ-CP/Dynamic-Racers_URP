@@ -6,7 +6,23 @@ public class Countdown : MonoBehaviour
 {
 	[SerializeField] private Gradient _gradient;
 	[SerializeField] private TMP_Text _countdownText;
-	[SerializeField] private float _timeToDisplayGO;
+	[SerializeField] private float _timeToDisplayText;
+	[SerializeField] private SpeedGameBase _speedGameBase;
+
+	private void Awake()
+	{
+		_countdownText.gameObject.SetActive(false);
+	}
+
+	private void OnEnable()
+	{
+		_speedGameBase.ShowStartText += ShowEndText;
+	}
+
+	private void OnDisable()
+	{
+		_speedGameBase.ShowStartText -= ShowEndText;
+	}
 
 	public void Run()
 	{
@@ -15,9 +31,12 @@ public class Countdown : MonoBehaviour
 		StartCoroutine(StartCountdown());
 	}
 
-	private void Awake()
+	private void ShowEndText(string text, Color color)
 	{
-		_countdownText.gameObject.SetActive(false);
+		StopAllCoroutines();
+		_countdownText.text = text;
+		_countdownText.color = color;
+		StartCoroutine(HideText(_timeToDisplayText));
 	}
 
 	private IEnumerator StartCountdown()
@@ -39,9 +58,14 @@ public class Countdown : MonoBehaviour
 			yield return null;
 		}
 
-		_countdownText.text = "GO!";
+		yield return new WaitForSeconds(_timeToDisplayText);
 
-		yield return new WaitForSeconds(_timeToDisplayGO);
+		_countdownText.gameObject.SetActive(false);
+	}
+
+	private IEnumerator HideText(float time)
+	{
+		yield return new WaitForSeconds(time);
 
 		_countdownText.gameObject.SetActive(false);
 	}

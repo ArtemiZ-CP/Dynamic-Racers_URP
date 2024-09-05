@@ -57,6 +57,7 @@ public class GlobalSettings : ScriptableObject
 	[Header("Character Speed")]
 	[SerializeField, Min(0)] private float _baseSpeed = 1;
 	[SerializeField, Min(0)] private float _additionalSpeedByUpgrade = 1;
+	[SerializeField] private float _reduseUpgradesByLevel = 1;
 	[Header("Before Start")]
 	[SerializeField, Min(0)] private float _timeToStartRun = 5;
 	[SerializeField] private float _distanceToStartPower;
@@ -80,6 +81,7 @@ public class GlobalSettings : ScriptableObject
 	public float FallAngle => _fallAngle;
 	public float BaseSpeed => _baseSpeed;
 	public float AdditionalSpeedByUpgrade => _additionalSpeedByUpgrade;
+	public float ReduseUpgradesByLevel => _reduseUpgradesByLevel;
 	public float TimeToStartRun => _timeToStartRun;
 	public float DistanceToStartPower => _distanceToStartPower;
 	public float CharacterStartOffset => _characterStartOffset;

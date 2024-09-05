@@ -16,7 +16,7 @@ public class RewardMenu : MonoBehaviour
 
     private int _openStageIndex = 0;
     private Animator _currentAnimator;
-    private RewardContainer _currentReward;
+    private ChestReward _currentReward;
 
     public void GiveRewards()
     {
@@ -57,40 +57,16 @@ public class RewardMenu : MonoBehaviour
         _rewardWindow.gameObject.SetActive(false);
     }
 
-    private void GiveReward(RewardContainer reward)
-    {
-        _currentReward = reward;
-
-        if (reward is ChestReward boxReward)
-        {
-            GiveReward(boxReward);
-        }
-        else if (reward is BagReward bagReward)
-        {
-            GiveReward(bagReward);
-        }
-    }
-
     private void GiveReward(ChestReward boxReward)
     {
-        foreach (GadgetReward newBoxReward in boxReward.Rewards)
+        _currentReward = boxReward;
+        foreach (GadgetReward newBoxReward in boxReward.GadgetRewards)
         {
             PlayerData.AddGadget(new Gadget(newBoxReward.Gadget, newBoxReward.Amount));
         }
 
         _box.gameObject.SetActive(true);
-        _currentAnimator = _box; 
-    }
-
-    private void GiveReward(BagReward bagReward)
-    {
-        foreach (CharacteristicReward characteristic in bagReward.RewardsQueue)
-        {
-            PlayerData.AddCharacteristic(characteristic.Type, characteristic.Value);
-        }
-
-        _bag.gameObject.SetActive(true);
-        _currentAnimator = _bag;
+        _currentAnimator = _box;
     }
 
     private void OpenBox()

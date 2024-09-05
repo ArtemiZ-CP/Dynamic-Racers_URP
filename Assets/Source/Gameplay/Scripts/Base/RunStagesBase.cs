@@ -16,6 +16,9 @@ public abstract class RunStagesBase : MonoBehaviour
     [Header("Characters")]
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private List<EnemyMovement> _enemies;
+    [Header("Enemy Characteristics")]
+    [SerializeField] private int _minCharacteristicsDelta;
+    [SerializeField] private int _maxCharacteristicsDelta;
 
     private List<CharacterMovement> _placements = new();
     private List<CharacterMovement> _finished = new();
@@ -24,20 +27,6 @@ public abstract class RunStagesBase : MonoBehaviour
     public SpeedGameBase SpeedGame => _speedGame;
     public bool IsRunning => _isRunning;
     public int CharactersCount => _enemies.Count + 1;
-
-    protected abstract int GetEnemyUpgrades(CharacteristicType characteristicType);
-
-    protected abstract void GiveReward();
-
-    public int GetPlacement(CharacterMovement characterMovement)
-    {
-        return _placements.IndexOf(characterMovement) + 1;
-    }
-
-    protected virtual void ActiveSpeedGame()
-    {
-        _speedGame.gameObject.SetActive(true);
-    }
 
     private void Awake()
     {
@@ -88,6 +77,23 @@ public abstract class RunStagesBase : MonoBehaviour
         }
     }
 
+    public int GetPlacement(CharacterMovement characterMovement)
+    {
+        return _placements.IndexOf(characterMovement) + 1;
+    }
+
+    protected virtual void ActiveSpeedGame()
+    {
+        _speedGame.gameObject.SetActive(true);
+    }
+
+    protected abstract void GiveReward();
+
+    private int GetEnemyUpgrades()
+    {
+        return Random.Range(_minCharacteristicsDelta, _maxCharacteristicsDelta + 1);
+    }
+
     private void CaclulatePlacements()
     {
         _placements.Clear();
@@ -130,10 +136,10 @@ public abstract class RunStagesBase : MonoBehaviour
             foreach (EnemyMovement enemy in _enemies)
             {
                 enemy.SetUpgrades(
-                    GetEnemyUpgrades(CharacteristicType.Run),
-                    GetEnemyUpgrades(CharacteristicType.Swim),
-                    GetEnemyUpgrades(CharacteristicType.Climb),
-                    GetEnemyUpgrades(CharacteristicType.Fly));
+                    GetEnemyUpgrades(),
+                    GetEnemyUpgrades(),
+                    GetEnemyUpgrades(),
+                    GetEnemyUpgrades());
                 enemy.StartMove(chunks, _speedGame.RandomSpeedMultiplier);
             }
         }
@@ -141,17 +147,22 @@ public abstract class RunStagesBase : MonoBehaviour
 
     private void CheckEndChunk(Chunk chunk, CharacterMovement characterMovement)
     {
+        if (characterMovement.TryGetComponent(out CharacterGadgets characterGadgets) == false)
+        {
+            return;
+        }
+
         if (chunk.Type == ChunkType.Finish)
         {
             if (characterMovement == _playerMovement)
             {
-                _endGame.AddPlayerFinisher(characterMovement);
+                _endGame.AddPlayerFinisher(characterGadgets);
                 GiveReward();
                 StartCoroutine(LoadMenuOnClick());
             }
             else
             {
-                _endGame.AddFinisher(characterMovement);
+                _endGame.AddFinisher(characterGadgets);
             }
         }
     }

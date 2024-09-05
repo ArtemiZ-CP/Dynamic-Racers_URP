@@ -12,19 +12,12 @@ public class RewardWindow : MonoBehaviour
 
     public bool IsActive { get; private set; }
 
-    public void ShowReward(RewardContainer reward)
+    public void ShowReward(ChestReward reward)
     {
         IsActive = true;
         gameObject.SetActive(true);
 
-        if (reward is ChestReward boxReward)
-        {
-            _rewards = new Queue<Reward>(boxReward.Rewards);
-        }
-        else if (reward is BagReward bagReward)
-        {
-            _rewards = new Queue<Reward>(bagReward.RewardsQueue);
-        }
+        _rewards = new Queue<Reward>(reward.GadgetRewards);
 
         HandleTouch();
     }
@@ -63,7 +56,7 @@ public class RewardWindow : MonoBehaviour
     private void ShowGadget(GadgetReward gadgetReward)
     {
         Gadget gadget = new(gadgetReward.Gadget, gadgetReward.Amount);
-        
+
         _gadgetCell.gameObject.SetActive(true);
         _gadgetCell.Init(gadget);
         _rewardSound.Play();

@@ -149,8 +149,6 @@ public class CharacterAnimation : MonoBehaviour
 				_activeGadget.SetActive(true);
 				_gadgetAnimator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
 				_animator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
-				// _animator.SetTrigger(gadgetChunkInfo.ChunkType.ToString());
-				// Debug.LogWarning("Temporarily solution");
 			}
 			else
 			{
@@ -162,6 +160,10 @@ public class CharacterAnimation : MonoBehaviour
 	private void DisactiveAnimationHandler(ChunkType chunkType)
 	{
 		_activeGadget.SetActive(false);
-		_animator.SetTrigger(chunkType.ToString());
+
+		if (chunkType != ChunkType.Finish)
+		{
+			_animator.SetTrigger(chunkType.ToString());
+		}
 	}
 }

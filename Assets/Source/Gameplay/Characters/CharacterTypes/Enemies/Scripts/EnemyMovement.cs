@@ -13,7 +13,7 @@ public class EnemyMovement : CharacterMovement
 		_glideUpgradesAmount = glideUpgradesAmount;
 	}
 
-	protected override int GetUpgradeAmount(ChunkType chunkType)
+	protected override float GetUpgradeAmount(ChunkType chunkType)
 	{
 		return chunkType switch
 		{

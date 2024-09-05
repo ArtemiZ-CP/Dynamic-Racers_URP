@@ -4,7 +4,7 @@ public class ChestShopReward : ShopReward
 
     public ChestShopReward(ChestReward.ChestType chestsType, int amount = 1)
     {
-        Chests = new(chestsType);
+        Chests = new ChestReward(chestsType);
         Amount = amount;
     }
 

@@ -244,12 +244,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _progressBar: {fileID: 298209794}
   _menuScene: Menu
-  _trainingScene0: Training0
-  _trainingScene1: Training1
-  _trainingScene2: Training2
-  _trainingScene3: Training3
-  _trainingScene4: Training4
   _loadingPercentage: {fileID: 2049820462}
+  _minLoadTime: 2
 --- !u!1 &298209792
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,9 +396,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: This could be your advert...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1e5a6a485bd2141759be60cbe56c65ed, type: 2}
-  m_sharedMaterial: {fileID: -268800262132760982, guid: 1e5a6a485bd2141759be60cbe56c65ed,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials:
   - {fileID: -268800262132760982, guid: 1e5a6a485bd2141759be60cbe56c65ed, type: 2}
   m_fontMaterial: {fileID: 0}
@@ -1115,9 +1110,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 50%
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9a372966a629a494ea0c443d695460e7, type: 2}
-  m_sharedMaterial: {fileID: 6039804538708077116, guid: 9a372966a629a494ea0c443d695460e7,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials:
   - {fileID: 6039804538708077116, guid: 9a372966a629a494ea0c443d695460e7, type: 2}
   m_fontMaterial: {fileID: 0}

@@ -6,8 +6,7 @@ using UnityEngine;
 public static class PlayerData
 {
     public static IReadOnlyCollection<ChestReward> BoxRewardQueue => _boxRewardQueue;
-    public static IReadOnlyCollection<BagReward> BagRewardQueue => _bagRewardQueue;
-    public static bool IsRewardQueueEmpty => _boxRewardQueue.Count == 0 && _bagRewardQueue.Count == 0;
+    public static bool IsRewardQueueEmpty => _boxRewardQueue.Count == 0;
     public static IReadOnlyList<OpeningChest> OpeningChests => _openingChests;
     // Consumables
     public static int Level => _level;
@@ -34,7 +33,6 @@ public static class PlayerData
     // fix change random seed
 
     private static Queue<ChestReward> _boxRewardQueue = new();
-    private static Queue<BagReward> _bagRewardQueue = new();
     private static OpeningChest[] _openingChests = new OpeningChest[4];
     // Consumables
     private static int _level;
@@ -73,22 +71,14 @@ public static class PlayerData
 
     public static void LoadData(SaveData saveData)
     {
-        Debug.Log("Loading: " + saveData);
-        GlobalSettings globalSettings = GlobalSettings.Instance;
-
         if (saveData == null)
         {
-            SetMusic(true);
-            SetSounds(true);
-            SetHaptic(true);
-
-            SetFPS(globalSettings.MinFPS);
-
-            _lastTimeBattlePassBought = DateTime.MinValue;
-            _shopRandomSeed = GetShopSeed();
-
+            DataSaver.ResetData();
             return;
         }
+
+        Debug.Log("Loading: " + saveData);
+        GlobalSettings globalSettings = GlobalSettings.Instance;
 
         if (saveData.BoxRewardQueue == null)
         {
@@ -97,19 +87,9 @@ public static class PlayerData
         else
         {
             _boxRewardQueue = new Queue<ChestReward>(saveData.BoxRewardQueue.Select(chestReward => new ChestReward(
-                chestReward.GadgetRewards.Select(gadget => new GadgetReward(
-                    globalSettings.GetGadgetByName(gadget.GadgetName), gadget.Amount)).ToList())));
-        }
-
-        if (saveData.BagRewardQueue == null)
-        {
-            _bagRewardQueue = new Queue<BagReward>();
-        }
-        else
-        {
-            _bagRewardQueue = new Queue<BagReward>(saveData.BagRewardQueue.Select(bagReward => new BagReward(
-                bagReward.RewardsQueue.Select(reward => new CharacteristicReward(
-                    (CharacteristicType)reward.TypeInt, reward.Value)).ToList())));
+                chestReward.GadgetRewards.Select(gadget => new GadgetReward(globalSettings.GetGadgetByName(gadget.GadgetName), gadget.Amount)).ToList(),
+                chestReward.CharacteristicRewards.Select(sharacteristicReward => new CharacteristicReward((CharacteristicType)sharacteristicReward.TypeInt, sharacteristicReward.Amount)).ToList(),
+                chestReward.CoinsReward)));
         }
 
         if (saveData.PlayerGadgets == null)
@@ -295,30 +275,18 @@ public static class PlayerData
         DataSaver.SaveData();
     }
 
-    public static void AddReward(RewardContainer reward)
+    public static void AddReward(ChestReward reward)
     {
-        if (reward is ChestReward boxReward)
-        {
-            _boxRewardQueue.Enqueue(boxReward);
-        }
-        else if (reward is BagReward bagReward)
-        {
-            _bagRewardQueue.Enqueue(bagReward);
-        }
+        _boxRewardQueue.Enqueue(reward);
 
         DataSaver.SaveData();
     }
 
-    public static RewardContainer GetReward()
+    public static ChestReward GetReward()
     {
         if (_boxRewardQueue.Count > 0)
         {
             return _boxRewardQueue.Dequeue();
-        }
-
-        if (_bagRewardQueue.Count > 0)
-        {
-            return _bagRewardQueue.Dequeue();
         }
 
         return null;

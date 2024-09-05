@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3415417063982182098}
   - component: {fileID: 7265821579360068961}
   - component: {fileID: 4843213697268642319}
-  - component: {fileID: 1041248655147712154}
+  - component: {fileID: 2315190394871067458}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -64,7 +64,7 @@ MonoBehaviour:
   _meshSpawner: {fileID: 5564266083515135188}
   _slingAnimator: {fileID: 0}
   _launchAnimationDuration: 2
---- !u!114 &1041248655147712154
+--- !u!114 &2315190394871067458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,9 +73,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 506430097536909851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ee8effebc4d24249bdc0aa642226ee6, type: 3}
+  m_Script: {fileID: 11500000, guid: d792a1f75e20642ffb4e1a19bde15bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _addGadget: 1
 --- !u!1 &922306072914500163
 GameObject:
   m_ObjectHideFlags: 0

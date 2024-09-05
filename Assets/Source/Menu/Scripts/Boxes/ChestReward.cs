@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class ChestReward : RewardContainer
+public class ChestReward
 {
     [Serializable]
     public class ChestSprite
@@ -22,11 +22,27 @@ public class ChestReward : RewardContainer
         Legendary
     }
 
-    [SerializeField] private List<GadgetReward> _rewards;
+    [SerializeField] private List<GadgetReward> _gadgetRewards;
+    [SerializeField] private List<CharacteristicReward> _characteristicRewards;
+    [SerializeField] private int _coinsReward;
 
-    public List<GadgetReward> Rewards => _rewards;
-    
+    public List<GadgetReward> GadgetRewards => _gadgetRewards;
+    public List<CharacteristicReward> CharacteristicRewards => _characteristicRewards;
+    public int CoinsReward => _coinsReward;
+
     public ChestReward(ChestType chestType)
+    {
+        AddChest(chestType);
+    }
+    
+    public ChestReward(List<GadgetReward> gadgetRewards, List<CharacteristicReward> characteristicRewards, int coinsReward)
+    {
+        _gadgetRewards = new List<GadgetReward>(gadgetRewards);
+        _characteristicRewards = new List<CharacteristicReward>(characteristicRewards);
+        _coinsReward = coinsReward;
+    }
+
+    private void AddChest(ChestType chestType)
     {
         GlobalSettings globalSettings = GlobalSettings.Instance;
         
@@ -35,11 +51,6 @@ public class ChestReward : RewardContainer
         int randomIndex = UnityEngine.Random.Range(0, gadgets.Count);
         int amount = (int)Mathf.Pow(2, (int)chestType);
         GadgetReward reward = new(gadgets[randomIndex].ScriptableObject, amount);
-        _rewards = new List<GadgetReward>() { reward };
-    }
-
-    public ChestReward(List<GadgetReward> rewards)
-    {
-        _rewards = new List<GadgetReward>(rewards);
+        _gadgetRewards = new List<GadgetReward>() { reward };
     }
 }

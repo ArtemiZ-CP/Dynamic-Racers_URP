@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 [Serializable]
@@ -8,10 +7,14 @@ public struct SpeedPower
 	[SerializeField] private Transform _left;
 	[SerializeField] private Transform _right;
 	[SerializeField] private float _speedMultiplier;
+	[SerializeField] private string _startText;
+	[SerializeField] private Color _startTextColor;
 
-	public readonly Vector3 LeftPosition => _left.position;
-	public readonly Vector3 RightPosition => _right.position;
+	public readonly Vector3 LeftPosition => _left.localPosition;
+	public readonly Vector3 RightPosition => _right.localPosition;
 	public readonly float SpeedMultiplier => _speedMultiplier;
+	public readonly string StartText => _startText;
+	public readonly Color StartTextColor => _startTextColor;
 
 	public static float GetRotationZ(Vector3 pointPosition, Vector3 arrowPosition)
 	{
