@@ -11,6 +11,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
     [SerializeField] private Animator _playerAnimator;
     [SerializeField] private Material _playerMaterial;
     [SerializeField] private UpgradePanel _upgradePanel;
+    [SerializeField] private UpgradeGadget _upgradeGadget;
     [SerializeField] private RectTransform _gadgetCellsParent;
     [SerializeField] private GadgetSelectionCell _gadgetCellPrefab;
     [SerializeField] private GadgetCollectionCell _gadgetCellInfo;
@@ -49,13 +50,19 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
         }
 
         _selectedGadget = null;
+        RunSettings.PlayerGadget = null;
 
         InitCells();
-        RunSettings.PlayerGadget = null;
         _selectedGadgetInfo.Select(null);
 
         _playerAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
         _playerAnimator.transform.GetComponentInChildren<SkinnedMeshRenderer>().material = _playerMaterial;
+        _upgradeGadget.LevelUp += UpdateGadget;
+    }
+
+    private void OnDisable()
+    {
+        _upgradeGadget.LevelUp -= UpdateGadget;
     }
 
     private void Update()
@@ -90,6 +97,18 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
             RunSettings.PlayerGadget = gadget;
             _startButtonAnimation.ActiveButton();
             _startButton.interactable = true;
+        }
+    }
+
+    private void UpdateGadget(Gadget gadget)
+    {
+        foreach (GadgetSelectionCell cell in _gadgetCells)
+        {
+            if (cell.Gadget == gadget)
+            {
+                cell.UpdateCell();
+                return;
+            }
         }
     }
 

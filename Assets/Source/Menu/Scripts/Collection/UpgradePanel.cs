@@ -92,9 +92,11 @@ public class UpgradePanel : MonoBehaviour
         _itemDistance.text = gadget.ScriptableObject.DistanceToDisactive == float.MaxValue ? "Infinity" : $"{gadget.ScriptableObject.DistanceToDisactive}m";
         _itemUses.text = gadget.ScriptableObject.UsageCount == int.MaxValue ? "Infinity" : gadget.ScriptableObject.UsageCount.ToString();
 
-        if (gadget.TryGetAdditionalSpeed(out float additionalSpeed))
+        if (gadget.TryGetAdditionalSpeed(out float additionalSpeed, out bool isAbleToUpgrade))
         {
-            _itemSpeedBoost.text = $"{gadget.SpeedMultiplier * 100}% + <color=green>+{additionalSpeed * 100}%</color>";
+            string color = isAbleToUpgrade ? "green" : "grey";
+
+            _itemSpeedBoost.text = $"{gadget.SpeedMultiplier * 100}% <color={color}>+{additionalSpeed * 100}%</color>";
         }
         else
         {

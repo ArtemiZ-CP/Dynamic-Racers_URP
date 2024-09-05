@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 877db2fbb19117e4084e6e96afbc5de5, type: 3}
-  m_Name: Urn
+  m_Name: TrashCan
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 4654591429510769051, guid: 4b3286aa69d6747c7b8d84c12b0121ee, type: 3}
+  _prefab: {fileID: 365860125298572020, guid: 370fac07f93f74272a35ba7403ca24cc, type: 3}
   _group: 3
   _rare: 2
   _gadgetAnimationInfos:
@@ -21,13 +21,15 @@ MonoBehaviour:
     _startDelay: 0
     _speedMultiplierOnDelay: 0
     _isAccelerates: 1
-    _animationTriggerName: UrnGround
-  _speedMultiplier: 0.5
+    _animationTriggerName: TrashCanGround
+  _speedMultiplier: 0.4
   _isSpeedIncreasing: 0
   _distanceToDisactive: 50
   _isInfiniteDistance: 0
   _activeCount: 3
   _isInfiniteActiveCounts: 0
-  _name: Urn
-  _sprite: {fileID: 21300000, guid: fd6cb712d7bfb4fd389415edff702a10, type: 3}
-  _description: 
+  _isUsageSplited: 0
+  _name: Trash Can
+  _bigSprite: {fileID: 21300000, guid: 7d25e7c61f05947f5b6a880488a16848, type: 3}
+  _smallSprite: {fileID: 21300000, guid: 6494edeb082d24e9c9c7a29738ff5c97, type: 3}
+  _description: 'Gives 3 acceleration for <sprite="Run" index=0><color=#18F5DF>Run</color> '

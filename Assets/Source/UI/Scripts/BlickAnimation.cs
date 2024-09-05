@@ -19,16 +19,16 @@ public class BlickAnimation : MonoBehaviour
         ActiveButton();
     }
 
-    public void DisactiveButton()
-    {
-        _blickMaterial.SetTexture("_Texture2D", _disactiveUpgradeButtonSprite.texture);
-        StopAllCoroutines();
-    }
-
     public void ActiveButton()
     {
         _blickMaterial.SetTexture("_Texture2D", _upgradeButtonSprite.texture);
         StartCoroutine(Animate());
+    }
+
+    public void DisactiveButton()
+    {
+        _blickMaterial.SetTexture("_Texture2D", _disactiveUpgradeButtonSprite.texture);
+        StopAllCoroutines();
     }
 
     private IEnumerator Animate()

@@ -25,14 +25,16 @@ public class Gadget
         _level = level;
     }
 
-    public bool TryGetAdditionalSpeed(out float additionalSpeed)
+    public bool TryGetAdditionalSpeed(out float additionalSpeed, out bool isAbleToUpgrade)
     {
-        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(this, out _, out _))
+        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(this, out int gadgetsToLevelUp, out int coinsCost))
         {
+            isAbleToUpgrade = _amount >= gadgetsToLevelUp && PlayerData.Coins >= coinsCost;
             additionalSpeed = _scriptableObject.SpeedMultiplier * 0.1f;
             return true;
         }
 
+        isAbleToUpgrade = false;
         additionalSpeed = 0;
         return false;
     }

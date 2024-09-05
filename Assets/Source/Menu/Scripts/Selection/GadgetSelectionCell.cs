@@ -13,42 +13,35 @@ public class GadgetSelectionCell : MonoBehaviour
 
     public Gadget Gadget { get; private set; }
 
-    public void Init()
-    {
-        _image.gameObject.SetActive(false);
-        _notFound.SetActive(false);
-        _recomendedWindow.SetActive(false);
-        Deselect();
-    }
-
-    public void Init(Gadget gadget)
+    public void Init(Gadget gadget, bool isFound = true, IClickableGadget clickableGadget = null)
     {
         Gadget = gadget;
         _image.sprite = gadget.ScriptableObject.BigSprite;
-        Deselect();
-
-        _notFound.SetActive(false);
-        _recomendedWindow.SetActive(false);
-    }
-
-    public void Init(Gadget gadget, bool isFound, IClickableGadget clickableGadget)
-    {
-        Init(gadget);
 
         if (clickableGadget != null)
         {
             _button.onClick.AddListener(() => clickableGadget.Click(gadget));
         }
+
         if (isFound)
         {
             _levelText.gameObject.SetActive(true);
             _levelText.text = $"Level {gadget.Level + 1}";
+            _notFound.SetActive(false);
         }
         else
         {
             _levelText.gameObject.SetActive(false);
             _notFound.SetActive(true);
         }
+
+        _recomendedWindow.SetActive(false);
+        Deselect();
+    }
+
+    public void UpdateCell()
+    {
+        _levelText.text = $"Level {Gadget.Level + 1}";
     }
 
     public void Select()

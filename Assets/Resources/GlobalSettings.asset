@@ -78,6 +78,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 01840f12431394904abbed67736be3ad, type: 2}
   - {fileID: 11400000, guid: a3d1d259c3c9245789c356c6f150f9a7, type: 2}
   - {fileID: 11400000, guid: 854119e465ad24665a3e032872a76b5f, type: 2}
+  - {fileID: 11400000, guid: de831156fbbc049a3b9f2d7ea41d7ba9, type: 2}
   _gadgetRareBackgrounds:
   - {fileID: 21300000, guid: c45704f4e194c4592b4f76273205616f, type: 3}
   - {fileID: 21300000, guid: d3f26c5999c8b4e77a1bb3dd31f0af38, type: 3}
@@ -90,6 +91,7 @@ MonoBehaviour:
   - {r: 0.9647059, g: 0.78039217, b: 0.007843138, a: 1}
   _baseSpeed: 5
   _additionalSpeedByUpgrade: 0.05
+  _reduseUpgradesByLevel: 1
   _timeToStartRun: 5
   _distanceToStartPower: 15
   _characterStartOffset: 3
