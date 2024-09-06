@@ -26,17 +26,22 @@ public class ChestReward
     [SerializeField] private List<CharacteristicReward> _characteristicRewards;
     [SerializeField] private int _coinsReward;
 
+    private ChestType _chestType;
+
     public List<GadgetReward> GadgetRewards => _gadgetRewards;
     public List<CharacteristicReward> CharacteristicRewards => _characteristicRewards;
     public int CoinsReward => _coinsReward;
+    public ChestType Type => _chestType;
 
     public ChestReward(ChestType chestType)
     {
+        _chestType = chestType;
         AddChest(chestType);
     }
     
-    public ChestReward(List<GadgetReward> gadgetRewards, List<CharacteristicReward> characteristicRewards, int coinsReward)
+    public ChestReward(ChestType chestType, List<GadgetReward> gadgetRewards, List<CharacteristicReward> characteristicRewards, int coinsReward)
     {
+        _chestType = chestType;
         _gadgetRewards = new List<GadgetReward>(gadgetRewards);
         _characteristicRewards = new List<CharacteristicReward>(characteristicRewards);
         _coinsReward = coinsReward;
@@ -44,9 +49,7 @@ public class ChestReward
 
     private void AddChest(ChestType chestType)
     {
-        GlobalSettings globalSettings = GlobalSettings.Instance;
-        
-        List<Gadget> gadgets = globalSettings.GetAllGadgets();
+        List<Gadget> gadgets = GlobalSettings.Instance.GetAllGadgets();
 
         int randomIndex = UnityEngine.Random.Range(0, gadgets.Count);
         int amount = (int)Mathf.Pow(2, (int)chestType);

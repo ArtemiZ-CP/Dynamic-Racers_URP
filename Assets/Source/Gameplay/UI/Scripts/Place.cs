@@ -1,25 +1,28 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Place : MonoBehaviour
 {
-
     [SerializeField] private TMP_Text _placeText;
     [SerializeField] private TMP_Text _place;
-    [SerializeField] private List<GameObject> _1;
-    [SerializeField] private List<GameObject> _2;
-    [SerializeField] private List<GameObject> _3;
-    [SerializeField] private List<GameObject> _4;
+    [SerializeField] private Sprite _1;
+    [SerializeField] private Sprite _2;
+    [SerializeField] private Sprite _3;
+    [SerializeField] private Sprite _4;
     [SerializeField] private Image _gadget;
+    [SerializeField] private Image _background;
+    [SerializeField] private BlickAnimation _blickAnimation;
     [SerializeField] private GameObject _playerOutline;
+
+    private Sprite _currentPlace;
 
     public void SetPlace(string name, int place, Sprite gadgetSprite)
     {
         _placeText.text = name;
         _place.text = place.ToString();
-        ActivePlacementObjects(place);
+        SetPlacementSprite(place);
+        _playerOutline.SetActive(false);
 
         if (gadgetSprite == null)
         {
@@ -29,46 +32,34 @@ public class Place : MonoBehaviour
         {
             _gadget.sprite = gadgetSprite;
         }
-
-        _playerOutline.SetActive(false);
     }
 
-    public void SetPlayerOutline()
+    public void SetPlayerPlace()
     {
         _playerOutline.SetActive(true);
+        _background.material = _blickAnimation.BlickMaterial;
+        _blickAnimation.Initialize(_currentPlace);
+        _blickAnimation.enabled = true;
     }
 
-    
-
-    private void ActivePlacementObjects(int place)
+    private void SetPlacementSprite(int place)
     {
-        SetActiveObjects(_1, false);
-        SetActiveObjects(_2, false);
-        SetActiveObjects(_3, false);
-        SetActiveObjects(_4, false);
-
         switch (place)
         {
             case 1:
-                SetActiveObjects(_1, true);
+                _currentPlace = _1;
                 break;
             case 2:
-                SetActiveObjects(_2, true);
+                _currentPlace = _2;
                 break;
             case 3:
-                SetActiveObjects(_3, true);
+                _currentPlace = _3;
                 break;
             default:
-                SetActiveObjects(_4, true);
+                _currentPlace = _4;
                 break;
         }
-    }
 
-    private void SetActiveObjects(List<GameObject> objects, bool isActive)
-    {
-        foreach (var item in objects)
-        {
-            item.SetActive(isActive);
-        }
+        _background.sprite = _currentPlace;
     }
 }

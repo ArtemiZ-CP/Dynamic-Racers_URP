@@ -42,6 +42,7 @@ public class CharacteristicRewardSaveInfo
 [Serializable]
 public class ChestRewardSaveInfo
 {
+    public int ChestTypeInt;
     public PlayerGadgetSaveInfo[] GadgetRewards;
     public CharacteristicRewardSaveInfo[] CharacteristicRewards;
     public int CoinsReward;

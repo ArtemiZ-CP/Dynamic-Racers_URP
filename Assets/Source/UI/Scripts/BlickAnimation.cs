@@ -13,19 +13,35 @@ public class BlickAnimation : MonoBehaviour
     [SerializeField] private Sprite _disactiveUpgradeButtonSprite;
 
     private float _offset;
+    public Material BlickMaterial => _blickMaterial;
 
     private void OnEnable()
     {
-        ActiveButton();
+        ActiveBlick();
     }
 
-    public void ActiveButton()
+    public void Initialize(Sprite buttonSprite)
+    {
+        _upgradeButtonSprite = buttonSprite;
+        _disactiveUpgradeButtonSprite = buttonSprite;
+        
+        if (gameObject.activeInHierarchy) ActiveBlick();
+    }
+
+    public void Initialize(Sprite upgradeButtonSprite, Sprite disactiveUpgradeButtonSprite)
+    {
+        _upgradeButtonSprite = upgradeButtonSprite;
+        _disactiveUpgradeButtonSprite = disactiveUpgradeButtonSprite;
+    }
+
+    public void ActiveBlick()
     {
         _blickMaterial.SetTexture("_Texture2D", _upgradeButtonSprite.texture);
+        StopAllCoroutines();
         StartCoroutine(Animate());
     }
 
-    public void DisactiveButton()
+    public void DisactiveBlick()
     {
         _blickMaterial.SetTexture("_Texture2D", _disactiveUpgradeButtonSprite.texture);
         StopAllCoroutines();

@@ -46,7 +46,7 @@ public class UpgradeGadget : MonoBehaviour
 
             if (isAbleToUpgrade == false)
             {
-                _blickAnimation.DisactiveButton();
+                _blickAnimation.DisactiveBlick();
             }
 
             _upgradeButtonObject.SetActive(true);

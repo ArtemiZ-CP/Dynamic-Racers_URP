@@ -30,7 +30,6 @@ public static class PlayerData
     public static DateTime LastTimeBattlePassBought => _lastTimeBattlePassBought;
     public static DateTime LastUpdateShopDay => _lastUpdateShopDay;
     public static int ShopRandomSeed => _shopRandomSeed;
-    // fix change random seed
 
     private static Queue<ChestReward> _boxRewardQueue = new();
     private static OpeningChest[] _openingChests = new OpeningChest[4];
@@ -87,6 +86,7 @@ public static class PlayerData
         else
         {
             _boxRewardQueue = new Queue<ChestReward>(saveData.BoxRewardQueue.Select(chestReward => new ChestReward(
+                (ChestReward.ChestType)chestReward.ChestTypeInt,
                 chestReward.GadgetRewards.Select(gadget => new GadgetReward(globalSettings.GetGadgetByName(gadget.GadgetName), gadget.Amount)).ToList(),
                 chestReward.CharacteristicRewards.Select(sharacteristicReward => new CharacteristicReward((CharacteristicType)sharacteristicReward.TypeInt, sharacteristicReward.Amount)).ToList(),
                 chestReward.CoinsReward)));

@@ -13,7 +13,7 @@ public class EndGamePanel : MonoBehaviour
 
         if (isPlayerFinished)
         {
-            place.SetPlayerOutline();
+            place.SetPlayerPlace();
         }
     }
 

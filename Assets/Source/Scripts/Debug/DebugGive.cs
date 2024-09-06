@@ -22,8 +22,10 @@ public class DebugGive : MonoBehaviour
         CharacteristicReward characteristicReward = new(_characteristicType, _value);
 
         PlayerData.AddReward(new ChestReward(
+            ChestReward.ChestType.Wood,
             new List<GadgetReward> { gadgetReward },
-            new List<CharacteristicReward> { characteristicReward }, _coins));
+            new List<CharacteristicReward> { characteristicReward }, 
+            _coins));
     }
 
     private void Start()

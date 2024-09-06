@@ -39,7 +39,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
         }
         else
         {
-            _startButtonAnimation.DisactiveButton();
+            _startButtonAnimation.DisactiveBlick();
             _startButton.interactable = false;
         }
 
@@ -95,7 +95,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
 
             _gadgetCells.Find(gadgetCell => gadgetCell.Gadget == gadget)?.Select();
             RunSettings.PlayerGadget = gadget;
-            _startButtonAnimation.ActiveButton();
+            _startButtonAnimation.ActiveBlick();
             _startButton.interactable = true;
         }
     }
