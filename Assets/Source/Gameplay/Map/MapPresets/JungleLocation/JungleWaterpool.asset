@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a96db882ea56b4cdf85c25e0f42ab5ed, type: 3}
+  m_Name: JungleWaterpool
+  m_EditorClassIdentifier: 
+  _startMiddle: {fileID: 4389088238115731540, guid: 26aa967f9a62541c68b712a7a6a56fac,
+    type: 3}
+  _middleMiddle: {fileID: 4389088238115731540, guid: e821d820dd3694e3795bf3d6fa274a2a,
+    type: 3}
+  _startSide: {fileID: 4389088238115731540, guid: e3f07624e18944b5e8256c837480df37,
+    type: 3}
+  _middleSide: {fileID: 4389088238115731540, guid: b4b0cecf8d7704b488a96c311816243b,
+    type: 3}

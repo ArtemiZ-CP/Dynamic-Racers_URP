@@ -1,45 +1,44 @@
-using System;
-using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BiomProgress : MonoBehaviour
 {
-    [Serializable]
-    private class BiomPoint
-    {
-        [SerializeField, Range(0, 1)] private float _progress;
-        [SerializeField] private Reward _reward;
-
-        public BiomPoint(int progress, Reward reward)
-        {
-            _progress = progress;
-            _reward = reward;
-        }
-
-        public float Progress => _progress;
-        public Reward Reward => _reward;
-    }
-
-    [SerializeField] private Reward _endReward;
-    [SerializeField] private List<BiomPoint> _biomPoints = new();
+    [SerializeField] private TMP_Text _biomName;
     [SerializeField] private RectTransform _biomPointPrefab;
+    [SerializeField] private RectTransform _biomEmptyPointPrefab;
     [SerializeField] private RectTransform _biomParent;
     [SerializeField] private RectTransform _progressBar;
+    [SerializeField] private Image _progressSlider;
+    [SerializeField] private TMP_Text _coinsRewardPerStar;
 
-    [ContextMenu("Set Biom Points")]
-    public void SetBiomPoints()
+    public void SetBiomPoints(ICompanyBiomInfoReadOnly companyBiomInfo)
     {
-        if (_biomPoints.Count == 0 || _biomPointPrefab == null)
+        ChestReward.ChestType?[] rewards = companyBiomInfo.Rewards.ToArray();
+
+        if (rewards == null || rewards.Length == 0)
         {
             return;
         }
 
         ClearBiomPoints();
 
-        foreach (BiomPoint biomPoint in _biomPoints)
+        for (int i = 0; i < rewards.Length; i++)
         {
-            SpawnBiomPoint(biomPoint);
+            if (rewards[i] is ChestReward.ChestType chestType)
+            {
+                SpawnBiomPoint(chestType, i, rewards.Length);
+            }
+            else
+            {
+                SpawnEmptyBiomPoint(i, rewards.Length);
+            }
         }
+
+        _biomName.text = companyBiomInfo.BiomName;
+        _coinsRewardPerStar.text = companyBiomInfo.RewardsPerStar.Amount.ToString();
+        _progressSlider.fillAmount = companyBiomInfo.CurrentStars / (float)rewards.Length;
     }
 
     private void ClearBiomPoints()
@@ -55,14 +54,35 @@ public class BiomProgress : MonoBehaviour
         }
     }
 
-    private void SpawnBiomPoint(BiomPoint biomPoint)
+    private void SpawnBiomPoint(ChestReward.ChestType chestType, int progress, int maxProgress)
+    {
+        if (progress == maxProgress - 1)
+        {
+            return;
+        }
+
+        RectTransform pointTransform = Instantiate(_biomPointPrefab, _biomParent);
+        pointTransform.position = GetPointPosition(progress, maxProgress);
+    }
+
+    private void SpawnEmptyBiomPoint(int progress, int maxProgress)
+    {
+        if (progress == maxProgress - 1)
+        {
+            return;
+        }
+
+        RectTransform pointTransform = Instantiate(_biomEmptyPointPrefab, _biomParent);
+        pointTransform.position = GetPointPosition(progress, maxProgress);
+    }
+
+    private Vector3 GetPointPosition(int progress, int maxProgress)
     {
         float leftPosition = _progressBar.rect.xMin * transform.lossyScale.x + _progressBar.position.x;
         float rightPosition = _progressBar.rect.xMax * transform.lossyScale.x + _progressBar.position.x;
 
-        RectTransform pointTransform = Instantiate(_biomPointPrefab, _biomParent);
-        pointTransform.position = new Vector3(
-            Mathf.Lerp(leftPosition, rightPosition, biomPoint.Progress),
+        return new Vector3(
+            Mathf.Lerp(leftPosition, rightPosition, (progress + 1) / (float)maxProgress),
             _biomParent.position.y,
             _biomParent.position.z
         );

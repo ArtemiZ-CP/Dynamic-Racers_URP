@@ -90,6 +90,11 @@ public class WallMeshDrawer : ChunkMeshDrawer
 
 	private void SpawnMarginLine(float xPosition, int lenght, MarginsOffset marginsOffset, bool mirror, WallMarginCellsContainer wallMarginCellsContainer, bool emptyBefore, bool emptyAfter)
 	{
+		if (wallMarginCellsContainer == null)
+		{
+			return;
+		}
+
 		GameObject start = null;
 		GameObject middle = null;
 		GameObject end = null;

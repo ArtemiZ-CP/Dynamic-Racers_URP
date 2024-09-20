@@ -6,9 +6,6 @@ using UnityEngine.SceneManagement;
 public class PreloadLevel : MonoBehaviour
 {
     [SerializeField] private string _levelName = "Gameplay";
-    [Header("Training")]
-    [SerializeField] private string _trainingLevelName = "Training";
-    [SerializeField] private int _startTrainingLevelIndex = 1;
 
     private LoadAnimation _loadAnimation;
 
@@ -24,25 +21,11 @@ public class PreloadLevel : MonoBehaviour
 
     private IEnumerator Preload()
     {
-        string levelName;
-        int playersCount;
-
-        if (PlayerData.PassedTrainings < GlobalSettings.Instance.TrainingLevelsCount)
-        {
-            levelName = $"{_trainingLevelName}{PlayerData.PassedTrainings + _startTrainingLevelIndex}";
-            playersCount = GlobalSettings.Instance.TrainingPlayersCount;
-        }
-        else
-        {
-            levelName = _levelName;
-            playersCount = GlobalSettings.Instance.GameplayPlayersCount;
-        }
-
-        var levelLoader = SceneManager.LoadSceneAsync(levelName);
+        var levelLoader = SceneManager.LoadSceneAsync(_levelName);
         levelLoader.allowSceneActivation = false;
 
-        yield return _loadAnimation.StartAnimation(playersCount);
-        
+        yield return _loadAnimation.StartAnimation(GlobalSettings.Instance.GameplayPlayersCount);
+
         levelLoader.allowSceneActivation = true;
     }
 }

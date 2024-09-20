@@ -87,7 +87,7 @@ public abstract class RunStagesBase : MonoBehaviour
         _speedGame.gameObject.SetActive(true);
     }
 
-    protected abstract void GiveReward();
+    protected abstract void GiveReward(int placement);
 
     private int GetEnemyUpgrades()
     {
@@ -103,7 +103,7 @@ public abstract class RunStagesBase : MonoBehaviour
         _placements.RemoveAll(a => _finished.Contains(a));
         _placements.Sort((a, b) => b.Distance.CompareTo(a.Distance));
         List<CharacterMovement> newFinished = _placements.FindAll(a => a.IsFinished);
-        
+
         if (newFinished.Contains(_playerMovement))
         {
             newFinished.Remove(_playerMovement);
@@ -120,7 +120,7 @@ public abstract class RunStagesBase : MonoBehaviour
         }
     }
 
-    private void StartRunning(float multiplier)
+    private void StartRunning(float multiplier, bool goodStart)
     {
         _cameraSwitcher.SwitchToGameplayCamera();
         _speedGame.gameObject.SetActive(false);
@@ -130,6 +130,7 @@ public abstract class RunStagesBase : MonoBehaviour
         List<Chunk> chunks = _map.Chunks;
 
         _playerMovement.StartMove(chunks, multiplier);
+        _playerMovement.GetComponent<CharacterAnimation>().LaunchCharacter(goodStart, _speedGame.FullCharge);
 
         if (_enemies.Count > 0)
         {
@@ -140,7 +141,8 @@ public abstract class RunStagesBase : MonoBehaviour
                     GetEnemyUpgrades(),
                     GetEnemyUpgrades(),
                     GetEnemyUpgrades());
-                enemy.StartMove(chunks, _speedGame.RandomSpeedMultiplier);
+                enemy.StartMove(chunks, _speedGame.GetRandomSpeedMultiplier(out goodStart));
+                enemy.GetComponent<CharacterAnimation>().LaunchCharacter(goodStart, true);
             }
         }
     }
@@ -154,35 +156,37 @@ public abstract class RunStagesBase : MonoBehaviour
 
         if (chunk.Type == ChunkType.Finish)
         {
+            int placement = GetPlacement(characterMovement);
+
             if (characterMovement == _playerMovement)
             {
-                _endGame.AddPlayerFinisher(characterGadgets);
-                GiveReward();
+                _endGame.AddPlayerFinisher(characterGadgets, placement);
+                GiveReward(placement);
                 StartCoroutine(LoadMenuOnClick());
             }
             else
             {
-                _endGame.AddFinisher(characterGadgets);
+                _endGame.AddFinisher(characterGadgets, placement);
             }
         }
     }
 
-    private bool IsTouchGown()
+    private bool IsTouchUp()
     {
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            return touch.phase == TouchPhase.Began;
+            return touch.phase == TouchPhase.Ended;
         }
 
-        return Input.GetKeyDown(KeyCode.Mouse0);
+        return Input.GetKeyUp(KeyCode.Mouse0);
     }
 
     private IEnumerator LoadMenuOnClick()
     {
         while (true)
         {
-            if (IsTouchGown())
+            if (IsTouchUp())
             {
                 SceneManager.LoadScene(_menuSceneName);
                 break;

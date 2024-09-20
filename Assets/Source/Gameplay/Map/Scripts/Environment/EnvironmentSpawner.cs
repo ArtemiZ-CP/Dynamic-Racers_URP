@@ -4,8 +4,8 @@ public class EnvironmentSpawner : MonoBehaviour
 {
     private const float OffsetY = 0.25f;
     private const float OffsetZ = 0.1f;
-    private const float ChanceToSpawnEmptyOnRoad = 0.1f;
-    private const float ChanceToSpawnEmptyOutside = 0.5f;
+    private const float ChanceToSpawnEmptyOnRoad = 0.4f;
+    private const float ChanceToSpawnEmptyOutside = 0.85f;
 
     [SerializeField] private Transform _environmentParent;
 
@@ -101,14 +101,14 @@ public class EnvironmentSpawner : MonoBehaviour
                 continue;
             }
 
-            FillMap(ref environmentMap, emptyCell, environment.Lenth);
+            FillMap(ref environmentMap, emptyCell, environment.Length);
             SpawnEnvironmentObject(environment, startMarginPositionX, emptyCell, isLeftSide);
         }
     }
 
-    private void SpawnEnvironment(float startMarginPositionX, int length, int wigth, Environment.Type type, bool isAbleToSpawnHigh, EnvironmentContainer environmentContainer)
+    private void SpawnEnvironment(float startMarginPositionX, int length, int wight, Environment.Type type, bool isAbleToSpawnHigh, EnvironmentContainer environmentContainer)
     {
-        bool[,] environmentMap = new bool[length, wigth];
+        bool[,] environmentMap = new bool[length, wight];
 
         while (IsMapComplitedFilled(environmentMap) == false)
         {
@@ -120,9 +120,9 @@ public class EnvironmentSpawner : MonoBehaviour
                 continue;
             }
 
-            GetMaxEnvironmentSize(environmentMap, emptyCell, out int environmentLength, out int environmentWigth);
+            GetMaxEnvironmentSize(environmentMap, emptyCell, out int environmentLength, out int environmentWight);
 
-            if (environmentLength == 0 || environmentWigth == 0)
+            if (environmentLength == 0 || environmentWight == 0)
             {
                 break;
             }
@@ -132,7 +132,7 @@ public class EnvironmentSpawner : MonoBehaviour
                 isAbleToSpawnHigh = false;
             }
 
-            Environment environment = environmentContainer.GetRandomEnvironment(type, environmentLength, environmentWigth, isAbleToSpawnHigh);
+            Environment environment = environmentContainer.GetRandomEnvironment(type, environmentLength, environmentWight, isAbleToSpawnHigh);
 
             if (environment == null)
             {
@@ -140,7 +140,7 @@ public class EnvironmentSpawner : MonoBehaviour
                 continue;
             }
 
-            FillMap(ref environmentMap, emptyCell, environment.Lenth, environment.Wigth);
+            FillMap(ref environmentMap, emptyCell, environment.Length, environment.Wigth);
             SpawnEnvironmentObject(environment, startMarginPositionX, emptyCell, isAbleToSpawnHigh == false);
         }
     }
@@ -154,12 +154,12 @@ public class EnvironmentSpawner : MonoBehaviour
 
         if (environment.EnvironmentType == Environment.Type.Ground)
         {
-            localPosition += new Vector3(0, 0, emptyCell.x + environment.Lenth / 2f) * offset;
+            localPosition += new Vector3(0, 0, emptyCell.x + environment.Length / 2f) * offset;
             localPosition += Vector3.up * (offset + OffsetY);
         }
         else
         {
-            localPosition += new Vector3(0, emptyCell.x + environment.Lenth / 2f, 0) * offset;
+            localPosition += new Vector3(0, emptyCell.x + environment.Length / 2f, 0) * offset;
             localPosition += Vector3.forward * OffsetZ;
             localPosition += Vector3.up * (offset + OffsetY);
         }
@@ -194,7 +194,7 @@ public class EnvironmentSpawner : MonoBehaviour
 
         Vector3 localPosition = Vector3.zero;
 
-        localPosition += new Vector3(0, 0, emptyCell + environment.Lenth / 2f) * offset;
+        localPosition += new Vector3(0, 0, emptyCell + environment.Length / 2f) * offset;
         localPosition += Vector3.up * (offset + OffsetY);
 
         Vector3 position;

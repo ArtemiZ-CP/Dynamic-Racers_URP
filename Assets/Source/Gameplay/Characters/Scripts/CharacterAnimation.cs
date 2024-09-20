@@ -4,12 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterMovement), typeof(CharacterGadgets))]
 public class CharacterAnimation : MonoBehaviour
 {
+	private const float _goodStartAnimationDelay = 0.1f;
+	private const float _badStartAnimationDelay = 0.5f;
+
 	private readonly int End = Animator.StringToHash(nameof(End));
 	private readonly int SpeedMultiplier = Animator.StringToHash(nameof(SpeedMultiplier));
 	private readonly int LaunchSpeed = Animator.StringToHash(nameof(LaunchSpeed));
 	private readonly int Defeat = Animator.StringToHash(nameof(Defeat));
 	private readonly int Victory = Animator.StringToHash(nameof(Victory));
 	private readonly int Launch = Animator.StringToHash(nameof(Launch));
+	private readonly int BadLaunch = Animator.StringToHash(nameof(BadLaunch));
 	private readonly int StartLaunch = Animator.StringToHash(nameof(StartLaunch));
 
 	[SerializeField] private MeshSpawner _meshSpawner;
@@ -18,7 +22,6 @@ public class CharacterAnimation : MonoBehaviour
 
 	private GlobalSettings _globalSettings;
 	private RunStagesBase _runStagesBase;
-	private SpeedGameBase _speedGameBase;
 	private CharacterGadgets _characterGadgets;
 	private CharacterMovement _characterMovement;
 	private Animator _animator;
@@ -26,6 +29,9 @@ public class CharacterAnimation : MonoBehaviour
 	private GameObject _activeGadget;
 	private Coroutine _launchAnimationCoroutine;
 	private int _place = 0;
+	private bool _isAbleToAnimate = false;
+	private GadgetChunkInfo _activeGadgetChunkInfo;
+	private bool _isGadgetActive = false;
 
 	private void Awake()
 	{
@@ -34,7 +40,6 @@ public class CharacterAnimation : MonoBehaviour
 		_characterMovement = GetComponent<CharacterMovement>();
 		_characterGadgets = GetComponent<CharacterGadgets>();
 		_runStagesBase = FindObjectOfType<RunStagesBase>();
-		_speedGameBase = _runStagesBase.SpeedGame;
 	}
 
 	private void Start()
@@ -53,14 +58,12 @@ public class CharacterAnimation : MonoBehaviour
 	{
 		_characterGadgets.OnActiveAnimation += ActiveAnimationHandler;
 		_characterGadgets.OnDisactiveAnimation += DisactiveAnimationHandler;
-		_speedGameBase.EndedSpeedGame += LaunchCharacter;
 	}
 
 	private void OnDisable()
 	{
 		_characterGadgets.OnActiveAnimation -= ActiveAnimationHandler;
 		_characterGadgets.OnDisactiveAnimation -= DisactiveAnimationHandler;
-		_speedGameBase.EndedSpeedGame -= LaunchCharacter;
 	}
 
 	private void Update()
@@ -76,6 +79,33 @@ public class CharacterAnimation : MonoBehaviour
 		}
 	}
 
+	public void LaunchCharacter(bool goodStart, bool fullCharge)
+	{
+		StopCoroutine(_launchAnimationCoroutine);
+
+		if (fullCharge == false)
+		{
+			_slingAnimator.SetFloat(LaunchSpeed, -_globalSettings.BaseSpeed);
+			StartCoroutine(StartAnimationDelay(0));
+			print(1);
+		}
+		else
+		{
+			if (goodStart)
+			{
+				_slingAnimator.SetTrigger(Launch);
+				_animator.SetTrigger(Launch);
+				StartCoroutine(StartAnimationDelay(_goodStartAnimationDelay));
+			}
+			else
+			{
+				_slingAnimator.SetTrigger(BadLaunch);
+				_animator.SetTrigger(BadLaunch);
+				StartCoroutine(StartAnimationDelay(_badStartAnimationDelay));
+			}
+		}
+	}
+
 	private void SetAnimationSpeed()
 	{
 		float speedMultiplier = _characterMovement.Speed;
@@ -88,15 +118,22 @@ public class CharacterAnimation : MonoBehaviour
 		}
 	}
 
+	private IEnumerator StartAnimationDelay(float delay)
+	{
+		yield return new WaitForSeconds(delay);
+		_isAbleToAnimate = true;
+		ActiveAnimationHandler(_activeGadgetChunkInfo, _isGadgetActive);
+	}
+
 	private IEnumerator ControllLaunchAnimation()
 	{
 		float lastCharactePosition = _characterMovement.CurrentOffset;
 		float maxDistance = GlobalSettings.Instance.CharacterStartOffset;
 
-		while (lastCharactePosition == transform.position.z)
-		{
-			yield return null;
-		}
+		// while (lastCharactePosition == _characterMovement.CurrentOffset)
+		// {
+		// 	yield return null;
+		// }
 
 		_animator.SetTrigger(StartLaunch);
 		_slingAnimator.SetTrigger(StartLaunch);
@@ -114,26 +151,11 @@ public class CharacterAnimation : MonoBehaviour
 		}
 	}
 
-	private void LaunchCharacter(float speedMultiplier)
-	{
-		StopCoroutine(_launchAnimationCoroutine);
-
-		if (_characterMovement.CurrentOffset < _globalSettings.CharacterStartOffset)
-		{
-			_slingAnimator.SetFloat(LaunchSpeed, -_globalSettings.BaseSpeed);
-		}
-		else
-		{
-			_slingAnimator.SetTrigger(Launch);
-			_animator.SetTrigger(Launch);
-		}
-	}
-
 	private void ActiveAnimationHandler(GadgetChunkInfo gadgetChunkInfo, bool isGadgetActive)
 	{
 		if (gadgetChunkInfo.ChunkType == ChunkType.Finish)
 		{
-			if (_place == 1)
+			if (_place == 1 || _place == 2 || _place == 3)
 			{
 				_animator.SetTrigger(Victory);
 			}
@@ -144,6 +166,13 @@ public class CharacterAnimation : MonoBehaviour
 		}
 		else
 		{
+			if (_isAbleToAnimate == false)
+			{
+				_activeGadgetChunkInfo = gadgetChunkInfo;
+				_isGadgetActive = isGadgetActive;
+				return;
+			}
+
 			if (isGadgetActive)
 			{
 				_activeGadget.SetActive(true);
@@ -152,14 +181,21 @@ public class CharacterAnimation : MonoBehaviour
 			}
 			else
 			{
-				_animator.SetTrigger(gadgetChunkInfo.ChunkType.ToString());
+				if (gadgetChunkInfo.ChunkType == ChunkType.Start)
+				{
+					_animator.SetTrigger(ChunkType.Ground.ToString());
+				}
+				else
+				{
+					_animator.SetTrigger(gadgetChunkInfo.ChunkType.ToString());
+				}
 			}
 		}
 	}
 
 	private void DisactiveAnimationHandler(ChunkType chunkType)
 	{
-		_activeGadget.SetActive(false);
+		_activeGadget?.SetActive(false);
 
 		if (chunkType != ChunkType.Finish)
 		{

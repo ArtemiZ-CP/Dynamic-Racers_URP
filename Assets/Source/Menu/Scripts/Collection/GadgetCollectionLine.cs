@@ -36,16 +36,16 @@ public class GadgetCollectionLine : MonoBehaviour
 
                 if (i < foundGadgetsCount)
                 {
-                    gadgetCell.Init(gadgets[i], isFound: true);
+                    gadgetCell.Initialize(gadgets[i], isFound: true);
                 }
                 else
                 {
-                    gadgetCell.Init(gadgets[i], isFound: false);
+                    gadgetCell.Initialize(gadgets[i], isFound: false);
                 }
             }
             else
             {
-                gadgetCell.Init();
+                gadgetCell.Initialize();
             }
         }
     }

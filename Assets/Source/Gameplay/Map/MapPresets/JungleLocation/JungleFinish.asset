@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c85fe221a854073bf5d991328d7a3d, type: 3}
+  m_Name: JungleFinish
+  m_EditorClassIdentifier: 
+  _middleLine: {fileID: 7075046582411392766, guid: b655dcc4b51ef460dbac02b23a2151cc,
+    type: 3}
+  _middle: {fileID: 7075046582411392766, guid: 950b86005ada5444ca05e16658f2c313, type: 3}
+  _leftLine: {fileID: 7075046582411392766, guid: 9cdb85fdda84a42fcb074865b240903a,
+    type: 3}
+  _rightLine: {fileID: 7075046582411392766, guid: 4eecccb89b02e491da1b8c2b813720e8,
+    type: 3}
+  _finishObject: {fileID: 6708191261618389559, guid: 6dfd98697fec24e569294c232411499c,
+    type: 3}

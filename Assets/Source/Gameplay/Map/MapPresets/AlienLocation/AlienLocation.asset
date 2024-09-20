@@ -26,5 +26,5 @@ MonoBehaviour:
     type: 2}
   _environmentContainer: {fileID: 11400000, guid: 57e233feef99e45059e7576fb23f811a,
     type: 2}
-  _finishPrefab: {fileID: 1199139674193166142, guid: 68a075e137a8249288193593069eb823,
-    type: 3}
+  _finishCellsContainer: {fileID: 11400000, guid: 4ca0884dd205947c9b68d4712aeafbdf,
+    type: 2}

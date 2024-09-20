@@ -49,6 +49,9 @@ MonoBehaviour:
     Sprite: {fileID: 236003690, guid: 4940f87de66474a4b94b5f17ffd3b8a3, type: 3}
   - ChestType: 4
     Sprite: {fileID: -182500655, guid: b855ba335d20c43f796ba9fb218823d3, type: 3}
+  _bioms:
+  - {fileID: 11400000, guid: c6f73aa21e359451687c627ed4e443f1, type: 2}
+  - {fileID: 11400000, guid: 55a81ce22549b471795e3cd391ef5738, type: 2}
   _trainingLevelsCount: 4
   _trainingPlayersCount: 4
   _gadgetsLevelProgression:
@@ -76,6 +79,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1aabc42c94adc408886e2b8c1d1b3311, type: 2}
   - {fileID: 11400000, guid: f93b7918fa1d440f2a0628e7dd33cda0, type: 2}
   - {fileID: 11400000, guid: 01840f12431394904abbed67736be3ad, type: 2}
+  - {fileID: 11400000, guid: b165c190206e1421393c3cf1a3fd61c7, type: 2}
   - {fileID: 11400000, guid: a3d1d259c3c9245789c356c6f150f9a7, type: 2}
   - {fileID: 11400000, guid: 854119e465ad24665a3e032872a76b5f, type: 2}
   - {fileID: 11400000, guid: de831156fbbc049a3b9f2d7ea41d7ba9, type: 2}
@@ -89,12 +93,30 @@ MonoBehaviour:
   - {r: 0.15294118, g: 0.5647059, b: 0.83137256, a: 1}
   - {r: 0.53333336, g: 0.13333334, b: 0.9529412, a: 1}
   - {r: 0.9647059, g: 0.78039217, b: 0.007843138, a: 1}
+  _skins:
+  - {fileID: 919132149155446097, guid: 57655353cf6c5416c8ce86b9616a3916, type: 3}
+  - {fileID: 919132149155446097, guid: eb3997c1f06984c4c8cdab3cff3180fd, type: 3}
+  - {fileID: 919132149155446097, guid: a4838e076970b444eabfbb539d9a5fb3, type: 3}
+  - {fileID: 919132149155446097, guid: 0d8194628e02c416eb762fb7f53332fa, type: 3}
+  - {fileID: 919132149155446097, guid: edb984bd7e0444d67ae59d27b309aa77, type: 3}
+  - {fileID: 919132149155446097, guid: fd01e91fa275447e7b3e7df8413b98b6, type: 3}
+  - {fileID: 919132149155446097, guid: e9d933ba5a376433397c4ce04e699aad, type: 3}
+  - {fileID: 919132149155446097, guid: 13247673ff3df4a5484c579776fddbfc, type: 3}
+  - {fileID: 919132149155446097, guid: 6fdd5152bdd0342869969e0430a5ef98, type: 3}
+  - {fileID: 919132149155446097, guid: a446dcc83526d4608ae4e605594f1908, type: 3}
+  - {fileID: 919132149155446097, guid: aef425585dbfe407398f2a2c06950603, type: 3}
+  - {fileID: 919132149155446097, guid: e439e81ef47574e4489537564b2e711c, type: 3}
+  - {fileID: 919132149155446097, guid: 30273ecbbcd594398bfe0dfdfcf63d03, type: 3}
+  - {fileID: 919132149155446097, guid: 2f8aef52c575f4b2d8056fbccc2f8177, type: 3}
+  - {fileID: 919132149155446097, guid: 387ad818ac4be45bd9cde61f329f1a16, type: 3}
   _baseSpeed: 5
   _additionalSpeedByUpgrade: 0.05
   _reduseUpgradesByLevel: 1
   _timeToStartRun: 5
   _distanceToStartPower: 15
   _characterStartOffset: 3
+  _playerOffsetSmoothing: 4
+  _dragOffset: 500
   _startPowerCurve:
     serializedVersion: 2
     m_Curve:

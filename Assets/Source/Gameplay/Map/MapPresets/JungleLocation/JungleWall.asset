@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92cea24ef492946908c48fe5c3a3a114, type: 3}
+  m_Name: JungleWall
+  m_EditorClassIdentifier: 
+  _startMiddle: {fileID: 3848698157293380671, guid: 5e57537b9e65b44d0998e381b04f4c4f,
+    type: 3}
+  _middleMiddle: {fileID: 3848698157293380671, guid: 52c4bbae8edaf46359c439cb8b512a4f,
+    type: 3}
+  _endMiddle: {fileID: 3848698157293380671, guid: 910526f51f65642a79ab8e213bfa34b1,
+    type: 3}
+  _startSide: {fileID: 3848698157293380671, guid: 756ac22db98824a849467f0af2772e10,
+    type: 3}
+  _middleSide: {fileID: 3848698157293380671, guid: cfe3887df763549468d5ca4b56cdca59,
+    type: 3}
+  _endSide: {fileID: 3848698157293380671, guid: 0c2b72e669ca649978acbdf08f3a4b6b,
+    type: 3}

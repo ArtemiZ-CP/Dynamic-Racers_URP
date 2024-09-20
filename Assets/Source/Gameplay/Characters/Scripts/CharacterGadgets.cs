@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterMovement))]
@@ -70,7 +71,7 @@ public class CharacterGadgets : MonoBehaviour
 		if (TryActiveGadget()) return;
 
 		OnActiveAnimation.Invoke(new GadgetChunkInfo(_currentChunkType), false);
-		_characterMovement.SetChunkSpeed(chunk.Type);
+		_characterMovement.SetChunkSpeed(_currentChunkType);
 	}
 
 	private bool TryContinue()

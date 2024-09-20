@@ -25,12 +25,12 @@ public class GadgetCollectionCell : MonoBehaviour
         _button.onClick.RemoveListener(Select);
     }
 
-    public void Init()
+    public void Initialize()
     {
         _countBar.gameObject.SetActive(false);
     }
 
-    public void Init(Gadget gadget, bool isFound = true)
+    public void Initialize(Gadget gadget, bool isFound = true)
     {
         SetGadget(gadget);
 

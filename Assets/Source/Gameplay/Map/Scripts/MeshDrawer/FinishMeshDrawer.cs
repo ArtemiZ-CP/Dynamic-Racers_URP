@@ -10,8 +10,8 @@ public class FinishMeshDrawer : ChunkMeshDrawer
     {
         _basisMeshDrawer.SpawnMesh(size, mapCellsContainer, emptyBefore, emptyAfter);
         size = base.SpawnMesh(size, mapCellsContainer, emptyBefore, emptyAfter);
-        SpawnGround(size, mapCellsContainer.GroundCellsContainer, mapCellsContainer.MarginCellsContainer, emptyBefore, emptyAfter);
-        SpawnFinish(mapCellsContainer.FinishPrefab);
+        SpawnGround(size, mapCellsContainer.MarginCellsContainer, emptyBefore, emptyAfter);
+        SpawnFinish(size, mapCellsContainer.FinishCellsContainer, emptyBefore, emptyAfter);
 
         return size;
     }
@@ -21,12 +21,42 @@ public class FinishMeshDrawer : ChunkMeshDrawer
         _basisMeshDrawer = GetComponent<BasisMeshDrawer>();
     }
 
-    private void SpawnFinish(GameObject finishObject)
+    private void SpawnFinish(Vector3Int size, FinishCellsContainer finishCellsContainer, bool emptyBefore, bool emptyAfter)
     {
-        Instantiate(finishObject, MeshParent);
+        Vector3 sizeVector = Vector3.one;
+        int min = GlobalSettings.Instance.ChunkMargin;
+        int max = size.x - 1 - min;
+
+        for (int x = 0; x < size.x; x++)
+        {
+            float xPosition = -size.x / 2f + x;
+
+            if (x >= min && x <= max)
+            {
+                if (x == min)
+                {
+                    SpawnCell(finishCellsContainer.LeftLine, new Vector3(xPosition, 0, 0), sizeVector, emptyBefore, emptyAfter);
+                }
+                else if (x == max)
+                {
+                    SpawnCell(finishCellsContainer.RightLine, new Vector3(xPosition, 0, 0), sizeVector, emptyBefore, emptyAfter);
+                }
+                else
+                {
+                    SpawnCell(finishCellsContainer.MiddleLine, new Vector3(xPosition, 0, 0), sizeVector, emptyBefore, emptyAfter);
+                }
+            }
+
+            SpawnCell(finishCellsContainer.Middle, new Vector3(xPosition, 0, 1), sizeVector, emptyBefore, emptyAfter);
+        }
+
+        if (finishCellsContainer.FinishObject != null)
+        {
+            SpawnCell(finishCellsContainer.FinishObject, Vector3.zero, Vector3.one, emptyBefore, emptyAfter);
+        }
     }
 
-    private void SpawnGround(Vector3Int size, GroundCellsContainer groundCellsContainer, MarginCellsContainer marginCellsContainer, bool emptyBefore, bool emptyAfter)
+    private void SpawnGround(Vector3Int size, MarginCellsContainer marginCellsContainer, bool emptyBefore, bool emptyAfter)
     {
         int min = GlobalSettings.Instance.ChunkMargin;
         int max = size.x - 1 - min;
@@ -70,7 +100,7 @@ public class FinishMeshDrawer : ChunkMeshDrawer
                 if (x == min)
                 {
                     SpawnLine(xPosition, size.z, mirror: false,
-                    groundCellsContainer.StartSide,
+                    null,
                     marginCellsContainer.RoadCornerMargin,
                     marginCellsContainer.MiddleMiddleMargin,
                     marginCellsContainer.StartMiddleMargin, emptyBefore, emptyAfter);
@@ -78,7 +108,7 @@ public class FinishMeshDrawer : ChunkMeshDrawer
                 else if (x == max)
                 {
                     SpawnLine(xPosition, size.z, mirror: true,
-                    groundCellsContainer.StartSide,
+                    null,
                     marginCellsContainer.RoadCornerMargin,
                     marginCellsContainer.MiddleMiddleMargin,
                     marginCellsContainer.StartMiddleMargin, emptyBefore, emptyAfter);
@@ -86,7 +116,7 @@ public class FinishMeshDrawer : ChunkMeshDrawer
                 else
                 {
                     SpawnLine(xPosition, size.z, mirror: false,
-                    groundCellsContainer.StartMiddle,
+                    null,
                     marginCellsContainer.SecondMiddleMargin,
                     marginCellsContainer.MiddleMiddleMargin,
                     marginCellsContainer.StartMiddleMargin, emptyBefore, emptyAfter);

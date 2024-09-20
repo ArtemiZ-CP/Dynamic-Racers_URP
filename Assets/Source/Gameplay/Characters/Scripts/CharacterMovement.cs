@@ -142,7 +142,7 @@ public abstract class CharacterMovement : MonoBehaviour
 	{
 		if (GetTarget() == _chunks[_currentChunkIndex].ChangeAnimationPoint)
 		{
-			if (_chunks[_currentChunkIndex].Type != ChunkType.Finish)
+			if (_currentChunkIndex < _chunks.Count - 1)
 			{
 				OnChangeChunk?.Invoke(_chunks[_currentChunkIndex + 1], this);
 			}

@@ -11,7 +11,7 @@ public class Countdown : MonoBehaviour
 
 	private void Awake()
 	{
-		_countdownText.gameObject.SetActive(false);
+		_countdownText.text = string.Empty;
 	}
 
 	private void OnEnable()
@@ -24,11 +24,10 @@ public class Countdown : MonoBehaviour
 		_speedGameBase.ShowStartText -= ShowEndText;
 	}
 
-	public void Run()
+	public void Run(bool showCount = true)
 	{
-		gameObject.SetActive(true);
 		_countdownText.gameObject.SetActive(true);
-		StartCoroutine(StartCountdown());
+		StartCoroutine(StartCountdown(showCount));
 	}
 
 	private void ShowEndText(string text, Color color)
@@ -39,7 +38,7 @@ public class Countdown : MonoBehaviour
 		StartCoroutine(HideText(_timeToDisplayText));
 	}
 
-	private IEnumerator StartCountdown()
+	private IEnumerator StartCountdown(bool showCount)
 	{
 		float startTime = GlobalSettings.Instance.TimeToStartRun;
 		float time = startTime;
@@ -49,7 +48,7 @@ public class Countdown : MonoBehaviour
 			time -= Time.deltaTime;
 			string text = ((int)time + 1).ToString();
 
-			if (text != _countdownText.text)
+			if (text != _countdownText.text && showCount)
 			{
 				_countdownText.color = _gradient.Evaluate(time / startTime);
 				_countdownText.text = text;

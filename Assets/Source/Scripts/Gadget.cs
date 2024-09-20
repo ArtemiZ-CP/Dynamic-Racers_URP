@@ -11,17 +11,17 @@ public class Gadget
     public int Level => _level;
     public float SpeedMultiplier => _scriptableObject.SpeedMultiplier * (1 + 0.1f * _level);
 
-    public Gadget(GadgetScriptableObject gadgetScriptableObject, int amount = 1, int level = 0)
-    {
-        _scriptableObject = gadgetScriptableObject;
-        _amount = amount;
-        _level = level;
-    }
-
     public Gadget(Gadget gadget, int level = 0)
     {
         _scriptableObject = gadget.ScriptableObject;
         _amount = gadget.GetAmount();
+        _level = level;
+    }
+
+    public Gadget(GadgetScriptableObject gadgetScriptableObject, int amount = 1, int level = 0)
+    {
+        _scriptableObject = gadgetScriptableObject;
+        _amount = amount;
         _level = level;
     }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -14,30 +15,12 @@ public static class DataSaver
     {
         SaveData saveData = new()
         {
-            BoxRewardQueue = PlayerData.BoxRewardQueue.Select(boxReward => new ChestRewardSaveInfo
-            {
-                GadgetRewards = boxReward.GadgetRewards.Select(reward => new PlayerGadgetSaveInfo
-                {
-                    GadgetName = reward.Gadget.Name,
-                    Amount = reward.Amount,
-                }).ToArray(),
-
-                CharacteristicRewards = boxReward.CharacteristicRewards.Select(reward => new CharacteristicRewardSaveInfo
-                {
-                    TypeInt = (int)reward.Type,
-                    Amount = reward.Amount,
-                }).ToArray(),
-
-                CoinsReward = boxReward.CoinsReward
-            }).ToArray(),
-
-            PlayerGadgets = PlayerData.PlayerGadgets.Select(gadget => new PlayerGadgetSaveInfo
-            {
-                GadgetName = gadget.ScriptableObject.Name,
-                Amount = gadget.GetAmount(),
-                Level = gadget.Level
-            }).ToArray(),
-
+            Rewards = SaveRewards(PlayerData.Rewards.ToList()),
+            RunRewards = SaveRewards(PlayerData.RunRewards.ToList()),
+            PlayerPlace = PlayerData.PlayerPlace,
+            PlayerGadgets = PlayerData.PlayerGadgets.Select(gadget => new PlayerGadgetSaveInfo(gadget)).ToArray(),
+            OpeningChests = PlayerData.OpeningChests.Select(openingChest => new OpeningChestSaveInfo(openingChest)).ToArray(),
+            CompanyBiomInfos = PlayerData.CompanyBiomInfos.Select(companyBiomInfo => new CompanyBiomSaveInfo(companyBiomInfo)).ToArray(),
             Experience = PlayerData.Experience,
             Level = PlayerData.Level,
             Coins = PlayerData.Coins,
@@ -52,8 +35,8 @@ public static class DataSaver
             IsMusicOn = PlayerData.IsMusicOn,
             IsSoundsOn = PlayerData.IsSoundsOn,
             IsHapticOn = PlayerData.IsHapticOn,
-            LastTimeBattlePassBought = new MyData { DateTimeValue = PlayerData.LastTimeBattlePassBought },
-            LastUpdateShopDay = new MyData { DateTimeValue = PlayerData.LastUpdateShopDay },
+            LastTimeBattlePassBought = new DateToSave { DateTimeValue = PlayerData.LastTimeBattlePassBought },
+            LastUpdateShopDay = new DateToSave { DateTimeValue = PlayerData.LastUpdateShopDay },
             ShopRandomSeed = PlayerData.ShopRandomSeed
         };
 
@@ -66,8 +49,11 @@ public static class DataSaver
 
         SaveData saveData = new()
         {
-            BoxRewardQueue = new ChestRewardSaveInfo[0],
-            PlayerGadgets = new PlayerGadgetSaveInfo[0],
+            Rewards = null,
+            RunRewards = null,
+            PlayerGadgets = null,
+            OpeningChests = new OpeningChestSaveInfo[4],
+            CompanyBiomInfos = null,
             Experience = 0,
             Level = 0,
             Coins = 0,
@@ -82,8 +68,8 @@ public static class DataSaver
             IsMusicOn = true,
             IsSoundsOn = true,
             IsHapticOn = true,
-            LastTimeBattlePassBought = new MyData { DateTimeValue = DateTime.MinValue },
-            LastUpdateShopDay = new MyData { DateTimeValue = DateTime.MinValue },
+            LastTimeBattlePassBought = new DateToSave { DateTimeValue = DateTime.MinValue },
+            LastUpdateShopDay = new DateToSave { DateTimeValue = DateTime.MinValue },
             ShopRandomSeed = (int)DateTime.Now.Ticks
         };
 
@@ -142,5 +128,38 @@ public static class DataSaver
         }
 
         return null;
+    }
+
+    private static RewardSaveInfo[] SaveRewards(List<Reward> rewards)
+    {
+        RewardSaveInfo[] rewardSaveInfo = new RewardSaveInfo[rewards.Count];
+
+        for (int i = 0; i < rewards.Count; i++)
+        {
+            Reward reward = rewards.ToList()[i];
+
+            if (reward is ChestReward chestReward)
+            {
+                rewardSaveInfo[i] = new ChestSaveInfo(chestReward);
+            }
+            else if (reward is GadgetReward gadgetReward)
+            {
+                rewardSaveInfo[i] = new GadgetSaveInfo(gadgetReward);
+            }
+            else if (reward is CharacteristicReward characteristicReward)
+            {
+                rewardSaveInfo[i] = new CharacteristicSaveInfo(characteristicReward);
+            }
+            else if (reward is CoinsReward coinsReward)
+            {
+                rewardSaveInfo[i] = new CoinsSaveInfo(coinsReward);
+            }
+            else if (reward is DiamondsReward diamondsReward)
+            {
+                rewardSaveInfo[i] = new DiamondsSaveInfo(diamondsReward);
+            }
+        }
+
+        return rewardSaveInfo;
     }
 }

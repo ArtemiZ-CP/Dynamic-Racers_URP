@@ -15,34 +15,40 @@ public class SpeedGameBase : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float _arrowSpeed;
     [SerializeField] private AnimationCurve _arrowMovementCurve;
-    [SerializeField] private float _dragOffset;
     [SerializeField] private string _startTextOnNotTouch;
     [SerializeField] private Color _startTextColorOnNotTouch;
 
-    public event Action<float> EndedSpeedGame;
+    public event Action<float, bool> EndedSpeedGame;
     public event Action<string, Color> ShowStartText;
 
     public PlayerMovement PlayerMovement => _playerMovement;
     public Vector3 StartPlayerPosition => _startPlayerPosition;
-    public float RandomSpeedMultiplier => _speedPowers[UnityEngine.Random.Range(0, _speedPowers.Count)].SpeedMultiplier;
-    public float DragOffset => _dragOffset;
     public float MaxPlayerOffset => _maxPlayerOffset;
     public bool IsGameActive => _isGameActive;
+    public bool FullCharge => _fullCharge;
 
+    private float _dragOffset;
+    private float _playerOffsetSmoothing;
     private float _maxPlayerOffset;
     private Vector3 _startPlayerPosition;
     private bool _isGameActive;
     private float _speedMultiplier;
+    private bool _goodStart;
     private string _startText;
     private Color _startTextColor;
     private float _startTouchPositionY;
+    private float _touchOffset;
+    private bool _fullCharge = false;
 
     protected virtual void Awake()
     {
         _visual.SetActive(false);
-        _maxPlayerOffset = GlobalSettings.Instance.CharacterStartOffset;
+        GlobalSettings globalSettings = GlobalSettings.Instance;
+        _maxPlayerOffset = globalSettings.CharacterStartOffset;
         _startText = _startTextOnNotTouch;
         _startTextColor = _startTextColorOnNotTouch;
+        _playerOffsetSmoothing = globalSettings.PlayerOffsetSmoothing;
+        _dragOffset = globalSettings.DragOffset;
     }
 
     protected virtual void Start()
@@ -55,6 +61,13 @@ public class SpeedGameBase : MonoBehaviour
     private void Update()
     {
         ProcessTouch();
+    }
+
+    public float GetRandomSpeedMultiplier(out bool goodStart)
+    {
+        SpeedPower speedPower = _speedPowers[UnityEngine.Random.Range(0, _speedPowers.Count)];
+        goodStart = speedPower.GoodStart;
+        return speedPower.SpeedMultiplier;
     }
 
     protected virtual void SetStartTouchPosition()
@@ -77,24 +90,15 @@ public class SpeedGameBase : MonoBehaviour
 
     protected void ProcessTouch()
     {
-		if (IsTouchGown() && IsGameActive == false)
-		{
-			SetStartTouchPosition();
-		}
-		else if (IsTouch() && IsGameActive == false)
-		{
-			float t = Mathf.Clamp01(GetTouchOffset() / DragOffset);
-			PlayerMovement.CurrentOffset = MaxPlayerOffset * t;
-
-			if (GetTouchOffset() > DragOffset)
-			{
-				StartGame();
-			}
-		}
-		else if (IsTouchUp() && IsGameActive)
-		{
-			FinishSpeedGame();
-		}
+        if (IsTouchGown() && IsGameActive == false)
+        {
+            SetStartTouchPosition();
+            StartCoroutine(SmoothOffset(_dragOffset));
+        }
+        else if (IsTouchUp() && IsGameActive)
+        {
+            FinishSpeedGame();
+        }
     }
 
     protected bool IsTouchGown()
@@ -132,6 +136,7 @@ public class SpeedGameBase : MonoBehaviour
 
     protected void StartGame()
     {
+        _fullCharge = true;
         _speedMultiplier = 1;
         _isGameActive = true;
         _visual.SetActive(true);
@@ -142,7 +147,7 @@ public class SpeedGameBase : MonoBehaviour
     protected void StartRunning()
     {
         HideHint();
-        EndedSpeedGame?.Invoke(_speedMultiplier);
+        EndedSpeedGame?.Invoke(_speedMultiplier, _goodStart);
         ShowStartText?.Invoke(_startText, _startTextColor);
     }
 
@@ -154,7 +159,7 @@ public class SpeedGameBase : MonoBehaviour
             return -touch.position.y + _startTouchPositionY;
         }
 
-        return -Input.mousePosition.y + _startTouchPositionY;
+        return 0;
     }
 
     protected void ShowHint()
@@ -179,7 +184,7 @@ public class SpeedGameBase : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    private float GetMultiplierRotation(float rotationZ, out string startText, out Color startTextColor)
+    private float GetMultiplierRotation(float rotationZ, out bool goodStart, out string startText, out Color startTextColor)
     {
         foreach (SpeedPower speedPower in _speedPowers)
         {
@@ -187,11 +192,30 @@ public class SpeedGameBase : MonoBehaviour
             {
                 startText = speedPower.StartText;
                 startTextColor = speedPower.StartTextColor;
+                goodStart = speedPower.GoodStart;
                 return speedPower.SpeedMultiplier;
             }
         }
 
         throw new Exception("SpeedPower not found");
+    }
+
+    private IEnumerator SmoothOffset(float maxOffset)
+    {
+        while (Mathf.Abs(PlayerMovement.CurrentOffset - maxOffset) > 0.01f)
+        {
+            if (_touchOffset < 1)
+            {
+                _touchOffset = Mathf.Clamp01(GetTouchOffset() / _dragOffset);
+            }
+            else if (IsTouch() && IsGameActive == false)
+            {
+                StartGame();
+            }
+
+            PlayerMovement.CurrentOffset = Mathf.Lerp(PlayerMovement.CurrentOffset, _touchOffset * _maxPlayerOffset, _playerOffsetSmoothing * Time.deltaTime);
+            yield return null;
+        }
     }
 
     private IEnumerator MoveArrow()
@@ -211,6 +235,6 @@ public class SpeedGameBase : MonoBehaviour
             yield return null;
         }
 
-        _speedMultiplier = GetMultiplierRotation(currentPositionX, out _startText, out _startTextColor);
+        _speedMultiplier = GetMultiplierRotation(currentPositionX, out _goodStart, out _startText, out _startTextColor);
     }
 }

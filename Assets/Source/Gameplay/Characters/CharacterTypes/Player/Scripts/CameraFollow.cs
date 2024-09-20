@@ -56,12 +56,12 @@ public class CameraFollow : MonoBehaviour
 
 	private void OnChangeChunk(Chunk newChunk, CharacterMovement characterMovement)
 	{
-		if (_isFinishing)
+		if (_isFinishing || newChunk == null)
 		{
 			return;
 		}
 
-		if (_currentChunk != null && newChunk != null)
+		if (_currentChunk != null)
 		{
 			if ((_currentChunk.Type == ChunkType.Ground || _currentChunk.Type == ChunkType.Water)
 				&& (newChunk.Type == ChunkType.Ground || newChunk.Type == ChunkType.Water))

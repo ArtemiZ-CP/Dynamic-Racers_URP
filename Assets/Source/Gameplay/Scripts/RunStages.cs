@@ -11,9 +11,8 @@ public class RunStages : RunStagesBase
 		_countdown.Run();
 	}
 
-	override protected void GiveReward()
+	override protected void GiveReward(int placement)
 	{
-		PlayerData.AddExperience(RunSettings.ExperienceReward);
-		RunSettings.Reset();
+		RunSettings.ApplyRewards(placement);
 	}
 }

@@ -17,6 +17,7 @@ public class TrainingSpeedGame : SpeedGameBase
     {
         base.Start();
         Invoke(nameof(ShowFingerHint), _showHintDelay);
+        ShowHint();
     }
 
     protected override void SetStartTouchPosition()
@@ -24,7 +25,6 @@ public class TrainingSpeedGame : SpeedGameBase
         base.SetStartTouchPosition();
         CancelInvoke(nameof(ShowFingerHint));
         HideFingerHint();
-        ShowHint();
     }
 
     protected override void FinishSpeedGame()

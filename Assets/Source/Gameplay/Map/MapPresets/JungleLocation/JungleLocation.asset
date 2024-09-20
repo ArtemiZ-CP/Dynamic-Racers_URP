@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeba897ceb86845568f3a4befb7d2117, type: 3}
+  m_Name: JungleLocation
+  m_EditorClassIdentifier: 
+  _basisCellsContainer: {fileID: 11400000, guid: 95841a19584f54280a4b391b9ca6b96c,
+    type: 2}
+  _groundCellsContainer: {fileID: 11400000, guid: 4c4705ffeeb8c484088993bf90f85546,
+    type: 2}
+  _wallCellsContainer: {fileID: 11400000, guid: fa211d2bb48374d60a6981e6c0758816,
+    type: 2}
+  _waterpoolCellsContainer: {fileID: 11400000, guid: 6384ab97fc709449caed613a8835d035,
+    type: 2}
+  _marginCellsContainer: {fileID: 11400000, guid: 8b7a7f26b3d274240be70787798e7de0,
+    type: 2}
+  _wallMarginCellsContainer: {fileID: 11400000, guid: 3f873889a5f3e4c77a11627e9bf5b02e,
+    type: 2}
+  _environmentContainer: {fileID: 11400000, guid: e3c3be5682f8c49ff92bfab99d05763c,
+    type: 2}
+  _finishCellsContainer: {fileID: 11400000, guid: 64717f3f21f034a3f8ea385cd6cf6fd1,
+    type: 2}

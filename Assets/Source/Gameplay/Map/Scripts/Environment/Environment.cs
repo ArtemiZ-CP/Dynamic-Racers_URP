@@ -16,7 +16,7 @@ public class Environment : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool _isDebug = false;
 
-    public int Lenth => _lenth;
+    public int Length => _lenth;
     public int Wigth => _wigth;
     public bool IsHigh => _isHigh;
     public Type EnvironmentType => _type;

@@ -1,21 +1,29 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Place : MonoBehaviour
 {
+    [Serializable]
+    private class PlaceImages
+    {
+        public Sprite Sprite;
+        public GameObject Place;
+    }
+
     [SerializeField] private TMP_Text _placeText;
     [SerializeField] private TMP_Text _place;
-    [SerializeField] private Sprite _1;
-    [SerializeField] private Sprite _2;
-    [SerializeField] private Sprite _3;
-    [SerializeField] private Sprite _4;
+    [SerializeField] private PlaceImages _1;
+    [SerializeField] private PlaceImages _2;
+    [SerializeField] private PlaceImages _3;
+    [SerializeField] private PlaceImages _4;
     [SerializeField] private Image _gadget;
     [SerializeField] private Image _background;
     [SerializeField] private BlickAnimation _blickAnimation;
     [SerializeField] private GameObject _playerOutline;
 
-    private Sprite _currentPlace;
+    private PlaceImages _currentPlace;
 
     public void SetPlace(string name, int place, Sprite gadgetSprite)
     {
@@ -38,7 +46,7 @@ public class Place : MonoBehaviour
     {
         _playerOutline.SetActive(true);
         _background.material = _blickAnimation.BlickMaterial;
-        _blickAnimation.Initialize(_currentPlace);
+        _blickAnimation.Initialize(_currentPlace.Sprite);
         _blickAnimation.enabled = true;
     }
 
@@ -60,6 +68,7 @@ public class Place : MonoBehaviour
                 break;
         }
 
-        _background.sprite = _currentPlace;
+        _background.sprite = _currentPlace.Sprite;
+        _currentPlace.Place.SetActive(true);
     }
 }

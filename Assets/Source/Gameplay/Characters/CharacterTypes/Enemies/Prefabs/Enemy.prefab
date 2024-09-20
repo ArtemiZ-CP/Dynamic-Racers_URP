@@ -76,7 +76,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d792a1f75e20642ffb4e1a19bde15bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _addGadget: 1
 --- !u!1 &922306072914500163
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,13 +359,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67319857f33c44c32bc322eb196a5abf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyMeshes:
-  - {fileID: 2454922299222579760, guid: d78ce4f7224e746808b2c2af121bb9bc, type: 3}
-  - {fileID: 2454922299222579760, guid: edea72e6c07c64a64ae98d286ccdc1ae, type: 3}
-  - {fileID: 2454922299222579760, guid: 7cf069585080e41129cfb5d6a98a8509, type: 3}
-  - {fileID: 2454922299222579760, guid: 3e93263866b694acea8a601dd0674ba0, type: 3}
-  - {fileID: 2454922299222579760, guid: d5d85ad92b124466986d3477aad6194a, type: 3}
-  - {fileID: 2454922299222579760, guid: 308b1c9af1f7a4c43890938abb24999f, type: 3}
+  _avatar: {fileID: 9000000, guid: a281d46138a4c465786c971fce3c54aa, type: 3}
+  _animator: {fileID: 9100000, guid: 0768ce90afdc14dfd96313472419450c, type: 2}
 --- !u!1 &6890717523802263613
 GameObject:
   m_ObjectHideFlags: 0

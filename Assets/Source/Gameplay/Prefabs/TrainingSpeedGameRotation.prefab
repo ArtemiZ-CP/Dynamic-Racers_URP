@@ -360,7 +360,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0.0019226074, y: -0.00050354004}
-  m_SizeDelta: {x: -82.8134, y: -73.7377}
+  m_SizeDelta: {x: -82.8, y: -73.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9199257156828301961
 CanvasRenderer:
@@ -392,8 +392,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Pull the slingshot to launch your character
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 015ee9024ec4445cc903eb465fd8c2da, type: 2}
+  m_sharedMaterial: {fileID: 8558387709148431831, guid: 015ee9024ec4445cc903eb465fd8c2da,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -417,12 +418,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 90
   m_fontSizeBase: 100
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 90
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -844,37 +845,44 @@ MonoBehaviour:
   _speedPowers:
   - _left: {fileID: 4271046523883203714}
     _right: {fileID: 6698475104866548030}
-    _speedMultiplier: 1
+    _speedMultiplier: 0.5
+    _goodStart: 0
     _startText: Bad
     _startTextColor: {r: 1, g: 0, b: 0, a: 1}
   - _left: {fileID: 6698475104866548030}
     _right: {fileID: 8733378539543289939}
-    _speedMultiplier: 1.2
+    _speedMultiplier: 0.75
+    _goodStart: 0
     _startText: Ok
     _startTextColor: {r: 1, g: 0.6666667, b: 0, a: 1}
   - _left: {fileID: 8733378539543289939}
     _right: {fileID: 6380549809478617733}
     _speedMultiplier: 1.5
+    _goodStart: 1
     _startText: Good
     _startTextColor: {r: 1, g: 0.95686275, b: 0, a: 1}
   - _left: {fileID: 6380549809478617733}
     _right: {fileID: 4720934260519675621}
     _speedMultiplier: 2
+    _goodStart: 1
     _startText: Perfect!
     _startTextColor: {r: 0.015686275, g: 1, b: 0, a: 1}
   - _left: {fileID: 4720934260519675621}
     _right: {fileID: 785127872734052884}
     _speedMultiplier: 1.5
+    _goodStart: 1
     _startText: Good
     _startTextColor: {r: 1, g: 0.95686275, b: 0, a: 1}
   - _left: {fileID: 785127872734052884}
     _right: {fileID: 3004634271191662387}
-    _speedMultiplier: 1.2
+    _speedMultiplier: 0.75
+    _goodStart: 0
     _startText: Ok
     _startTextColor: {r: 1, g: 0.6666667, b: 0, a: 1}
   - _left: {fileID: 3004634271191662387}
     _right: {fileID: 3154176459889327851}
-    _speedMultiplier: 1
+    _speedMultiplier: 0.5
+    _goodStart: 0
     _startText: Bad
     _startTextColor: {r: 1, g: 0, b: 0, a: 1}
   _visual: {fileID: 5920202835726889148}
@@ -906,7 +914,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _dragOffset: 200
   _startTextOnNotTouch: To slow
   _startTextColorOnNotTouch: {r: 1, g: 1, b: 1, a: 0}
   _fingerHint: {fileID: 2855240320525429363}

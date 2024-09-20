@@ -8,7 +8,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
 {
     private readonly int SpeedMultiplier = Animator.StringToHash(nameof(SpeedMultiplier));
 
-    [SerializeField] private Animator _playerAnimator;
+    [SerializeField] private Transform _playerAnimatorParent;
     [SerializeField] private Material _playerMaterial;
     [SerializeField] private UpgradePanel _upgradePanel;
     [SerializeField] private UpgradeGadget _upgradeGadget;
@@ -25,10 +25,12 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
     private float _contentWidth;
     private Animator _gadgetAnimator;
     private Gadget _selectedGadget;
+    private Animator _playerAnimator;
 
     private void Awake()
     {
         _globalSettings = GlobalSettings.Instance; 
+        _playerAnimator = _playerAnimatorParent.GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
@@ -56,7 +58,6 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
         _selectedGadgetInfo.Select(null);
 
         _playerAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
-        _playerAnimator.transform.GetComponentInChildren<SkinnedMeshRenderer>().material = _playerMaterial;
         _upgradeGadget.LevelUp += UpdateGadget;
     }
 
@@ -80,7 +81,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
             return;
         }
 
-        _gadgetCellInfo.Init(gadget);
+        _gadgetCellInfo.Initialize(gadget);
         _selectedGadgetInfo.Select(gadget);
         _selectedGadget = gadget;
 

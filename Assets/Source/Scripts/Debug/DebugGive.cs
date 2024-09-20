@@ -14,8 +14,18 @@ public class DebugGive : MonoBehaviour
     [SerializeField] private GadgetReward _gadgetReward;
     [Space(20)]
     [SerializeField] private int _coins;
+    [SerializeField] private int _diamonds;
+    [Space(20)]
+    [SerializeField] private int _biomID;
+    [SerializeField] private int _starsAmount;
 
-    [ContextMenu("Give Gadget Reward")]
+    [ContextMenu("Add Stars")]
+    public void AddStars()
+    {
+        PlayerData.AddCompanyStars(_biomID, _starsAmount);
+    }
+
+    [ContextMenu("Give Rewards")]
     public void GiveGadget()
     {
         GadgetReward gadgetReward = new(_gadgetReward);
@@ -25,7 +35,7 @@ public class DebugGive : MonoBehaviour
             ChestReward.ChestType.Wood,
             new List<GadgetReward> { gadgetReward },
             new List<CharacteristicReward> { characteristicReward }, 
-            _coins));
+            new CoinsReward(_coins), new DiamondsReward(_diamonds)));
     }
 
     private void Start()

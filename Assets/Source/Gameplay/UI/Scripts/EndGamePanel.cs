@@ -9,6 +9,7 @@ public class EndGamePanel : MonoBehaviour
     public void AddFinisher(string name, int placement, Sprite gadgetSprite, bool isPlayerFinished)
     {
         Place place = Instantiate(_placePrefab, _board);
+        place.gameObject.transform.SetSiblingIndex(placement - 1);
         place.SetPlace(name, placement, gadgetSprite);
 
         if (isPlayerFinished)

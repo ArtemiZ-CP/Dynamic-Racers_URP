@@ -22,7 +22,7 @@ public class UpgradePanel : MonoBehaviour
     [SerializeField] private Image _itemRareImage;
     [SerializeField] private TMP_Text _itemRareText;
     [SerializeField] private TMP_Text _itemCategoryText;
-    [SerializeField] private Animator _playerAnimator;
+    [SerializeField] private Transform _playerAnimatorParent;
     [SerializeField] private Material _playerMaterial;
     [SerializeField] private UpgradeGadget _upgradeGadget;
 
@@ -30,10 +30,12 @@ public class UpgradePanel : MonoBehaviour
     private GadgetScriptableObject _gadget;
     private Animator _gadgetAnimator;
     private GadgetChunkInfo _gadgetChunkInfo;
+    private Animator _playerAnimator;
 
     private void Awake()
     {
         _globalSettings = GlobalSettings.Instance;
+        _playerAnimator = _playerAnimatorParent.GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
@@ -45,7 +47,6 @@ public class UpgradePanel : MonoBehaviour
         }
 
         _playerAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
-        _playerAnimator.transform.GetComponentInChildren<SkinnedMeshRenderer>().material = _playerMaterial;
         ActivePlayerAnimation();
         
         if (RunSettings.PlayerGadget != null)
@@ -122,7 +123,7 @@ public class UpgradePanel : MonoBehaviour
 
     private void ShowGadget(Gadget gadget)
     {
-        _gadgetCollectionCell.Init(gadget, PlayerData.PlayerGadgets.Any(g => g.ScriptableObject == gadget.ScriptableObject));
+        _gadgetCollectionCell.Initialize(gadget, PlayerData.PlayerGadgets.Any(g => g.ScriptableObject == gadget.ScriptableObject));
     }
 
     private void ShowSpeedBonus(Gadget gadget)

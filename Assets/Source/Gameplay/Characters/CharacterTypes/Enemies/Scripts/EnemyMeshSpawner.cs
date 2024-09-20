@@ -1,9 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyMeshSpawner : MeshSpawner
 {
-    [SerializeField] private List<GameObject> _enemyMeshes;
+    [SerializeField] private Avatar _avatar;
+    [SerializeField] private RuntimeAnimatorController _animator;
+    [SerializeField] private GameObject _skin;
 
     public override Animator Initialize()
     {
@@ -14,8 +15,21 @@ public class EnemyMeshSpawner : MeshSpawner
 
     private void SpawnMesh()
     {
-        int randomIndex = Random.Range(0, _enemyMeshes.Count);
-        Instantiate(_enemyMeshes[randomIndex], transform);
+        GameObject skin;
+
+        if (_skin != null)
+        {
+            skin = _skin;
+        }
+        else
+        {
+            skin = GlobalSettings.Instance.GetRandomSkin();
+        }
+
+        skin = Instantiate(skin, transform);
+        Animator animator = skin.AddComponent<Animator>();
+        animator.avatar = _avatar;
+        animator.runtimeAnimatorController = _animator;
     }
 
     private void DestroyAllMeshes()

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1cadd5a0704745b9977f15067770451, type: 3}
+  m_Name: JungleEnvironment
+  m_EditorClassIdentifier: 
+  _environments:
+  - {fileID: 3214685892353107800, guid: 91796429b78344b96990af243b9f36a9, type: 3}
+  - {fileID: 3214685892353107800, guid: 7f8c872f20a9e44a28689665c77c24b8, type: 3}
+  - {fileID: 3214685892353107800, guid: df830dd8c8e714834bcd5e70035dd8eb, type: 3}
+  - {fileID: 3214685892353107800, guid: 38105eda0dce745d9b0e32a5e8be7299, type: 3}
+  - {fileID: 3214685892353107800, guid: e723a975fb92a44989b87da822b09ff5, type: 3}
+  - {fileID: 3214685892353107800, guid: 539849f2019534105a9d925e3ae4fac3, type: 3}
+  - {fileID: 3214685892353107800, guid: 94746af446db84dedb268328c75ff882, type: 3}

@@ -4,14 +4,15 @@ public class StartChunk : Chunk
 {
 	[Header("Move Points")]
 	[SerializeField] private Transform _startMovePoint;
+	[SerializeField] private Transform _endMovePoint;
 
 	public override int SetChunkLength(int length)
 	{
 		length = base.SetChunkLength(length);
 
-		if (_startMovePoint != null)
+		if (_endMovePoint != null)
 		{
-			_startMovePoint.position = new Vector3(0, _startMovePoint.position.y, length + transform.position.z);
+			_endMovePoint.position = new Vector3(0, _endMovePoint.position.y, length + transform.position.z);
 		}
 
 		return length;
@@ -19,6 +20,8 @@ public class StartChunk : Chunk
 
 	public override int SetChunkHeight(int height)
 	{
+		base.SetChunkHeight(0);
+
 		return 0;
 	}
 

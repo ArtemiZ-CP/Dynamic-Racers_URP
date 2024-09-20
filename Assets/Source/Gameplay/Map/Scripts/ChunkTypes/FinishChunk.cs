@@ -1,18 +1,9 @@
-using UnityEngine;
-
 public class FinishChunk : Chunk
 {
-	[Header("Move Points")]
-	[SerializeField] private Transform _startMovePoint;
 
 	public override int SetChunkLength(int length)
 	{
 		length = base.SetChunkLength(length);
-
-		if (_startMovePoint != null)
-		{
-			_startMovePoint.position = new Vector3(0, _startMovePoint.position.y, transform.position.z);
-		}
 
 		return length;
 	}

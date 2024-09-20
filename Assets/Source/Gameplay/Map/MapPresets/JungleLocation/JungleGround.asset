@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b168f046537144289cf2439aeaedda2, type: 3}
+  m_Name: JungleGround
+  m_EditorClassIdentifier: 
+  _startMiddle: {fileID: 6265250116202855287, guid: ca94c3a44e83746c78af8f0f853a5c98,
+    type: 3}
+  _middleMiddle: {fileID: 6265250116202855287, guid: c82cd285c0a4448b7941b1e9807805ac,
+    type: 3}
+  _startSide: {fileID: 6265250116202855287, guid: 2f6921b3ce1c54a678d22ae717f545e9,
+    type: 3}
+  _middleSide: {fileID: 6265250116202855287, guid: 0d3e29d7709ba4c62b614f43995e377a,
+    type: 3}

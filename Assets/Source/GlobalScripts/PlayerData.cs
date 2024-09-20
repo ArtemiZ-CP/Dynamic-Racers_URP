@@ -5,9 +5,13 @@ using UnityEngine;
 
 public static class PlayerData
 {
-    public static IReadOnlyCollection<ChestReward> BoxRewardQueue => _boxRewardQueue;
-    public static bool IsRewardQueueEmpty => _boxRewardQueue.Count == 0;
+    public static IReadOnlyList<Reward> Rewards => _rewards;
+    public static IReadOnlyList<Reward> RunRewards => _runRewards;
+    public static int PlayerPlace => _playerPlace;
+    public static bool IsRewardsEmpty => _rewards.Count == 0;
+    public static bool IsRunRewardsEmpty => _runRewards.Count == 0;
     public static IReadOnlyList<OpeningChest> OpeningChests => _openingChests;
+    public static IReadOnlyList<ICompanyBiomInfoReadOnly> CompanyBiomInfos => _companyBiomInfos;
     // Consumables
     public static int Level => _level;
     public static int Coins => _coins;
@@ -31,8 +35,11 @@ public static class PlayerData
     public static DateTime LastUpdateShopDay => _lastUpdateShopDay;
     public static int ShopRandomSeed => _shopRandomSeed;
 
-    private static Queue<ChestReward> _boxRewardQueue = new();
+    private static List<Reward> _rewards = new();
+    private static List<Reward> _runRewards = new();
+    private static int _playerPlace;
     private static OpeningChest[] _openingChests = new OpeningChest[4];
+    private static CompanyBiomInfo[] _companyBiomInfos;
     // Consumables
     private static int _level;
     private static int _coins;
@@ -79,23 +86,29 @@ public static class PlayerData
         Debug.Log("Loading: " + saveData);
         GlobalSettings globalSettings = GlobalSettings.Instance;
 
-        if (saveData.BoxRewardQueue == null)
+        if (saveData.Rewards != null)
         {
-            _boxRewardQueue = new Queue<ChestReward>();
+            foreach (RewardSaveInfo rewardSaveInfo in saveData.Rewards)
+            {
+                AddReward(rewardSaveInfo);
+            }
         }
-        else
+
+        _rewards = new List<Reward>();
+
+        if (saveData.RunRewards != null)
         {
-            _boxRewardQueue = new Queue<ChestReward>(saveData.BoxRewardQueue.Select(chestReward => new ChestReward(
-                (ChestReward.ChestType)chestReward.ChestTypeInt,
-                chestReward.GadgetRewards.Select(gadget => new GadgetReward(globalSettings.GetGadgetByName(gadget.GadgetName), gadget.Amount)).ToList(),
-                chestReward.CharacteristicRewards.Select(sharacteristicReward => new CharacteristicReward((CharacteristicType)sharacteristicReward.TypeInt, sharacteristicReward.Amount)).ToList(),
-                chestReward.CoinsReward)));
+            foreach (RewardSaveInfo rewardSaveInfo in saveData.RunRewards)
+            {
+                AddReward(rewardSaveInfo);
+            }
         }
+
+        _runRewards = new List<Reward>();
 
         if (saveData.PlayerGadgets == null)
         {
             saveData.PlayerGadgets = new PlayerGadgetSaveInfo[0];
-
         }
         else
         {
@@ -103,6 +116,30 @@ public static class PlayerData
                 globalSettings.GetGadgetByName(gadget.GadgetName), gadget.Amount, gadget.Level)).ToList();
         }
 
+        _openingChests = saveData.OpeningChests.Select(openingChest => new OpeningChest(openingChest)).ToArray();
+
+        Biom[] bioms = globalSettings.Bioms.ToArray();
+        _companyBiomInfos = new CompanyBiomInfo[bioms.Length];
+
+        for (int i = 0; i < bioms.Length; i++)
+        {
+            _companyBiomInfos[i] = new(bioms[i]);
+        }
+
+        if (saveData.CompanyBiomInfos != null)
+        {
+            for (int i = 0; i < bioms.Length; i++)
+            {
+                CompanyBiomSaveInfo companyBiomSaveInfo = saveData.CompanyBiomInfos.FirstOrDefault(biom => biom.ID == bioms[i].ID);
+
+                if (companyBiomSaveInfo != null)
+                {
+                    _companyBiomInfos[i].LoadSave(companyBiomSaveInfo);
+                }
+            }
+        }
+
+        _playerPlace = saveData.PlayerPlace;
         _experience = saveData.Experience;
         _level = saveData.Level;
         _coins = saveData.Coins;
@@ -140,6 +177,11 @@ public static class PlayerData
         OnCoinsChanged?.Invoke();
         OnDiamondsChanged?.Invoke();
         OnTicketsChanged?.Invoke();
+    }
+
+    public static void SetPlayerPlace(int place)
+    {
+        _playerPlace = place;
     }
 
     public static bool TryToUpdateShop(out TimeSpan remainingTime)
@@ -275,21 +317,99 @@ public static class PlayerData
         DataSaver.SaveData();
     }
 
-    public static void AddReward(ChestReward reward)
+    public static void AddRewards(List<Reward> rewards)
     {
-        _boxRewardQueue.Enqueue(reward);
+        _rewards.AddRange(rewards);
+        SortRewards(_rewards);
 
         DataSaver.SaveData();
     }
 
-    public static ChestReward GetReward()
+    public static void AddRunRewards(List<Reward> rewards, int placement)
     {
-        if (_boxRewardQueue.Count > 0)
-        {
-            return _boxRewardQueue.Dequeue();
-        }
+        SetPlayerPlace(placement);
+        _runRewards.AddRange(rewards);
+        SortRewards(_runRewards);
 
-        return null;
+        DataSaver.SaveData();
+    }
+
+    public static void AddReward(Reward reward)
+    {
+        _rewards.Add(reward);
+        SortRewards(_rewards);
+
+        DataSaver.SaveData();
+    }
+
+    public static void AddRunReward(Reward reward)
+    {
+        _runRewards.Add(reward);
+        SortRewards(_runRewards);
+
+        DataSaver.SaveData();
+    }
+
+    public static List<Reward> GetRewards()
+    {
+        List<Reward> rewards = _rewards.ToList();
+        _rewards.Clear();
+        return rewards;
+    }
+
+    public static List<Reward> GetRunRewards()
+    {
+        List<Reward> rewards = _runRewards.ToList();
+        _runRewards.Clear();
+        return rewards;
+    }
+
+    public static void AddCompanyStars(int id, int stars)
+    {
+        CompanyBiomInfo companyBiomInfo = _companyBiomInfos.First(biom => biom.ID == id);
+        AddRewards(companyBiomInfo.AddStars(stars));
+    }
+
+    private static void AddReward(RewardSaveInfo rewardSaveInfo)
+    {
+        if (rewardSaveInfo is ChestSaveInfo chestRewardSaveInfo)
+        {
+            foreach (GadgetSaveInfo gadgetSaveInfo in chestRewardSaveInfo.GadgetRewards)
+            {
+                AddGadget(gadgetSaveInfo);
+            }
+
+            foreach (CharacteristicSaveInfo characteristicRewardSaveInfo in chestRewardSaveInfo.CharacteristicRewards)
+            {
+                AddCharacteristic(characteristicRewardSaveInfo);
+            }
+
+            if (chestRewardSaveInfo.CoinsReward != null)
+            {
+                AddCoins(chestRewardSaveInfo.CoinsReward.Amount);
+            }
+
+            if (chestRewardSaveInfo.DiamondsReward != null)
+            {
+                AddDiamonds(chestRewardSaveInfo.DiamondsReward.Amount);
+            }
+        }
+        else if (rewardSaveInfo is GadgetSaveInfo gadgetSaveInfo)
+        {
+            AddGadget(gadgetSaveInfo);
+        }
+        else if (rewardSaveInfo is CharacteristicSaveInfo characteristicRewardSaveInfo)
+        {
+            AddCharacteristic(characteristicRewardSaveInfo);
+        }
+        else if (rewardSaveInfo is CoinsSaveInfo coinsRewardSaveInfo)
+        {
+            AddCoins(coinsRewardSaveInfo.Amount);
+        }
+        else if (rewardSaveInfo is DiamondsSaveInfo diamondsRewardSaveInfo)
+        {
+            AddDiamonds(diamondsRewardSaveInfo.Amount);
+        }
     }
 
     public static void AddExperience(int experience)
@@ -364,6 +484,46 @@ public static class PlayerData
             default:
                 return 0;
         }
+    }
+
+    private static void SortRewards(List<Reward> rewards)
+    {
+        int coins = 0;
+        List<CoinsReward> coinsRewards = rewards.Select(r => r as CoinsReward).Where(r => r != null).ToList();
+        coinsRewards.ForEach(r => coins += r.Amount);
+        CoinsReward coinsReward = new(coins);
+
+        int diamonds = 0;
+        List<DiamondsReward> diamondsRewards = rewards.Select(r => r as DiamondsReward).Where(r => r != null).ToList();
+        diamondsRewards.ForEach(r => diamonds += r.Amount);
+        DiamondsReward diamondsReward = new(diamonds);
+
+        List<GadgetReward> gadgetRewards = rewards.Select(r => r as GadgetReward).Where(r => r != null).ToList();
+        if (gadgetRewards.Count > 1) gadgetRewards.Sort((r1, r2) => r1.ScriptableObject.Rare.CompareTo(r2.ScriptableObject.Rare));
+
+        List<ChestReward> chestRewards = rewards.Select(r => r as ChestReward).Where(r => r != null).ToList();
+        if (chestRewards.Count > 1) chestRewards.Sort((r1, r2) => r1.Type.CompareTo(r2.Type));
+
+        rewards.Clear();
+        
+        if (coins > 0) rewards.Add(coinsReward);
+        if (diamonds > 0) rewards.Add(diamondsReward);
+        if (gadgetRewards != null) rewards.AddRange(gadgetRewards);
+        if (chestRewards != null) rewards.AddRange(chestRewards);
+    }
+
+    private static void AddGadget(GadgetSaveInfo gadgetSaveInfo)
+    {
+        Gadget gadget = new(GlobalSettings.Instance.GetGadgetByName(gadgetSaveInfo.GadgetName),
+            gadgetSaveInfo.Amount);
+
+        AddGadget(gadget);
+    }
+
+    private static void AddCharacteristic(CharacteristicSaveInfo characteristicType)
+    {
+        CharacteristicType type = (CharacteristicType)characteristicType.TypeInt;
+        AddCharacteristic(type, characteristicType.Amount);
     }
 
     private static bool TryToBuyWithCoins(ShopItem shopItem)

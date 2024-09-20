@@ -14,7 +14,7 @@ public class EnvironmentContainer : ScriptableObject
 
         foreach (Environment environment in _environments)
         {
-            if (environment.Lenth <= lenth && environment.Wigth <= wigth && environment.EnvironmentType == type)
+            if (environment.Length <= lenth && environment.Wigth <= wigth && environment.EnvironmentType == type)
             {
                 if (isHigh)
                 {

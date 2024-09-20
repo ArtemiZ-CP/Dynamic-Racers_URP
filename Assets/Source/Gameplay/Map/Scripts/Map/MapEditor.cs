@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MapEditor : MonoBehaviour
@@ -29,7 +30,7 @@ public class MapEditor : MonoBehaviour
 
 		if (RunSettings.Map != null)
 		{
-			map = RunSettings.Map;
+			map = RunSettings.Map.ToList();
 			playersCount = RunSettings.PlayersCount;
 			mapCellsContainer = RunSettings.MapCellsContainer;
 		}
