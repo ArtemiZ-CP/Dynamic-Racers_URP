@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeba897ceb86845568f3a4befb7d2117, type: 3}
+  m_Name: WinterLocation
+  m_EditorClassIdentifier: 
+  _basisCellsContainer: {fileID: 11400000, guid: c5f71423a5f2c49bdb3a411e087d3ce8,
+    type: 2}
+  _groundCellsContainer: {fileID: 11400000, guid: ee4e9a85157084a7bb9f9b74c4ce232e,
+    type: 2}
+  _wallCellsContainer: {fileID: 11400000, guid: 8ad8e7cfbc3ca439a8ea5a3457600209,
+    type: 2}
+  _waterpoolCellsContainer: {fileID: 11400000, guid: a5b0b1666bd7a4f8aadc69bc212d81ff,
+    type: 2}
+  _marginCellsContainer: {fileID: 11400000, guid: 20a00a66486234d28b0e68ac76d25584,
+    type: 2}
+  _wallMarginCellsContainer: {fileID: 11400000, guid: 043b4e44433c8437d9e74add0c991a3a,
+    type: 2}
+  _environmentContainer: {fileID: 11400000, guid: 03674efd4218941f4a44b1aa3f837545,
+    type: 2}
+  _finishCellsContainer: {fileID: 11400000, guid: caec3c5b699ea45bf9ed14f141530518,
+    type: 2}

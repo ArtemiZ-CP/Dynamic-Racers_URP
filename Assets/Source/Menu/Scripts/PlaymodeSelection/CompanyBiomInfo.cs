@@ -7,11 +7,12 @@ public interface ICompanyBiomInfoReadOnly
     public int ID { get; }
     public Sprite BiomSprite { get; }
     public MapCellsContainer Map { get; }
-    public ReadOnlyCollection<ChestReward.ChestType?> Rewards { get; }
+    public ReadOnlyCollection<ChestRewardInfo> Rewards { get; }
     public CoinsReward RewardsPerStar { get; }
     public string BiomName { get; }
     public int CurrentStars { get; }
     public int ReduseUpgrades { get; }
+    public Rare MaxEnemyGadget { get; }
 }
 
 public class CompanyBiomInfo : ICompanyBiomInfoReadOnly
@@ -19,21 +20,23 @@ public class CompanyBiomInfo : ICompanyBiomInfoReadOnly
     private readonly int _id;
     private readonly Sprite _biomSprite;
     private readonly MapCellsContainer _map;
-    private readonly ChestReward.ChestType?[] _rewards;
+    private readonly ChestRewardInfo[] _rewards;
     private readonly CoinsReward _rewardsPerStar;
     private readonly string _biomName;
     private int _currentStars;
     private int _startReduseUpgrades;
     private int _reduseUpgradesByStar;
+    private Rare _maxEnemyGadget = Rare.Legendary;
 
     public int ID => _id;
     public Sprite BiomSprite => _biomSprite;
     public MapCellsContainer Map => _map;
-    public ReadOnlyCollection<ChestReward.ChestType?> Rewards => new(_rewards);
+    public ReadOnlyCollection<ChestRewardInfo> Rewards => new(_rewards);
     public CoinsReward RewardsPerStar => _rewardsPerStar;
     public string BiomName => _biomName;
     public int CurrentStars => _currentStars;
     public int ReduseUpgrades => _startReduseUpgrades + _reduseUpgradesByStar * _currentStars;
+    public Rare MaxEnemyGadget => _maxEnemyGadget;
 
     public CompanyBiomInfo(Biom biom)
     {
@@ -45,6 +48,7 @@ public class CompanyBiomInfo : ICompanyBiomInfoReadOnly
         _biomName = biom.name;
         _startReduseUpgrades = biom.StartReduseUpgrades;
         _reduseUpgradesByStar = biom.ReduseUpgradesByStar;
+        _maxEnemyGadget = biom.MaxEnemyGadget;
         _currentStars = 0;
     }
 
@@ -56,7 +60,7 @@ public class CompanyBiomInfo : ICompanyBiomInfoReadOnly
             return;
         }
 
-        throw new System.Exception("Save info does not match biom name");
+        throw new System.Exception("Save info does not match biom index");
     }
 
     public List<Reward> AddStars(int stars)
@@ -67,9 +71,9 @@ public class CompanyBiomInfo : ICompanyBiomInfoReadOnly
         {
             if (_currentStars + i < _rewards.Length)
             {
-                if (_rewards[_currentStars + i] is ChestReward.ChestType reward)
+                if (_rewards[_currentStars + i] != null)
                 {
-                    rewards.Add(new ChestReward(reward));
+                    rewards.Add(_rewards[_currentStars + i].GetRewards());
                 }
             }
 

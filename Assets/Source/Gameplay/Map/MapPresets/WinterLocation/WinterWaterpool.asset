@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a96db882ea56b4cdf85c25e0f42ab5ed, type: 3}
+  m_Name: WinterWaterpool
+  m_EditorClassIdentifier: 
+  _startMiddle: {fileID: 4389088238115731540, guid: b8b78bad01c8b4d61bff4719bc95be39,
+    type: 3}
+  _middleMiddle: {fileID: 4389088238115731540, guid: 6366595273b9a4e038d4df4a688c333c,
+    type: 3}
+  _startSide: {fileID: 4389088238115731540, guid: 527a03799c27b4d33a4fb48f72cc3819,
+    type: 3}
+  _middleSide: {fileID: 4389088238115731540, guid: afc4465064e72473e822a2ad12860e2b,
+    type: 3}

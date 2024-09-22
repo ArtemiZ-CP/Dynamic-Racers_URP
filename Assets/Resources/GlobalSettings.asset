@@ -40,18 +40,20 @@ MonoBehaviour:
     _openingTimeInHours: 20
   _boxSprites:
   - ChestType: 0
-    Sprite: {fileID: 1016734939, guid: 861ad289352f5458c972607110983f31, type: 3}
+    Sprite: {fileID: 21300000, guid: a48bc0eeb41ab46b2a6a7a31c22cd7b6, type: 3}
   - ChestType: 1
-    Sprite: {fileID: -571338563, guid: 861ad289352f5458c972607110983f31, type: 3}
+    Sprite: {fileID: 21300000, guid: 34d551e60435d4d7daf6d2d324c6e94e, type: 3}
   - ChestType: 2
-    Sprite: {fileID: 1818840716, guid: 861ad289352f5458c972607110983f31, type: 3}
+    Sprite: {fileID: 21300000, guid: ba7141b28e06f45229a402e4d6bfdd86, type: 3}
   - ChestType: 3
-    Sprite: {fileID: 236003690, guid: 4940f87de66474a4b94b5f17ffd3b8a3, type: 3}
+    Sprite: {fileID: 21300000, guid: 2c715805d43884d959e05b5776a5d62d, type: 3}
   - ChestType: 4
-    Sprite: {fileID: -182500655, guid: b855ba335d20c43f796ba9fb218823d3, type: 3}
+    Sprite: {fileID: 21300000, guid: b533d54d5efc2402abf9a63ae2059a1f, type: 3}
   _bioms:
   - {fileID: 11400000, guid: c6f73aa21e359451687c627ed4e443f1, type: 2}
   - {fileID: 11400000, guid: 55a81ce22549b471795e3cd391ef5738, type: 2}
+  - {fileID: 11400000, guid: 4404ea6bc91a2401ba583ec5f9e6258e, type: 2}
+  - {fileID: 11400000, guid: 07c0f39fa1d984277b0d12c603d53521, type: 2}
   _trainingLevelsCount: 4
   _trainingPlayersCount: 4
   _gadgetsLevelProgression:

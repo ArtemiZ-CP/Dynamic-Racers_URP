@@ -21,11 +21,10 @@ public class TrainingRunStages : RunStagesBase
         {
             List<Gadget> gadgets = GlobalSettings.Instance.GetAllGadgets().Where(g => g.ScriptableObject.Rare == Rare.Common).ToList();
             List<GadgetReward> gadgetRewards = gadgets.Select(g => new GadgetReward(g.ScriptableObject, 1)).ToList();
-            PlayerData.SetPlayerPlace(placement);
             PlayerData.AddRunReward(new ChestReward(
                 ChestReward.ChestType.Wood, 
                 gadgetRewards,
-                null, null, null));
+                null, null, null), placement);
         }
     }
 }

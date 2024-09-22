@@ -22,6 +22,7 @@ public static class RunSettings
     public static RunType Type => _runType;
     public static int PlayersCount => _playersCount;
     public static int ReduseUpgrades => _biomInfo.ReduseUpgrades;
+    public static Rare MaxEnemyGadget => _biomInfo.MaxEnemyGadget;
 
     public static void SetTrainingRun(ICompanyBiomInfoReadOnly biomInfo, ChunkSettings[] map, int playersCount)
     {

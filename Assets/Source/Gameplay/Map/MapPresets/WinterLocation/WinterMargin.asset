@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d183e2b48af44e4b97a061986836a2, type: 3}
+  m_Name: WinterMargin
+  m_EditorClassIdentifier: 
+  _startRoadMargin: {fileID: 6265250116202855287, guid: 6c62f7f261d51464ea6982a909647887,
+    type: 3}
+  _secondRoadMargin: {fileID: 0}
+  _middleRoadMargin: {fileID: 6265250116202855287, guid: 03486c799dea345618620cd9be191466,
+    type: 3}
+  _startMiddleMargin: {fileID: 6265250116202855287, guid: 276e9197474b74f8c97e1c6787e0bc24,
+    type: 3}
+  _secondMiddleMargin: {fileID: 6265250116202855287, guid: 0506590d0c76d44d9b71a4f0848545a1,
+    type: 3}
+  _middleMiddleMargin: {fileID: 6265250116202855287, guid: 70655c1d52c7b4027928eaca286bf446,
+    type: 3}
+  _startSideMargin: {fileID: 6265250116202855287, guid: 947997dfdaef444bd9e60496f7f98eae,
+    type: 3}
+  _middleSideMargin: {fileID: 6265250116202855287, guid: 849f9b7f786fe431e8a1a5ff50247840,
+    type: 3}
+  _roadCornerMargin: {fileID: 6265250116202855287, guid: 9b7c981f6fc9745128ce8d849d4ed76f,
+    type: 3}

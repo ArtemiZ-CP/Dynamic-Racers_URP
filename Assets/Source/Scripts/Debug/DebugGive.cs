@@ -19,12 +19,6 @@ public class DebugGive : MonoBehaviour
     [SerializeField] private int _biomID;
     [SerializeField] private int _starsAmount;
 
-    [ContextMenu("Add Stars")]
-    public void AddStars()
-    {
-        PlayerData.AddCompanyStars(_biomID, _starsAmount);
-    }
-
     [ContextMenu("Give Rewards")]
     public void GiveGadget()
     {
@@ -36,6 +30,12 @@ public class DebugGive : MonoBehaviour
             new List<GadgetReward> { gadgetReward },
             new List<CharacteristicReward> { characteristicReward }, 
             new CoinsReward(_coins), new DiamondsReward(_diamonds)));
+    }
+
+    [ContextMenu("Add Stars")]
+    public void AddStars()
+    {
+        PlayerData.AddCompanyStars(_biomID, _starsAmount);
     }
 
     private void Start()

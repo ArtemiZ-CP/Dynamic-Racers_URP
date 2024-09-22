@@ -342,8 +342,9 @@ public static class PlayerData
         DataSaver.SaveData();
     }
 
-    public static void AddRunReward(Reward reward)
+    public static void AddRunReward(Reward reward, int placement)
     {
+        SetPlayerPlace(placement);
         _runRewards.Add(reward);
         SortRewards(_runRewards);
 
@@ -508,8 +509,8 @@ public static class PlayerData
         
         if (coins > 0) rewards.Add(coinsReward);
         if (diamonds > 0) rewards.Add(diamondsReward);
-        if (gadgetRewards != null) rewards.AddRange(gadgetRewards);
-        if (chestRewards != null) rewards.AddRange(chestRewards);
+        if (gadgetRewards != null && gadgetRewards.Count > 0) rewards.AddRange(gadgetRewards);
+        if (chestRewards != null && chestRewards.Count > 0) rewards.AddRange(chestRewards);
     }
 
     private static void AddGadget(GadgetSaveInfo gadgetSaveInfo)

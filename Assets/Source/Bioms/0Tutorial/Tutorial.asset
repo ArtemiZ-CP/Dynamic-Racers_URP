@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c8ee2b108ded4f0d8d55b54a1b21cd0, type: 3}
+  m_Name: Tutorial
+  m_EditorClassIdentifier: 
+  _id: 0
+  _icon: {fileID: 21300000, guid: df32e52ad95244a90a063941f305c5b0, type: 3}
+  _map: {fileID: 11400000, guid: e5b89b49a50424b18a17c198a12baceb, type: 2}
+  _rewards:
+  - {fileID: 11400000, guid: ae97558c6423c44f6a26a4dbdf8b1031, type: 2}
+  - {fileID: 11400000, guid: 5904808131cab497c8fd78ae0672bc12, type: 2}
+  - {fileID: 11400000, guid: 2d3dc60d7da9244f193d3af963dd7b03, type: 2}
+  _starPerReward: 3
+  _coinsRewardPerStar: 50
+  _startReduseUpgrades: -10
+  _reduseUpgradesByStar: 1
+  _maxEnemyGadget: 0

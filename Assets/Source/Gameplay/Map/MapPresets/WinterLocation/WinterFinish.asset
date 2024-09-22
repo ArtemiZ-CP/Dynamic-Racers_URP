@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c85fe221a854073bf5d991328d7a3d, type: 3}
+  m_Name: WinterFinish
+  m_EditorClassIdentifier: 
+  _middleLine: {fileID: 7075046582411392766, guid: aa7bff21f5b4f47aab7ef57e2e704546,
+    type: 3}
+  _middle: {fileID: 7075046582411392766, guid: b5fe475901cfc4ff2ae035b45c59a439, type: 3}
+  _leftLine: {fileID: 7075046582411392766, guid: fac04ab8fb9334c3e9a3db30b56baa20,
+    type: 3}
+  _rightLine: {fileID: 7075046582411392766, guid: 14ca193bc3e15487ea50c8df450d6295,
+    type: 3}
+  _finishObject: {fileID: 1913607892469741296, guid: 3545611b3c83a4713957314ea9b10caf,
+    type: 3}

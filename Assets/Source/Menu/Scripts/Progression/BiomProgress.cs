@@ -6,8 +6,7 @@ using UnityEngine.UI;
 public class BiomProgress : MonoBehaviour
 {
     [SerializeField] private TMP_Text _biomName;
-    [SerializeField] private RectTransform _biomPointPrefab;
-    [SerializeField] private RectTransform _biomEmptyPointPrefab;
+    [SerializeField] private BiomProgressPoint _biomPointPrefab;
     [SerializeField] private RectTransform _biomParent;
     [SerializeField] private RectTransform _progressBar;
     [SerializeField] private Image _progressSlider;
@@ -15,7 +14,7 @@ public class BiomProgress : MonoBehaviour
 
     public void SetBiomPoints(ICompanyBiomInfoReadOnly companyBiomInfo)
     {
-        ChestReward.ChestType?[] rewards = companyBiomInfo.Rewards.ToArray();
+        ChestRewardInfo[] rewards = companyBiomInfo.Rewards.ToArray();
 
         if (rewards == null || rewards.Length == 0)
         {
@@ -26,13 +25,9 @@ public class BiomProgress : MonoBehaviour
 
         for (int i = 0; i < rewards.Length; i++)
         {
-            if (rewards[i] is ChestReward.ChestType chestType)
+            if (rewards[i] != null)
             {
-                SpawnBiomPoint(chestType, i, rewards.Length);
-            }
-            else
-            {
-                SpawnEmptyBiomPoint(i, rewards.Length);
+                SpawnBiomPoint(rewards[i].ChestType, i, rewards.Length);
             }
         }
 
@@ -56,24 +51,9 @@ public class BiomProgress : MonoBehaviour
 
     private void SpawnBiomPoint(ChestReward.ChestType chestType, int progress, int maxProgress)
     {
-        if (progress == maxProgress - 1)
-        {
-            return;
-        }
-
-        RectTransform pointTransform = Instantiate(_biomPointPrefab, _biomParent);
-        pointTransform.position = GetPointPosition(progress, maxProgress);
-    }
-
-    private void SpawnEmptyBiomPoint(int progress, int maxProgress)
-    {
-        if (progress == maxProgress - 1)
-        {
-            return;
-        }
-
-        RectTransform pointTransform = Instantiate(_biomEmptyPointPrefab, _biomParent);
-        pointTransform.position = GetPointPosition(progress, maxProgress);
+        BiomProgressPoint pointTransform = Instantiate(_biomPointPrefab, _biomParent);
+        pointTransform.transform.position = GetPointPosition(progress, maxProgress);
+        pointTransform.Initialize(progress + 1, chestType, progress == maxProgress - 1);
     }
 
     private Vector3 GetPointPosition(int progress, int maxProgress)

@@ -1,47 +1,41 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Biom", menuName = "Biom")]
 public class Biom : ScriptableObject
 {
-    [Serializable]
-    public enum BiomChestType
-    {
-        No = -1,
-        Wood,
-        Small,
-        Medium,
-        Big,
-        Legendary
-    }
-
     [SerializeField] private int _id;
     [SerializeField] private Sprite _icon;
     [SerializeField] private MapCellsContainer _map;
-    [SerializeField] private BiomChestType[] _rewards;
+    [Header("Rewards")]
+    [SerializeField] private ChestRewardInfo[] _rewards;
+    [SerializeField, Min(1)] private int _starPerReward;
     [SerializeField] private int _coinsRewardPerStar;
+    [Header("Upgrades")]
     [SerializeField] private int _startReduseUpgrades;
     [SerializeField] private int _reduseUpgradesByStar;
+    [Header("Gadgets")]
+    [SerializeField] private Rare _maxEnemyGadget;
 
     public int ID => _id;
     public Sprite Sprite => _icon;
     public MapCellsContainer Map => _map;
-    public ChestReward.ChestType?[] Rewards => ConvertRewards();
+    public ChestRewardInfo[] Rewards => ConvertRewards();
     public int CoinsRewardPerStar => _coinsRewardPerStar;
     public int StartReduseUpgrades => _startReduseUpgrades;
     public int ReduseUpgradesByStar => _reduseUpgradesByStar;
+    public Rare MaxEnemyGadget => _maxEnemyGadget;
 
-    private ChestReward.ChestType?[] ConvertRewards()
+    private ChestRewardInfo[] ConvertRewards()
     {
-        ChestReward.ChestType?[] rewards = new ChestReward.ChestType?[_rewards.Length];
+        ChestRewardInfo[] rewards = new ChestRewardInfo[_rewards.Length * _starPerReward];
 
         for (int i = 0; i < _rewards.Length; i++)
         {
-            BiomChestType chestType = _rewards[i];
+            ChestRewardInfo chestType = _rewards[i];
 
-            if (chestType != BiomChestType.No)
+            if (chestType != null)
             {
-                rewards[i] = (ChestReward.ChestType)chestType;
+                rewards[i * _starPerReward + _starPerReward - 1] = chestType;
             }
         }
 

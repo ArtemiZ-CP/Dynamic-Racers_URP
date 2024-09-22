@@ -10,7 +10,7 @@ public class GadgetReward : Reward
     public GadgetScriptableObject ScriptableObject => _gadget;
     public int Amount => _amount;
 
-    public GadgetReward(GadgetScriptableObject gadget, int count)
+    public GadgetReward(GadgetScriptableObject gadget, int count = 1)
     {
         _gadget = gadget;
         _amount = count;

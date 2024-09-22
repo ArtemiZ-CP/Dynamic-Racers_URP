@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7cf3ba05a674098864d194b2105205, type: 3}
+  m_Name: WinterBasis
+  m_EditorClassIdentifier: 
+  _edgeCorner: {fileID: 3848698157293380671, guid: 06629185f08e949f484cacc460e8e6f2,
+    type: 3}
+  _edgeMiddle: {fileID: 3848698157293380671, guid: bf6b041ef23ab42d29246555ad5bbf40,
+    type: 3}
+  _corner: {fileID: 3848698157293380671, guid: 13c7f70996f5e4f39b0774167bc93ff7, type: 3}
+  _middle: {fileID: 3848698157293380671, guid: 62ff5ee59b52c431797773bc26919102, type: 3}

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1cadd5a0704745b9977f15067770451, type: 3}
+  m_Name: WinterEnvironment
+  m_EditorClassIdentifier: 
+  _environments:
+  - {fileID: 3214685892353107800, guid: 91fec50494ca84ec48483fd748cc353e, type: 3}
+  - {fileID: 3214685892353107800, guid: cc2725939936c4b329fd546625abb032, type: 3}
+  - {fileID: 3214685892353107800, guid: 8c21659e0e2454deca7f0f3c477390c1, type: 3}
+  - {fileID: 3214685892353107800, guid: 1e17dff59ec4c47988fb6a4236a7f61d, type: 3}
+  - {fileID: 3214685892353107800, guid: b0fe12c2ebfdc45d58ce84a53421e6b0, type: 3}
+  - {fileID: 3214685892353107800, guid: 627c6987a442847959c49308879318e8, type: 3}
+  - {fileID: 3214685892353107800, guid: e76a4654eed864507b9734e727004262, type: 3}
+  - {fileID: 3214685892353107800, guid: da02b5a472a7843a0bc718bdba497e6f, type: 3}
+  - {fileID: 3214685892353107800, guid: c452ab53911844469bbf2f094f1f80bd, type: 3}
+  - {fileID: 3214685892353107800, guid: 1bff10646f23b41e9bcf71d8b9c584d6, type: 3}

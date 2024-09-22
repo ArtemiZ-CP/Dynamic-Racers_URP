@@ -76,12 +76,12 @@ public class ChestReward : Reward
             }
         }
 
-        if (chestSaveInfo.CoinsReward != null)
+        if (chestSaveInfo.CoinsReward != null && chestSaveInfo.CoinsReward.Amount > 0)
         {
             _coinsReward = new CoinsReward(chestSaveInfo.CoinsReward);
         }
 
-        if (chestSaveInfo.DiamondsReward != null)
+        if (chestSaveInfo.DiamondsReward != null && chestSaveInfo.DiamondsReward.Amount > 0)
         {
             _diamondsReward = new DiamondsReward(chestSaveInfo.DiamondsReward);
         }
@@ -130,12 +130,12 @@ public class ChestReward : Reward
             rewards.AddRange(_characteristicRewards);
         }
 
-        if (_coinsReward != null)
+        if (_coinsReward != null && _coinsReward.Amount > 0)
         {
             rewards.Add(_coinsReward);
         }
 
-        if (_diamondsReward != null)
+        if (_diamondsReward != null && _diamondsReward.Amount > 0)
         {
             rewards.Add(_diamondsReward);
         }

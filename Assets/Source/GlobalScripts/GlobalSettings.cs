@@ -166,6 +166,32 @@ public class GlobalSettings : ScriptableObject
 		return _allGadgets[UnityEngine.Random.Range(0, _allGadgets.Length)];
 	}
 
+	public GadgetScriptableObject GetRandomGadget(Rare rare)
+	{
+		List<GadgetScriptableObject> gadgets = _allGadgets.Where(g =>
+			g.Rare == rare).ToList();
+
+		if (gadgets.Count == 0)
+		{
+			return null;
+		}
+
+		return gadgets[UnityEngine.Random.Range(0, gadgets.Count)];
+	}
+
+	public GadgetScriptableObject GetRandomGadget(Rare[] rares)
+	{
+		List<GadgetScriptableObject> gadgets = _allGadgets.Where(g =>
+			rares.Any(r => r == g.Rare)).ToList();
+
+		if (gadgets.Count == 0)
+		{
+			return null;
+		}
+
+		return gadgets[UnityEngine.Random.Range(0, gadgets.Count)];
+	}
+
 	public GadgetScriptableObject GetRandomGadget(Rare rare, System.Random random)
 	{
 		List<GadgetScriptableObject> gadgets = _allGadgets.Where(g =>
