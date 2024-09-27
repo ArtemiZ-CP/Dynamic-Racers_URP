@@ -2263,7 +2263,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PatsySans-Italic Atlas Material
-  m_Shader: {fileID: 4800000, guid: 2f94782b679614bdba078240ee25aa06, type: 3}
+  m_Shader: {fileID: 4800000, guid: acca79315153441c780bc5144926f0a5, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

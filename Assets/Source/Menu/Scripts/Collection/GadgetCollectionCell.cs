@@ -17,17 +17,20 @@ public class GadgetCollectionCell : MonoBehaviour
 
     private void OnEnable()
     {
-        _button.onClick.AddListener(Select);
+        _button?.onClick.AddListener(Select);
     }
 
     private void OnDisable()
     {
-        _button.onClick.RemoveListener(Select);
+        _button?.onClick.RemoveListener(Select);
     }
 
     public void Initialize()
     {
-        _countBar.gameObject.SetActive(false);
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
     }
 
     public void Initialize(Gadget gadget, bool isFound = true)
@@ -53,17 +56,17 @@ public class GadgetCollectionCell : MonoBehaviour
     {
         if (isFound)
         {
-            _countBar.gameObject.SetActive(true);
-            _levelText.gameObject.SetActive(true);
-            _notFound.SetActive(false);
-            _countBar.SetFill(Gadget);
-            _levelText.text = $"Level {Gadget.Level + 1}";
+            if (_countBar != null) _countBar.gameObject.SetActive(true);
+            if (_levelText != null) _levelText.gameObject.SetActive(true);
+            if (_notFound != null) _notFound.SetActive(false);
+            if (_countBar != null) _countBar.SetFill(Gadget);
+            if (_levelText != null) _levelText.text = $"Level {Gadget.Level + 1}";
         }
         else
         {
-            _countBar.gameObject.SetActive(false);
-            _levelText.gameObject.SetActive(false);
-            _notFound.SetActive(true);
+            if (_countBar != null) _countBar.gameObject.SetActive(false);
+            if (_levelText != null) _levelText.gameObject.SetActive(false);
+            _notFound?.SetActive(true);
         }
     }
 

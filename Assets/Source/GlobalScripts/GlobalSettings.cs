@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GlobalSettings", menuName = "Settings/Global", order = 1)]
+[CreateAssetMenu(fileName = "GlobalSettings", menuName = "GlobalSettings/Global", order = 1)]
 public class GlobalSettings : ScriptableObject
 {
 	public static readonly int ChunksTypeCount = 5;
@@ -25,16 +24,6 @@ public class GlobalSettings : ScriptableObject
 		}
 	}
 
-	[Serializable]
-	private class GadgetsLevelProgression
-	{
-		[SerializeField] private int _gadgetsToLevelUp;
-		[SerializeField] private int _coinsCost;
-
-		public int GadgetsToLevelUp => _gadgetsToLevelUp;
-		public int CoinsCost => _coinsCost;
-	}
-
 	[SerializeField, Min(1)] private int _XPToLevelUp;
 	[SerializeField] private int _gameplayPlayersCount;
 	[SerializeField] private int _maxTickets;
@@ -42,20 +31,17 @@ public class GlobalSettings : ScriptableObject
 	[SerializeField] private int _maxFPS = 30;
 	[Header("Opening Chests")]
 	[SerializeField] private List<ChestOpeningInfo> _openingChests = new();
-	[Header("Shop")]
+	[Header("Sprites")]
 	[SerializeField] private ChestReward.ChestSprite[] _boxSprites;
+	[SerializeField] private Sprite[] _characteristicRareBackgrounds;
+	[SerializeField] private Sprite _coinsSprite;
+	[SerializeField] private Sprite _diamondsSprite;
 	[Header("Bioms")]
     [SerializeField] private Biom[] _bioms;
+	[SerializeField] private int[] _starsRewards;
 	[Header("Training")]
 	[SerializeField] private int _trainingLevelsCount;
-	[SerializeField] private int _trainingPlayersCount;
-	[Header("Gadgets")]
-	[SerializeField] private GadgetsLevelProgression[] _gadgetsLevelProgression;
-	[SerializeField] private int[] _gadgetsLevelProgressionCostMultiplier;
-	[SerializeField] private int[] _gadgetsLevelProgressionStartLevel;
-	[SerializeField] private GadgetScriptableObject[] _allGadgets;
-	[SerializeField] private Sprite[] _gadgetRareBackgrounds;
-	[SerializeField] private Color[] _gadgetRareColor;
+	[SerializeField] private GadgetReward _trainingGadgetReward;
 	[SerializeField] private List<GameObject> _skins;
 	[Header("Character Speed")]
 	[SerializeField, Min(0)] private float _baseSpeed = 1;
@@ -82,8 +68,9 @@ public class GlobalSettings : ScriptableObject
 	public int MinFPS => _minFPS;
 	public int MaxFPS => _maxFPS;
 	public int TrainingLevelsCount => _trainingLevelsCount;
-	public int TrainingPlayersCount => _trainingPlayersCount;
+	public GadgetReward TrainingGadgetReward => _trainingGadgetReward;
 	public IReadOnlyCollection<Biom> Bioms => _bioms;
+	public IReadOnlyCollection<int> StarsRewards => _starsRewards;
 	public float FallAngle => _fallAngle;
 	public float BaseSpeed => _baseSpeed;
 	public float AdditionalSpeedByUpgrade => _additionalSpeedByUpgrade;
@@ -100,6 +87,8 @@ public class GlobalSettings : ScriptableObject
 	public int MinRoadLength => _minRoadLength;
 	public int MinRoadsCount => _minRoadsCount;
 	public IReadOnlyList<GameObject> Skins => _skins;
+	public Sprite CoinsSprite => _coinsSprite;
+	public Sprite DiamondsSprite => _diamondsSprite;
 
 	public static GlobalSettings Instance
 	{
@@ -119,11 +108,6 @@ public class GlobalSettings : ScriptableObject
 		return _skins[UnityEngine.Random.Range(0, _skins.Count)];
 	}
 
-	public GadgetScriptableObject GetGadgetByName(string name)
-	{
-		return _allGadgets.FirstOrDefault(gadget => gadget.Name == name);
-	}
-
 	public TimeSpan GetOpeningTime(ChestReward.ChestType chestType)
 	{
 		ChestOpeningInfo chestOpeningInfo = _openingChests.Find(info => info.Type == chestType);
@@ -136,97 +120,9 @@ public class GlobalSettings : ScriptableObject
 		return chestOpeningInfo.GetOpeningTime();
 	}
 
-	public List<Gadget> GetAllGadgets()
+	public Sprite GetCharacteristicRareBackground(Rare rare)
 	{
-		return _allGadgets.Select(gadget => new Gadget(gadget)).ToList();
-	}
-
-	public List<Gadget> GetNotFoundGadgets()
-	{
-		List<Gadget> foundGadgets = PlayerData.PlayerGadgets.ToList();
-		List<Gadget> notFoundGadgets = _allGadgets.Where(gadget =>
-			!foundGadgets.Any(foundGadget => foundGadget.ScriptableObject == gadget)).
-			Select(gadget => new Gadget(gadget)).ToList();
-
-		return notFoundGadgets;
-	}
-
-	public Sprite GetGadgetRareBackground(Rare rare)
-	{
-		return _gadgetRareBackgrounds[(int)rare];
-	}
-
-	public Color GetGadgetRareColor(Rare rare)
-	{
-		return _gadgetRareColor[(int)rare];
-	}
-
-	public GadgetScriptableObject GetRandomGadget()
-	{
-		return _allGadgets[UnityEngine.Random.Range(0, _allGadgets.Length)];
-	}
-
-	public GadgetScriptableObject GetRandomGadget(Rare rare)
-	{
-		List<GadgetScriptableObject> gadgets = _allGadgets.Where(g =>
-			g.Rare == rare).ToList();
-
-		if (gadgets.Count == 0)
-		{
-			return null;
-		}
-
-		return gadgets[UnityEngine.Random.Range(0, gadgets.Count)];
-	}
-
-	public GadgetScriptableObject GetRandomGadget(Rare[] rares)
-	{
-		List<GadgetScriptableObject> gadgets = _allGadgets.Where(g =>
-			rares.Any(r => r == g.Rare)).ToList();
-
-		if (gadgets.Count == 0)
-		{
-			return null;
-		}
-
-		return gadgets[UnityEngine.Random.Range(0, gadgets.Count)];
-	}
-
-	public GadgetScriptableObject GetRandomGadget(Rare rare, System.Random random)
-	{
-		List<GadgetScriptableObject> gadgets = _allGadgets.Where(g =>
-			g.Rare == rare).ToList();
-
-		if (gadgets.Count == 0)
-		{
-			return null;
-		}
-
-		return gadgets[random.Next(gadgets.Count)];
-	}
-
-	public int GetStartGadgetLevel(Gadget gadget)
-	{
-		return _gadgetsLevelProgressionStartLevel[(int)gadget.ScriptableObject.Rare] - 1;
-	}
-
-	public bool TryGetGadgetsLevelProgression(Gadget gadget, out int gadgetsToLevelUp, out int coinsCost)
-	{
-		if (gadget.Level < _gadgetsLevelProgression.Length)
-		{
-			int startLevel = GetStartGadgetLevel(gadget);
-			int rareGadgetCostMultiplier = _gadgetsLevelProgressionCostMultiplier[(int)gadget.ScriptableObject.Rare];
-
-			gadgetsToLevelUp = _gadgetsLevelProgression[gadget.Level - startLevel].GadgetsToLevelUp;
-			coinsCost = _gadgetsLevelProgression[gadget.Level - startLevel].CoinsCost * rareGadgetCostMultiplier;
-
-			return true;
-		}
-
-		gadgetsToLevelUp = 0;
-		coinsCost = 0;
-
-		return false;
+		return _characteristicRareBackgrounds[(int)rare - (int)Rare.Common];
 	}
 
 	public Sprite GetChestSprite(ChestReward.ChestType chestType)

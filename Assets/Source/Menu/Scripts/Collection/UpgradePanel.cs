@@ -26,15 +26,43 @@ public class UpgradePanel : MonoBehaviour
     [SerializeField] private Material _playerMaterial;
     [SerializeField] private UpgradeGadget _upgradeGadget;
 
+    private GadgetSettings _gadgetSettings;
     private GlobalSettings _globalSettings;
     private GadgetScriptableObject _gadget;
     private Animator _gadgetAnimator;
     private GadgetChunkInfo _gadgetChunkInfo;
     private Animator _playerAnimator;
 
+    public UpgradeGadget UpgradeGadget => _upgradeGadget;
+
+    private GadgetSettings GadgetSettings
+    {
+        get
+        {
+            if (_gadgetSettings == null)
+            {
+                _gadgetSettings = GadgetSettings.Instance;
+            }
+
+            return _gadgetSettings;
+        }
+    }
+
+    private GlobalSettings GlobalSettings
+    {
+        get
+        {
+            if (_globalSettings == null)
+            {
+                _globalSettings = GlobalSettings.Instance;
+            }
+
+            return _globalSettings;
+        }
+    }
+
     private void Awake()
     {
-        _globalSettings = GlobalSettings.Instance;
         _playerAnimator = _playerAnimatorParent.GetComponentInChildren<Animator>();
     }
 
@@ -46,7 +74,7 @@ public class UpgradePanel : MonoBehaviour
             _gadgetAnimator = null;
         }
 
-        _playerAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
+        _playerAnimator.SetFloat(SpeedMultiplier, GlobalSettings.BaseSpeed);
         ActivePlayerAnimation();
         
         if (RunSettings.PlayerGadget != null)
@@ -62,7 +90,17 @@ public class UpgradePanel : MonoBehaviour
         _upgradeGadget.LevelUp -= ShowGadgetInfo;
     }
 
-    public void SetPlayerAnimation(GadgetScriptableObject gadget, GadgetChunkInfo gadgetChunkInfo)
+    public void Active(GadgetScriptableObject gadget, GadgetChunkInfo gadgetChunkInfo)
+    {
+        SetGadget(gadget, gadgetChunkInfo);
+        Gadget playerGadget = PlayerData.PlayerGadgets.FirstOrDefault(g => g.ScriptableObject == gadget);
+        playerGadget ??= new Gadget(gadget);
+        gameObject.SetActive(true);
+
+        ShowGadgetInfo(playerGadget);
+    }
+
+    public void SetGadget(GadgetScriptableObject gadget, GadgetChunkInfo gadgetChunkInfo)
     {
         _gadget = gadget;
         _gadgetChunkInfo = gadgetChunkInfo;
@@ -73,7 +111,7 @@ public class UpgradePanel : MonoBehaviour
         if (Instantiate(_gadget.Prefab, _playerAnimator.transform).TryGetComponent(out _gadgetAnimator))
         {
             _gadgetAnimator.SetTrigger(_gadgetChunkInfo.AnimationTriggerName);
-            _gadgetAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
+            _gadgetAnimator.SetFloat(SpeedMultiplier, GlobalSettings.BaseSpeed);
             SkinnedMeshRenderer skinnedMeshRenderer = _gadgetAnimator.transform.GetComponentInChildren<SkinnedMeshRenderer>();
 
             if (skinnedMeshRenderer != null)
@@ -116,14 +154,15 @@ public class UpgradePanel : MonoBehaviour
 
     private void ShowGadgetRare(Gadget gadget)
     {
-        _itemRareImage.sprite = _globalSettings.GetGadgetRareBackground(gadget.ScriptableObject.Rare);
+        _itemRareImage.sprite = GadgetSettings.GetGadgetRareBackground(gadget.ScriptableObject.Rare);
         _itemRareText.text = gadget.ScriptableObject.Rare.ToString();
-        _itemRareText.color = _globalSettings.GetGadgetRareColor(gadget.ScriptableObject.Rare);
+        _itemRareText.color = GadgetSettings.GetGadgetRareColor(gadget.ScriptableObject.Rare);
     }
 
     private void ShowGadget(Gadget gadget)
     {
         _gadgetCollectionCell.Initialize(gadget, PlayerData.PlayerGadgets.Any(g => g.ScriptableObject == gadget.ScriptableObject));
+        _upgradeGadget.UpdateGadget();
     }
 
     private void ShowSpeedBonus(Gadget gadget)

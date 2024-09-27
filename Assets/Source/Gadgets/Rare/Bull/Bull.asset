@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 361341571312253833, guid: b8cf4ec5e94324d68afa6a00ea685801, type: 3}
   _group: 1
-  _rare: 1
+  _rare: 2
   _gadgetAnimationInfos:
   - _chunkType: 0
     _powerUsing: 0

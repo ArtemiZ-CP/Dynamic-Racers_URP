@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class TrainingRunStages : RunStagesBase
@@ -19,12 +17,7 @@ public class TrainingRunStages : RunStagesBase
 
         if (PlayerData.PassedTrainings == GlobalSettings.Instance.TrainingLevelsCount)
         {
-            List<Gadget> gadgets = GlobalSettings.Instance.GetAllGadgets().Where(g => g.ScriptableObject.Rare == Rare.Common).ToList();
-            List<GadgetReward> gadgetRewards = gadgets.Select(g => new GadgetReward(g.ScriptableObject, 1)).ToList();
-            PlayerData.AddRunReward(new ChestReward(
-                ChestReward.ChestType.Wood, 
-                gadgetRewards,
-                null, null, null), placement);
+            PlayerData.AddReward(GlobalSettings.Instance.TrainingGadgetReward);
         }
     }
 }

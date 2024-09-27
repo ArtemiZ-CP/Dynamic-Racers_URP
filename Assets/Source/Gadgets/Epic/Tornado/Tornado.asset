@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 4654591429510769051, guid: 4b3286aa69d6747c7b8d84c12b0121ee, type: 3}
   _group: 0
-  _rare: 2
+  _rare: 3
   _gadgetAnimationInfos:
   - _chunkType: 2
     _powerUsing: 2
@@ -23,10 +23,13 @@ MonoBehaviour:
     _isAccelerates: 1
     _animationTriggerName: TornadoWall
   _speedMultiplier: 0.2
+  _isSpeedIncreasing: 0
   _distanceToDisactive: 50
   _isInfiniteDistance: 0
   _activeCount: 3
   _isInfiniteActiveCounts: 0
+  _isUsageSplited: 0
   _name: Tornado
-  _sprite: {fileID: 21300000, guid: fd6cb712d7bfb4fd389415edff702a10, type: 3}
+  _bigSprite: {fileID: 0}
+  _smallSprite: {fileID: 0}
   _description: 

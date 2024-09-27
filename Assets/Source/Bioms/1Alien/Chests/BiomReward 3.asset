@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ff5bd2bcc7e344b49ec556c9a696164, type: 3}
+  m_Name: BiomReward 3
+  m_EditorClassIdentifier: 
+  _rewardType: 3
+  _rare: 1
+  _coinsCount: 0
+  _diamondsCount: 0
+  _characteristics: 
+  _gadgetInfos: []
+  _garaunteedGadgetsByRarity: 
+  _garaunteedGadgets:
+  - _gadget: {fileID: 11400000, guid: b165c190206e1421393c3cf1a3fd61c7, type: 2}
+    _amount: 1
+  _gadgetCells: 1

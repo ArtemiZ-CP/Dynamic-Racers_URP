@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterMovement), typeof(CharacterGadgets))]
 public class CharacterAnimation : MonoBehaviour
 {
-	private const float _goodStartAnimationDelay = 0.1f;
+	private const float _goodStartAnimationDelay = 0.5f;
 	private const float _badStartAnimationDelay = 0.5f;
 
 	private readonly int End = Animator.StringToHash(nameof(End));
@@ -19,6 +19,7 @@ public class CharacterAnimation : MonoBehaviour
 	[SerializeField] private MeshSpawner _meshSpawner;
 	[SerializeField] private Animator _slingAnimator;
 	[SerializeField] private float _launchAnimationDuration;
+	[SerializeField] private GameObject _characterPoint;
 
 	private GlobalSettings _globalSettings;
 	private RunStagesBase _runStagesBase;
@@ -40,6 +41,7 @@ public class CharacterAnimation : MonoBehaviour
 		_characterMovement = GetComponent<CharacterMovement>();
 		_characterGadgets = GetComponent<CharacterGadgets>();
 		_runStagesBase = FindObjectOfType<RunStagesBase>();
+		if (_characterPoint != null) _characterPoint.SetActive(false);
 	}
 
 	private void Start()
@@ -81,6 +83,7 @@ public class CharacterAnimation : MonoBehaviour
 
 	public void LaunchCharacter(bool goodStart, bool fullCharge)
 	{
+		if (_characterPoint != null) _characterPoint.SetActive(true);
 		StopCoroutine(_launchAnimationCoroutine);
 
 		if (fullCharge == false)

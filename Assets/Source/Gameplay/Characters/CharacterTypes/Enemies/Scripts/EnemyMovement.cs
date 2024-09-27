@@ -1,11 +1,11 @@
 public class EnemyMovement : CharacterMovement
 {
-	private int _raceUpgradesAmount = 0;
-	private int _diveUpgradesAmount = 0;
-	private int _ascendUpgradesAmount = 0;
-	private int _glideUpgradesAmount = 0;
+	private float _raceUpgradesAmount = 0;
+	private float _diveUpgradesAmount = 0;
+	private float _ascendUpgradesAmount = 0;
+	private float _glideUpgradesAmount = 0;
 
-	public void SetUpgrades(int raceUpgradesAmount, int diveUpgradesAmount, int ascendUpgradesAmount, int glideUpgradesAmount)
+	public void SetUpgrades(float raceUpgradesAmount, float diveUpgradesAmount, float ascendUpgradesAmount, float glideUpgradesAmount)
 	{
 		_raceUpgradesAmount = raceUpgradesAmount;
 		_diveUpgradesAmount = diveUpgradesAmount;

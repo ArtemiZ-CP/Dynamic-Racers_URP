@@ -1,6 +1,6 @@
 public enum Rare
 {
-    Common,
+    Common = 1,
     Rare,
     Epic,
     Legendary

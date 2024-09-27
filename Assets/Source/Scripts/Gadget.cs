@@ -5,7 +5,7 @@ public class Gadget
 {
     private GadgetScriptableObject _scriptableObject;
     private int _amount;
-    private int _level;
+    private int _level = 0;
 
     public GadgetScriptableObject ScriptableObject => _scriptableObject;
     public int Level => _level;
@@ -27,7 +27,7 @@ public class Gadget
 
     public bool TryGetAdditionalSpeed(out float additionalSpeed, out bool isAbleToUpgrade)
     {
-        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(this, out int gadgetsToLevelUp, out int coinsCost))
+        if (GadgetSettings.Instance.TryGetGadgetsLevelProgression(this, out int gadgetsToLevelUp, out int coinsCost))
         {
             isAbleToUpgrade = _amount >= gadgetsToLevelUp && PlayerData.Coins >= coinsCost;
             additionalSpeed = _scriptableObject.SpeedMultiplier * 0.1f;
@@ -36,12 +36,13 @@ public class Gadget
 
         isAbleToUpgrade = false;
         additionalSpeed = 0;
+
         return false;
     }
 
     public bool TryLevelUp()
     {
-        if (GlobalSettings.Instance.TryGetGadgetsLevelProgression(this, out int gadgetsToLevelUp, out int coinsCost))
+        if (GadgetSettings.Instance.TryGetGadgetsLevelProgression(this, out int gadgetsToLevelUp, out int coinsCost))
         {
             if (_amount >= gadgetsToLevelUp && PlayerData.TryToSpendCoins(coinsCost))
             {

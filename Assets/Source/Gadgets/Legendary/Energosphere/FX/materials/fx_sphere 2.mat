@@ -61,12 +61,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Flow:
-        m_Texture: {fileID: 2800000, guid: 91c142c7ae9fa934a89b9defa47d787f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5422b3b7c8018f24e8e91bc5e4337b74, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 91c142c7ae9fa934a89b9defa47d787f, type: 3}
-        m_Scale: {x: 1, y: 4.57}
+        m_Texture: {fileID: 2800000, guid: c3d861a4755627842927c7095c568326, type: 3}
+        m_Scale: {x: 0.5, y: 0.5}
         m_Offset: {x: 0, y: 0}
     - _Mask:
         m_Texture: {fileID: 0}
@@ -77,8 +77,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Noise:
-        m_Texture: {fileID: 2800000, guid: bc98592b32e84e34abcd5bb8307b761f, type: 3}
-        m_Scale: {x: 1, y: 2.13}
+        m_Texture: {fileID: 2800000, guid: c3d861a4755627842927c7095c568326, type: 3}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
@@ -125,7 +125,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _Emission: 10
+    - _Emission: 2
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -148,8 +148,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DistortionSpeedXYPowerZ: {r: 0, g: 0, b: 10, a: 0}
+    - _DistortionSpeedXYPowerZ: {r: 0.75, g: 0, b: 0.75, a: 0.1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SpeedMainTexUVNoiseZW: {r: -0.02, g: 0.1, b: 0.2, a: 0.2}
+    - _SpeedMainTexUVNoiseZW: {r: 0.75, g: 0, b: 0.75, a: 0}
   m_BuildTextureStacks: []

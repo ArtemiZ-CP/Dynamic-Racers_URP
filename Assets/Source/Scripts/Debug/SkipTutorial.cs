@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class SkipTutorial : MonoBehaviour
@@ -16,11 +14,6 @@ public class SkipTutorial : MonoBehaviour
             PlayerData.TrainingPassed();
         }
 
-        List<Gadget> gadgets = GlobalSettings.Instance.GetAllGadgets().Where(g => g.ScriptableObject.Rare == Rare.Common).ToList();
-        List<GadgetReward> gadgetRewards = gadgets.Select(g => new GadgetReward(g.ScriptableObject, 1)).ToList();
-        PlayerData.AddReward(new ChestReward(
-            ChestReward.ChestType.Wood,
-            gadgetRewards,
-            null, null, null));
+        PlayerData.AddReward(GlobalSettings.Instance.TrainingGadgetReward);
     }
 }

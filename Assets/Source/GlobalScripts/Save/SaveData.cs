@@ -54,6 +54,11 @@ public class OpeningChestSaveInfo
 
     public OpeningChestSaveInfo(OpeningChest openingChest)
     {
+        if (openingChest == null)
+        {
+            return;
+        }
+
         IsOpening = openingChest.IsOpening;
         HasChest = openingChest.HasChest;
         ChestRareInt = (int)openingChest.ChestRare;

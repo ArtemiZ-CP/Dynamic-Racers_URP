@@ -84,7 +84,6 @@ public static class PlayerData
         }
 
         Debug.Log("Loading: " + saveData);
-        GlobalSettings globalSettings = GlobalSettings.Instance;
 
         if (saveData.Rewards != null)
         {
@@ -113,12 +112,12 @@ public static class PlayerData
         else
         {
             _playerGadgets = saveData.PlayerGadgets.Select(gadget => new Gadget(
-                globalSettings.GetGadgetByName(gadget.GadgetName), gadget.Amount, gadget.Level)).ToList();
+                GadgetSettings.Instance.GetGadgetByName(gadget.GadgetName), gadget.Amount, gadget.Level)).ToList();
         }
 
         _openingChests = saveData.OpeningChests.Select(openingChest => new OpeningChest(openingChest)).ToArray();
 
-        Biom[] bioms = globalSettings.Bioms.ToArray();
+        Biom[] bioms = GlobalSettings.Instance.Bioms.ToArray();
         _companyBiomInfos = new CompanyBiomInfo[bioms.Length];
 
         for (int i = 0; i < bioms.Length; i++)
@@ -434,7 +433,7 @@ public static class PlayerData
 
         if (playerGadget == null)
         {
-            _playerGadgets.Add(new Gadget(gadget, GlobalSettings.Instance.GetStartGadgetLevel(gadget)));
+            _playerGadgets.Add(new Gadget(gadget, GadgetSettings.Instance.GetStartGadgetLevel(gadget)));
 
             if (_playerGadgets.Count > 1)
             {
@@ -499,6 +498,8 @@ public static class PlayerData
         diamondsRewards.ForEach(r => diamonds += r.Amount);
         DiamondsReward diamondsReward = new(diamonds);
 
+        List<CharacteristicReward> characteristicRewards = rewards.Select(r => r as CharacteristicReward).Where(r => r != null).ToList();
+
         List<GadgetReward> gadgetRewards = rewards.Select(r => r as GadgetReward).Where(r => r != null).ToList();
         if (gadgetRewards.Count > 1) gadgetRewards.Sort((r1, r2) => r1.ScriptableObject.Rare.CompareTo(r2.ScriptableObject.Rare));
 
@@ -509,13 +510,14 @@ public static class PlayerData
         
         if (coins > 0) rewards.Add(coinsReward);
         if (diamonds > 0) rewards.Add(diamondsReward);
+        if (characteristicRewards != null && characteristicRewards.Count > 0) rewards.AddRange(characteristicRewards);
         if (gadgetRewards != null && gadgetRewards.Count > 0) rewards.AddRange(gadgetRewards);
         if (chestRewards != null && chestRewards.Count > 0) rewards.AddRange(chestRewards);
     }
 
     private static void AddGadget(GadgetSaveInfo gadgetSaveInfo)
     {
-        Gadget gadget = new(GlobalSettings.Instance.GetGadgetByName(gadgetSaveInfo.GadgetName),
+        Gadget gadget = new(GadgetSettings.Instance.GetGadgetByName(gadgetSaveInfo.GadgetName),
             gadgetSaveInfo.Amount);
 
         AddGadget(gadget);

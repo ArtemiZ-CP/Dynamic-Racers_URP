@@ -15,13 +15,14 @@ MonoBehaviour:
   _id: 1
   _icon: {fileID: 21300000, guid: 06abf51d3a06649959bd36021c40f3bc, type: 3}
   _map: {fileID: 11400000, guid: 035dcd20d38504c3681116037d3c67da, type: 2}
+  _mapPresets: []
   _rewards:
   - {fileID: 11400000, guid: b78beb53cb3bb472c9e876a1f6ab7a52, type: 2}
   - {fileID: 11400000, guid: dd0b4b765bf964db6a66252aba55ac89, type: 2}
   - {fileID: 11400000, guid: c021e0722f9064067b5cc1cbe95e29dc, type: 2}
   - {fileID: 11400000, guid: e0d1aa4abd71a4945882ab51f9554db1, type: 2}
-  _starPerReward: 5
-  _coinsRewardPerStar: 100
-  _startReduseUpgrades: 10
-  _reduseUpgradesByStar: 1
-  _maxEnemyGadget: 0
+  _starPerReward: 50
+  _coinsRewardPerStar: 0
+  _startReduseUpgrades: -8
+  _reduseUpgradesByStar: 0
+  _maxEnemyGadget: 1

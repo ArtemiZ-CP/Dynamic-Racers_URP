@@ -22,14 +22,40 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
 
     private List<GadgetSelectionCell> _gadgetCells = new();
     private GlobalSettings _globalSettings;
+    private GadgetSettings _gadgetSettings;
     private float _contentWidth;
     private Animator _gadgetAnimator;
     private Gadget _selectedGadget;
     private Animator _playerAnimator;
 
+    private GlobalSettings GlobalSettings
+    {
+        get
+        {
+            if (_globalSettings == null)
+            {
+                _globalSettings = GlobalSettings.Instance;
+            }
+
+            return _globalSettings;
+        }
+    }
+
+    private GadgetSettings GadgetSettings
+    {
+        get
+        {
+            if (_gadgetSettings == null)
+            {
+                _gadgetSettings = GadgetSettings.Instance;
+            }
+
+            return _gadgetSettings;
+        }
+    }
+
     private void Awake()
     {
-        _globalSettings = GlobalSettings.Instance; 
         _playerAnimator = _playerAnimatorParent.GetComponentInChildren<Animator>();
     }
 
@@ -57,7 +83,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
         InitCells();
         _selectedGadgetInfo.Select(null);
 
-        _playerAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
+        _playerAnimator.SetFloat(SpeedMultiplier, GlobalSettings.BaseSpeed);
         _upgradeGadget.LevelUp += UpdateGadget;
     }
 
@@ -132,7 +158,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
                     if (Instantiate(gadget.ScriptableObject.Prefab, _playerAnimator.transform).TryGetComponent(out _gadgetAnimator))
                     {
                         _gadgetAnimator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
-                        _gadgetAnimator.SetFloat(SpeedMultiplier, _globalSettings.BaseSpeed);
+                        _gadgetAnimator.SetFloat(SpeedMultiplier, GlobalSettings.BaseSpeed);
                         SkinnedMeshRenderer skinnedMeshRenderer = _gadgetAnimator.transform.GetComponentInChildren<SkinnedMeshRenderer>();
 
                         if (skinnedMeshRenderer != null)
@@ -143,7 +169,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
                 }
 
                 _playerAnimator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
-                _upgradePanel.SetPlayerAnimation(gadget.ScriptableObject, gadgetChunkInfo);
+                _upgradePanel.SetGadget(gadget.ScriptableObject, gadgetChunkInfo);
                 return;
             }
         }
@@ -152,7 +178,7 @@ public class GadgetSelectionLine : MonoBehaviour, IClickableGadget
     private void InitCells()
     {
         List<Gadget> _foundGadgets = PlayerData.PlayerGadgets.ToList();
-        List<Gadget> _notFoundGadgets = _globalSettings.GetNotFoundGadgets();
+        List<Gadget> _notFoundGadgets = GadgetSettings.GetNotFoundGadgets();
 
         _gadgetCells.Clear();
 

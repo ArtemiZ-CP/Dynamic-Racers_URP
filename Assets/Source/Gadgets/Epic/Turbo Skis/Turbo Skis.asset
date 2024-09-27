@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 4654591429510769051, guid: 4b3286aa69d6747c7b8d84c12b0121ee, type: 3}
   _group: 2
-  _rare: 2
+  _rare: 3
   _gadgetAnimationInfos:
   - _chunkType: 1
     _powerUsing: 1
@@ -28,6 +28,8 @@ MonoBehaviour:
   _isInfiniteDistance: 0
   _activeCount: 3
   _isInfiniteActiveCounts: 0
+  _isUsageSplited: 0
   _name: Turbo Skis
-  _sprite: {fileID: 21300000, guid: fd6cb712d7bfb4fd389415edff702a10, type: 3}
+  _bigSprite: {fileID: 0}
+  _smallSprite: {fileID: 0}
   _description: 

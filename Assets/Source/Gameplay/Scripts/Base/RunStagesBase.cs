@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,8 +18,8 @@ public abstract class RunStagesBase : MonoBehaviour
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private List<EnemyMovement> _enemies;
     [Header("Enemy Characteristics")]
-    [SerializeField] private int _minCharacteristicsDelta;
-    [SerializeField] private int _maxCharacteristicsDelta;
+    [SerializeField] private float _minCharacteristicsDelta;
+    [SerializeField] private float _maxCharacteristicsDelta;
 
     private List<CharacterMovement> _placements = new();
     private List<CharacterMovement> _finished = new();
@@ -31,6 +32,14 @@ public abstract class RunStagesBase : MonoBehaviour
     private void Awake()
     {
         _playerInfo.gameObject.SetActive(false);
+
+        if (RunSettings.EnemyGadgets != null)
+        {
+            foreach (EnemyMovement enemy in _enemies)
+            {
+                enemy.GetComponent<CharacterGadgets>().Init(RunSettings.EnemyGadgets.ToList()[_enemies.IndexOf(enemy)]);
+            }
+        }
     }
 
     private void Start()
@@ -89,9 +98,9 @@ public abstract class RunStagesBase : MonoBehaviour
 
     protected abstract void GiveReward(int placement);
 
-    private int GetEnemyUpgrades()
+    private float GetEnemyUpgrades()
     {
-        return Random.Range(_minCharacteristicsDelta, _maxCharacteristicsDelta + 1);
+        return Random.Range(_minCharacteristicsDelta, _maxCharacteristicsDelta);
     }
 
     private void CaclulatePlacements()
@@ -160,13 +169,13 @@ public abstract class RunStagesBase : MonoBehaviour
 
             if (characterMovement == _playerMovement)
             {
-                _endGame.AddPlayerFinisher(characterGadgets, placement);
+                _endGame.AddPlayerFinisher(characterGadgets);
                 GiveReward(placement);
                 StartCoroutine(LoadMenuOnClick());
             }
             else
             {
-                _endGame.AddFinisher(characterGadgets, placement);
+                _endGame.AddFinisher(characterGadgets);
             }
         }
     }

@@ -4,15 +4,16 @@ public class EndGame : MonoBehaviour
 {
     [SerializeField] private EndGamePanel _endGamePanel;
     [SerializeField] private float _showDelay = 1;
+    [SerializeField] private GameObject _characterPoint;
 
-    public void AddPlayerFinisher(CharacterGadgets characterGadgets, int placement)
+    public void AddPlayerFinisher(CharacterGadgets characterGadgets)
     {
-        PlayerData.SetPlayerPlace(placement);
-        AddFinisher(characterGadgets, placement);
+        int place = AddFinisher(characterGadgets);
+        PlayerData.SetPlayerPlace(place);
         Invoke(nameof(Show), _showDelay);
     }
 
-    public void AddFinisher(CharacterGadgets characterGadgets, int placement)
+    public int AddFinisher(CharacterGadgets characterGadgets)
     {
         Sprite gadgetSprite = null;
 
@@ -21,7 +22,7 @@ public class EndGame : MonoBehaviour
             gadgetSprite = characterGadgets.Gadget.ScriptableObject.SmallSprite;
         }
 
-        _endGamePanel.AddFinisher(characterGadgets.name, placement, gadgetSprite, characterGadgets is PlayerGadgets);
+        return _endGamePanel.AddFinisher(characterGadgets.name, gadgetSprite, characterGadgets is PlayerGadgets);
     }
 
     private void Awake()
@@ -31,6 +32,7 @@ public class EndGame : MonoBehaviour
 
     private void Show()
     {
+        if (_characterPoint != null) _characterPoint.SetActive(false);
         _endGamePanel.gameObject.SetActive(true);
     }
 }

@@ -24,7 +24,7 @@ public class GadgetReward : Reward
 
     public GadgetReward(GadgetSaveInfo saveInfo)
     {
-        _gadget = GlobalSettings.Instance.GetGadgetByName(saveInfo.GadgetName);
+        _gadget = GadgetSettings.Instance.GetGadgetByName(saveInfo.GadgetName);
         _amount = saveInfo.Amount;
     }
 

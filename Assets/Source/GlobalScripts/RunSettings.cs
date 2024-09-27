@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public static class RunSettings
 {
     public enum RunType
@@ -13,16 +15,17 @@ public static class RunSettings
     private static int[] _companyStarsRewards;
     private static int[] _rankedExperienceRewards;
     private static ChunkSettings[] _map;
+    private static Gadget[] _enemyGadgets;
     private static ICompanyBiomInfoReadOnly _biomInfo;
     private static RunType _runType;
     private static int _playersCount;
 
-    public static ChunkSettings[] Map => _map;
+    public static IReadOnlyCollection<ChunkSettings> Map => _map;
     public static MapCellsContainer MapCellsContainer => _biomInfo.Map;
     public static RunType Type => _runType;
+    public static IReadOnlyCollection<Gadget> EnemyGadgets => _enemyGadgets;
     public static int PlayersCount => _playersCount;
-    public static int ReduseUpgrades => _biomInfo.ReduseUpgrades;
-    public static Rare MaxEnemyGadget => _biomInfo.MaxEnemyGadget;
+    public static float ReduseUpgrades => _biomInfo.ReduseUpgrades;
 
     public static void SetTrainingRun(ICompanyBiomInfoReadOnly biomInfo, ChunkSettings[] map, int playersCount)
     {
@@ -30,6 +33,7 @@ public static class RunSettings
         _map = map;
         _playersCount = playersCount;
         _runType = RunType.Training;
+        SetEnemyGadgets(biomInfo);
     }
 
     public static void SetCompanyRun(ICompanyBiomInfoReadOnly biomInfo, int[] biomPlacementRewards, ChunkSettings[] map, int playersCount)
@@ -39,6 +43,7 @@ public static class RunSettings
         _companyStarsRewards = biomPlacementRewards;
         _playersCount = playersCount;
         _runType = RunType.Company;
+        SetEnemyGadgets(biomInfo);
     }
 
     public static void SetRankedRun(ICompanyBiomInfoReadOnly biomInfo, int[] rankedPlacementRewards, ChunkSettings[] map, int playersCount)
@@ -48,8 +53,9 @@ public static class RunSettings
         _rankedExperienceRewards = rankedPlacementRewards;
         _playersCount = playersCount;
         _runType = RunType.Company;
+        SetEnemyGadgets(biomInfo);
     }
-    
+
     public static void ApplyRewards(int placement)
     {
         if (_runType == RunType.Company)
@@ -76,6 +82,23 @@ public static class RunSettings
         }
 
         Reset();
+    }
+
+    private static void SetEnemyGadgets(ICompanyBiomInfoReadOnly biomInfo)
+    {
+        _enemyGadgets = new Gadget[_playersCount - 1];
+
+        for (int i = 0; i < _playersCount - 1; i++)
+        {
+            List<Rare> rares = new();
+
+            for (int gadget = (int)Rare.Common; gadget <= (int)biomInfo.MaxEnemyGadget; gadget++)
+            {
+                rares.Add((Rare)gadget);
+            }
+
+            _enemyGadgets[i] = new Gadget(GadgetSettings.Instance.GetRandomGadget(rares.ToArray()));
+        }
     }
 
     private static void Reset()

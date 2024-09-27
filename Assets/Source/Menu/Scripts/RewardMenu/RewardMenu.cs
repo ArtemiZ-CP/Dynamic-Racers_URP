@@ -132,7 +132,7 @@ public class RewardMenu : MonoBehaviour
         }
         else
         {
-            GiveReward();
+            ShowRewards();
         }
     }
 

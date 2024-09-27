@@ -13,18 +13,21 @@ public class UpgradeGadget : MonoBehaviour
     [SerializeField] private GameObject _upgradeButtonObject;
     [SerializeField] private BlickAnimation _blickAnimation;
 
-    private GlobalSettings _globalSettings;
+    private GadgetSettings _gadgetSettings;
 
     public event Action<Gadget> LevelUp;
 
-    private void Awake()
+    private GadgetSettings GadgetSettings
     {
-        _globalSettings = GlobalSettings.Instance;
-    }
+        get
+        {
+            if (_gadgetSettings == null)
+            {
+                _gadgetSettings = GadgetSettings.Instance;
+            }
 
-    private void OnEnable()
-    {
-        UpdateGadget();
+            return _gadgetSettings;
+        }
     }
 
     public void Upgrade()
@@ -34,11 +37,11 @@ public class UpgradeGadget : MonoBehaviour
         LevelUp?.Invoke(_gadgetCollectionCell.Gadget);
     }
 
-    private void UpdateGadget()
+    public void UpdateGadget()
     {
         _gadgetCollectionCell.UpdateGadget();
 
-        if (_globalSettings.TryGetGadgetsLevelProgression(_gadgetCollectionCell.Gadget, out int gadgetsToLEvelUp, out int coinsCost))
+        if (GadgetSettings.TryGetGadgetsLevelProgression(_gadgetCollectionCell.Gadget, out int gadgetsToLEvelUp, out int coinsCost))
         {
             _upgradeCost.text = $"{coinsCost}{CoinIcon}";
             bool isAbleToUpgrade = PlayerData.Coins >= coinsCost && _gadgetCollectionCell.Gadget.GetAmount() >= gadgetsToLEvelUp;

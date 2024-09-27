@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 919132149155446097, guid: eefa839d8fc854c4a9c5c602cdc75684, type: 3}
   _group: 3
-  _rare: 1
+  _rare: 2
   _gadgetAnimationInfos:
   - _chunkType: 0
     _powerUsing: 0
@@ -28,6 +28,8 @@ MonoBehaviour:
   _isInfiniteDistance: 1
   _activeCount: 2
   _isInfiniteActiveCounts: 0
+  _isUsageSplited: 0
   _name: Scooter
-  _sprite: {fileID: 21300000, guid: 7b05dbd7d453f44f48f585726abf9661, type: 3}
+  _bigSprite: {fileID: 0}
+  _smallSprite: {fileID: 0}
   _description: Forever yours... But only twice.

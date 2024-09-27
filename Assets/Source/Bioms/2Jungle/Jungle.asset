@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Jungle
   m_EditorClassIdentifier: 
   _id: 2
-  _icon: {fileID: 21300000, guid: 06abf51d3a06649959bd36021c40f3bc, type: 3}
+  _icon: {fileID: 21300000, guid: 966bb58a68b064940aad36016e3e6032, type: 3}
   _map: {fileID: 11400000, guid: eebe1d6ef7efc4f1aa180d161200b20e, type: 2}
+  _mapPresets: []
   _rewards:
   - {fileID: 11400000, guid: 8354fcb2e232b489e9d956aeb9658303, type: 2}
   - {fileID: 11400000, guid: 2c13912f9a4a64147b60e6b2b83a2f61, type: 2}
   - {fileID: 11400000, guid: 6a8dd9eee9f4343fe86e2fc6385fd5dd, type: 2}
   - {fileID: 11400000, guid: 6d2d05d637903415e8f6a0de9c16095a, type: 2}
-  _starPerReward: 10
-  _coinsRewardPerStar: 200
-  _startReduseUpgrades: 50
-  _reduseUpgradesByStar: 1
-  _maxEnemyGadget: 1
+  _starPerReward: 100
+  _coinsRewardPerStar: 0
+  _startReduseUpgrades: -4
+  _reduseUpgradesByStar: 0
+  _maxEnemyGadget: 2

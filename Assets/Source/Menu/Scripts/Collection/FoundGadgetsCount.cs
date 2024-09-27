@@ -6,11 +6,19 @@ public class FoundGadgetsCount : MonoBehaviour
     [SerializeField] private TMP_Text _text;
     [SerializeField] private string _format;
 
-    private GlobalSettings _globalSettings;
+    private GadgetSettings _gadgetSettings;
 
-    private void Awake()
+    private GadgetSettings GadgetSettings
     {
-        _globalSettings = GlobalSettings.Instance;
+        get
+        {
+            if (_gadgetSettings == null)
+            {
+                _gadgetSettings = GadgetSettings.Instance;
+            }
+
+            return _gadgetSettings;
+        }
     }
 
     private void OnEnable()
@@ -20,6 +28,6 @@ public class FoundGadgetsCount : MonoBehaviour
 
     private void SetText()
     {
-        _text.text = $"{_format}{PlayerData.PlayerGadgets.Count}/{_globalSettings.GetAllGadgets().Count}";
+        _text.text = $"{_format}{PlayerData.PlayerGadgets.Count}/{GadgetSettings.GetAllGadgets().Count}";
     }
 }

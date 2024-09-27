@@ -45,11 +45,22 @@ public class ChestReward : Reward
         List<GadgetReward> gadgetRewards, List<CharacteristicReward> characteristicRewards,
         CoinsReward coinsReward, DiamondsReward diamondsReward)
     {
-        _chestType = chestType;
-        if (gadgetRewards != null) _gadgetRewards = new List<GadgetReward>(gadgetRewards);
-        if (characteristicRewards != null) _characteristicRewards = new List<CharacteristicReward>(characteristicRewards);
-        if (coinsReward != null) _coinsReward = coinsReward;
-        if (diamondsReward != null) _diamondsReward = diamondsReward;
+        SetRewards(chestType, gadgetRewards, characteristicRewards, coinsReward, diamondsReward);
+    }
+
+    public ChestReward(ChestType chestType,
+        List<GadgetReward> gadgetRewards, List<CharacteristicReward> characteristicRewards,
+        List<CoinsReward> coinsRewards, List<DiamondsReward> diamondsRewards)
+    {
+        int coins = 0;
+        coinsRewards.ForEach(c => coins += c.Amount);
+        CoinsReward coinsReward = new(coins);
+
+        int diamonds = 0;
+        diamondsRewards.ForEach(d => diamonds += d.Amount);
+        DiamondsReward diamondsReward = new(diamonds);
+
+        SetRewards(chestType, gadgetRewards, characteristicRewards, coinsReward, diamondsReward);
     }
 
     public ChestReward(ChestSaveInfo chestSaveInfo)
@@ -143,6 +154,17 @@ public class ChestReward : Reward
         return rewards.ToArray();
     }
 
+    private void SetRewards(ChestType chestType,
+        List<GadgetReward> gadgetRewards, List<CharacteristicReward> characteristicRewards,
+        CoinsReward coinsReward, DiamondsReward diamondsReward)
+    {
+        _chestType = chestType;
+        if (gadgetRewards != null) _gadgetRewards = new List<GadgetReward>(gadgetRewards);
+        if (characteristicRewards != null) _characteristicRewards = new List<CharacteristicReward>(characteristicRewards);
+        if (coinsReward != null) _coinsReward = coinsReward;
+        if (diamondsReward != null) _diamondsReward = diamondsReward;
+    }
+
     private void SetRewards(ChestType chestType)
     {
         SetGadgetReward(chestType);
@@ -153,7 +175,7 @@ public class ChestReward : Reward
 
     private void SetGadgetReward(ChestType chestType)
     {
-        List<Gadget> gadgets = GlobalSettings.Instance.GetAllGadgets();
+        List<Gadget> gadgets = GadgetSettings.Instance.GetAllGadgets();
 
         int randomIndex = UnityEngine.Random.Range(0, gadgets.Count);
         int amount = (int)Mathf.Pow(3, (int)chestType + 1);

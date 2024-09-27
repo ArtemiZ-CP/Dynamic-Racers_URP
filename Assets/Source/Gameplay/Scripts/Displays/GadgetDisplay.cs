@@ -9,11 +9,13 @@ public class GadgetDisplay : MonoBehaviour
     [SerializeField] private GameObject _usageCount;
     [SerializeField] private TMP_Text[] _splitedUsageCountTexts;
     [SerializeField] private GameObject _splitedUsageCount;
+    [SerializeField] private GameObject _gadgetEnergyBarParent;
     [SerializeField] private RectTransform _gadgetEnergyBar;
     [SerializeField] private GameObject[] _energyBarDisplay;
 
     private PlayerGadgets _playerGadgets;
     private float _startSize;
+    private bool _isGadgetBarActive = false;
 
     private void Start()
     {
@@ -23,7 +25,7 @@ public class GadgetDisplay : MonoBehaviour
         if (_playerGadgets != null && _playerGadgets.Gadget != null)
         {
             _gadget.sprite = _playerGadgets.Gadget.ScriptableObject.SmallSprite;
-            
+
             if (_playerGadgets.Gadget.ScriptableObject.DistanceToDisactive == float.MaxValue)
             {
                 foreach (var item in _energyBarDisplay)
@@ -74,22 +76,23 @@ public class GadgetDisplay : MonoBehaviour
             SetCount(_usageCountText, _playerGadgets.UsageCounts[0]);
         }
 
-        SetEnerguBar();
+        SetEnergyBar();
     }
 
     private void SetCount(TMP_Text tmpText, int count)
     {
         if (count == int.MaxValue)
         {
-            tmpText.text = "∞";
+            _usageCount.SetActive(false);
         }
         else
         {
+            _usageCount.SetActive(true);
             tmpText.text = count.ToString();
         }
     }
 
-    private void SetEnerguBar()
+    private void SetEnergyBar()
     {
         float persent = 1;
 
@@ -105,8 +108,25 @@ public class GadgetDisplay : MonoBehaviour
             }
         }
 
-        _gadgetEnergyBar.sizeDelta = new Vector2(_startSize * persent, _gadgetEnergyBar.sizeDelta.y);
-        _gadgetEnergyBar.anchoredPosition = new Vector2(_startSize * persent / 2, _gadgetEnergyBar.anchoredPosition.y);
+        if (persent == 1 || persent == 0)
+        {
+            if (_isGadgetBarActive)
+            {
+                _gadgetEnergyBarParent.SetActive(false);
+                _isGadgetBarActive = false;
+            }
+        }
+        else
+        {
+            if (_isGadgetBarActive == false)
+            {
+                _gadgetEnergyBarParent.SetActive(true);
+                _isGadgetBarActive = true;
+            }
+
+            _gadgetEnergyBar.sizeDelta = new Vector2(_startSize * persent, _gadgetEnergyBar.sizeDelta.y);
+            _gadgetEnergyBar.anchoredPosition = new Vector2(_startSize * persent / 2, _gadgetEnergyBar.anchoredPosition.y);
+        }
     }
 
     private bool IsGadgetHasUsages()

@@ -10,9 +10,33 @@ public class BiomProgressPoint : MonoBehaviour
     [SerializeField] private Image _lastChestImage;
     [SerializeField] private TMP_Text[] _chestProgress;
 
-    public void Initialize(int progress, ChestReward.ChestType chestType, bool isLast)
+    public void Initialize(int progress, BiomReward biomReward, bool isLast)
     {
-        Sprite sprite = GlobalSettings.Instance.GetChestSprite(chestType);
+        GlobalSettings globalSettings = GlobalSettings.Instance;
+        GadgetSettings gadgetSettings = GadgetSettings.Instance;
+        Sprite sprite;
+
+        switch (biomReward.Type)
+        {
+            case BiomReward.RewardType.Coins:
+                sprite = globalSettings.CoinsSprite;
+                break;
+            case BiomReward.RewardType.Diamonds:
+                sprite = globalSettings.DiamondsSprite;
+                break;
+            case BiomReward.RewardType.Characteristics:
+                sprite = globalSettings.GetCharacteristicRareBackground(biomReward.Rare);
+                break;
+            case BiomReward.RewardType.Gadget:
+                sprite = gadgetSettings.GetGadgetMisteryRareBackground(biomReward.Rare);
+                break;
+            case BiomReward.RewardType.Chest:
+                sprite = globalSettings.GetChestSprite(biomReward.ChestType);
+                break;
+            default:
+                sprite = null;
+                break;
+        }
 
         foreach (TMP_Text text in _chestProgress)
         {

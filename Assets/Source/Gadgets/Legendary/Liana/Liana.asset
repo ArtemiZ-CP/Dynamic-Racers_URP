@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 4654591429510769051, guid: 4b3286aa69d6747c7b8d84c12b0121ee, type: 3}
   _group: 1
-  _rare: 3
+  _rare: 4
   _gadgetAnimationInfos:
   - _chunkType: 2
     _powerUsing: 2
@@ -29,10 +29,13 @@ MonoBehaviour:
     _isAccelerates: 0
     _animationTriggerName: LianaGround
   _speedMultiplier: 0.5
+  _isSpeedIncreasing: 0
   _distanceToDisactive: 50
   _isInfiniteDistance: 0
   _activeCount: 4
   _isInfiniteActiveCounts: 0
+  _isUsageSplited: 0
   _name: Liana
-  _sprite: {fileID: 21300000, guid: fd6cb712d7bfb4fd389415edff702a10, type: 3}
+  _bigSprite: {fileID: 0}
+  _smallSprite: {fileID: 0}
   _description: 

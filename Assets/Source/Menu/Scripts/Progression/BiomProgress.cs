@@ -14,7 +14,7 @@ public class BiomProgress : MonoBehaviour
 
     public void SetBiomPoints(ICompanyBiomInfoReadOnly companyBiomInfo)
     {
-        ChestRewardInfo[] rewards = companyBiomInfo.Rewards.ToArray();
+        BiomReward[] rewards = companyBiomInfo.Rewards.ToArray();
 
         if (rewards == null || rewards.Length == 0)
         {
@@ -27,7 +27,7 @@ public class BiomProgress : MonoBehaviour
         {
             if (rewards[i] != null)
             {
-                SpawnBiomPoint(rewards[i].ChestType, i, rewards.Length);
+                SpawnBiomPoint(rewards[i], i, rewards.Length);
             }
         }
 
@@ -49,11 +49,11 @@ public class BiomProgress : MonoBehaviour
         }
     }
 
-    private void SpawnBiomPoint(ChestReward.ChestType chestType, int progress, int maxProgress)
+    private void SpawnBiomPoint(BiomReward biomReward, int progress, int maxProgress)
     {
         BiomProgressPoint pointTransform = Instantiate(_biomPointPrefab, _biomParent);
         pointTransform.transform.position = GetPointPosition(progress, maxProgress);
-        pointTransform.Initialize(progress + 1, chestType, progress == maxProgress - 1);
+        pointTransform.Initialize(progress + 1, biomReward, progress == maxProgress - 1);
     }
 
     private Vector3 GetPointPosition(int progress, int maxProgress)

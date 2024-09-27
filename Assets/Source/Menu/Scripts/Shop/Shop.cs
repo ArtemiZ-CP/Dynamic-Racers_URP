@@ -144,11 +144,37 @@ public class Shop : MonoBehaviour
 
     private IAPManager _iapManager;
     private GlobalSettings _globalSettings;
+    private GadgetSettings _gadgetSettings;
     private System.Random _random;
+
+    private GlobalSettings GlobalSettings
+    {
+        get
+        {
+            if (_globalSettings == null)
+            {
+                _globalSettings = GlobalSettings.Instance;
+            }
+
+            return _globalSettings;
+        }
+    }
+
+    private GadgetSettings GadgetSettings
+    {
+        get
+        {
+            if (_gadgetSettings == null)
+            {
+                _gadgetSettings = GadgetSettings.Instance;
+            }
+
+            return _gadgetSettings;
+        }
+    }
 
     private void Awake()
     {
-        _globalSettings = GlobalSettings.Instance;
         _iapManager = GetComponent<IAPManager>();
     }
 
@@ -259,7 +285,7 @@ public class Shop : MonoBehaviour
         foreach (ShopPermanentChestOffer offer in _chestOffers)
         {
             ChestShopReward chestReward = new(offer.ChestType);
-            offer.Offer.SetOffer(offer.Name, offer.Price, offer.Currency, _globalSettings.GetChestSprite(offer.ChestType), chestReward);
+            offer.Offer.SetOffer(offer.Name, offer.Price, offer.Currency, GlobalSettings.GetChestSprite(offer.ChestType), chestReward);
         }
 
         foreach (ShopPermanentUSDOffer offer in _diamondsOffers)
@@ -390,7 +416,7 @@ public class Shop : MonoBehaviour
 
     private void SetFreeGadgetOffer(int offerIndex)
     {
-        GadgetScriptableObject gadget = _globalSettings.GetRandomGadget(Rare.Common, _random);
+        GadgetScriptableObject gadget = GadgetSettings.GetRandomGadget(Rare.Common, _random);
         GadgetOfferInfo gadgetOfferInfo = _gadgetOfferInfo.First(g => g.Rare == gadget.Rare);
         int gadgetsAmount = gadgetOfferInfo.GetGadgetsCount(isOfferFree: true, _random, out _, out _);
         GadgetShopReward gadgetShopReward = new(gadget, gadgetsAmount);
@@ -400,7 +426,7 @@ public class Shop : MonoBehaviour
 
     private void SetADSGadgetOffer(int offerIndex)
     {
-        GadgetScriptableObject gadget = _globalSettings.GetRandomGadget(Rare.Common, _random);
+        GadgetScriptableObject gadget = GadgetSettings.GetRandomGadget(Rare.Common, _random);
         GadgetOfferInfo gadgetOfferInfo = _gadgetOfferInfo.First(g => g.Rare == gadget.Rare);
         int gadgetsAmount = gadgetOfferInfo.GetGadgetsCount(isOfferFree: true, _random, out _, out _);
         GadgetShopReward gadgetShopReward = new(gadget, gadgetsAmount);
@@ -410,7 +436,7 @@ public class Shop : MonoBehaviour
 
     private void SetGadgetOffer(int offerIndex, Rare rare)
     {
-        GadgetScriptableObject gadget = _globalSettings.GetRandomGadget(rare, _random);
+        GadgetScriptableObject gadget = GadgetSettings.GetRandomGadget(rare, _random);
         GadgetOfferInfo gadgetOfferInfo = _gadgetOfferInfo.First(g => g.Rare == gadget.Rare);
         int gadgetsAmount = gadgetOfferInfo.GetGadgetsCount(isOfferFree: false, _random, out int price, out ShopItem.Currency currency);
         GadgetShopReward gadgetShopReward = new(gadget, gadgetsAmount);
@@ -420,7 +446,7 @@ public class Shop : MonoBehaviour
 
     private void SetChestOffer(int offerIndex, int price, ShopItem.Currency currency, ChestReward.ChestType chestType)
     {
-        Sprite chestSprite = _globalSettings.GetChestSprite(chestType);
+        Sprite chestSprite = GlobalSettings.GetChestSprite(chestType);
         ChestShopReward chestShopReward = new(chestType);
         _dailyOffers[offerIndex].SetOffer($"{chestType} Chest", price, currency, chestSprite, chestShopReward, isInfinityToSell: false);
     }

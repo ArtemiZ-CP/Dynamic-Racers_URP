@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class LoadAnimation : MonoBehaviour
     [Header("Players load")]
     [SerializeField] private float _playersLoadDelay;
     [SerializeField] private float _gameLoadDelay;
-    [SerializeField] private GameObject _playerPrefab;
+    [SerializeField] private LoadingPlayer _playerPrefab;
     [SerializeField] private RectTransform _viewport;
     [SerializeField] private RectTransform _playersParent;
 
@@ -53,7 +54,16 @@ public class LoadAnimation : MonoBehaviour
         for (int i = 0; i < playersCount; i++)
         {
             yield return delay;
-            Instantiate(_playerPrefab, _playersParent);
+            LoadingPlayer loadingPlayer = Instantiate(_playerPrefab, _playersParent);
+
+            if (i == 0)
+            {
+                loadingPlayer.Initialize(RunSettings.PlayerGadget, isMainPlayer: true);
+            }
+            else
+            {
+                loadingPlayer.Initialize(RunSettings.EnemyGadgets.ToList()[i - 1], isMainPlayer: false);
+            }
         }
 
         yield return lastDelay;

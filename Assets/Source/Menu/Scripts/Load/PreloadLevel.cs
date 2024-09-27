@@ -14,7 +14,7 @@ public class PreloadLevel : MonoBehaviour
         _loadAnimation = GetComponent<LoadAnimation>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
         StartCoroutine(Preload());
     }

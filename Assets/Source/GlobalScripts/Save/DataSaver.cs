@@ -13,32 +13,40 @@ public static class DataSaver
 
     public static void SaveData()
     {
-        SaveData saveData = new()
+        SaveData saveData = null;
+
+        try
         {
-            Rewards = SaveRewards(PlayerData.Rewards.ToList()),
-            RunRewards = SaveRewards(PlayerData.RunRewards.ToList()),
-            PlayerPlace = PlayerData.PlayerPlace,
-            PlayerGadgets = PlayerData.PlayerGadgets.Select(gadget => new PlayerGadgetSaveInfo(gadget)).ToArray(),
-            OpeningChests = PlayerData.OpeningChests.Select(openingChest => new OpeningChestSaveInfo(openingChest)).ToArray(),
-            CompanyBiomInfos = PlayerData.CompanyBiomInfos.Select(companyBiomInfo => new CompanyBiomSaveInfo(companyBiomInfo)).ToArray(),
-            Experience = PlayerData.Experience,
-            Level = PlayerData.Level,
-            Coins = PlayerData.Coins,
-            Diamonds = PlayerData.Diamonds,
-            Tickets = PlayerData.Tickets,
-            PlayerRace = PlayerData.PlayerRace,
-            PlayerDive = PlayerData.PlayerDive,
-            PlayerAscend = PlayerData.PlayerAscend,
-            PlayerGlide = PlayerData.PlayerGlide,
-            TrainingsPassed = PlayerData.PassedTrainings,
-            FPS = PlayerData.FPS,
-            IsMusicOn = PlayerData.IsMusicOn,
-            IsSoundsOn = PlayerData.IsSoundsOn,
-            IsHapticOn = PlayerData.IsHapticOn,
-            LastTimeBattlePassBought = new DateToSave { DateTimeValue = PlayerData.LastTimeBattlePassBought },
-            LastUpdateShopDay = new DateToSave { DateTimeValue = PlayerData.LastUpdateShopDay },
-            ShopRandomSeed = PlayerData.ShopRandomSeed
-        };
+            saveData = new()
+            {
+                Rewards = SaveRewards(PlayerData.Rewards.ToList()),
+                RunRewards = SaveRewards(PlayerData.RunRewards.ToList()),
+                PlayerPlace = PlayerData.PlayerPlace,
+                PlayerGadgets = PlayerData.PlayerGadgets.Select(gadget => new PlayerGadgetSaveInfo(gadget)).ToArray(),
+                OpeningChests = PlayerData.OpeningChests.Select(openingChest => new OpeningChestSaveInfo(openingChest)).ToArray(),
+                CompanyBiomInfos = PlayerData.CompanyBiomInfos.Select(companyBiomInfo => new CompanyBiomSaveInfo(companyBiomInfo)).ToArray(),
+                Experience = PlayerData.Experience,
+                Level = PlayerData.Level,
+                Coins = PlayerData.Coins,
+                Diamonds = PlayerData.Diamonds,
+                Tickets = PlayerData.Tickets,
+                PlayerRace = PlayerData.PlayerRace,
+                PlayerDive = PlayerData.PlayerDive,
+                PlayerAscend = PlayerData.PlayerAscend,
+                PlayerGlide = PlayerData.PlayerGlide,
+                TrainingsPassed = PlayerData.PassedTrainings,
+                FPS = PlayerData.FPS,
+                IsMusicOn = PlayerData.IsMusicOn,
+                IsSoundsOn = PlayerData.IsSoundsOn,
+                IsHapticOn = PlayerData.IsHapticOn,
+                LastTimeBattlePassBought = new DateToSave { DateTimeValue = PlayerData.LastTimeBattlePassBought },
+                LastUpdateShopDay = new DateToSave { DateTimeValue = PlayerData.LastUpdateShopDay },
+                ShopRandomSeed = PlayerData.ShopRandomSeed
+            };
+        }
+        catch
+        {
+        }
 
         Save(saveData);
     }
@@ -51,7 +59,7 @@ public static class DataSaver
         {
             Rewards = null,
             RunRewards = null,
-            PlayerGadgets = null,
+            PlayerGadgets = new PlayerGadgetSaveInfo[0],
             OpeningChests = new OpeningChestSaveInfo[4],
             CompanyBiomInfos = null,
             Experience = 0,
@@ -59,10 +67,10 @@ public static class DataSaver
             Coins = 0,
             Diamonds = 0,
             Tickets = globalSettings.MaxTickets,
-            PlayerRace = 1,
-            PlayerDive = 1,
-            PlayerAscend = 1,
-            PlayerGlide = 1,
+            PlayerRace = 0,
+            PlayerDive = 0,
+            PlayerAscend = 0,
+            PlayerGlide = 0,
             TrainingsPassed = 0,
             FPS = globalSettings.MinFPS,
             IsMusicOn = true,
@@ -132,6 +140,11 @@ public static class DataSaver
 
     private static RewardSaveInfo[] SaveRewards(List<Reward> rewards)
     {
+        if (rewards == null)
+        {
+            return null;
+        }
+
         RewardSaveInfo[] rewardSaveInfo = new RewardSaveInfo[rewards.Count];
 
         for (int i = 0; i < rewards.Count; i++)

@@ -13,18 +13,23 @@ MonoBehaviour:
   m_Name: Magic Hot Pepper
   m_EditorClassIdentifier: 
   _prefab: {fileID: 4654591429510769051, guid: 4b3286aa69d6747c7b8d84c12b0121ee, type: 3}
-  _rare: 3
+  _group: 0
+  _rare: 4
   _gadgetAnimationInfos:
   - _chunkType: 0
+    _powerUsing: 0
     _startDelay: 2
     _speedMultiplierOnDelay: -0.5
     _isAccelerates: 1
     _animationTriggerName: MagicHotPepperGround
   _speedMultiplier: 1
+  _isSpeedIncreasing: 0
   _distanceToDisactive: 100
   _isInfiniteDistance: 0
   _activeCount: 1
   _isInfiniteActiveCounts: 0
+  _isUsageSplited: 0
   _name: Magic Hot Pepper
-  _sprite: {fileID: 21300000, guid: fd6cb712d7bfb4fd389415edff702a10, type: 3}
+  _bigSprite: {fileID: 0}
+  _smallSprite: {fileID: 0}
   _description: It's gonna be hot!

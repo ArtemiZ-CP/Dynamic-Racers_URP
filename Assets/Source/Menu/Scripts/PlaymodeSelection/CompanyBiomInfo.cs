@@ -7,11 +7,11 @@ public interface ICompanyBiomInfoReadOnly
     public int ID { get; }
     public Sprite BiomSprite { get; }
     public MapCellsContainer Map { get; }
-    public ReadOnlyCollection<ChestRewardInfo> Rewards { get; }
+    public ReadOnlyCollection<BiomReward> Rewards { get; }
     public CoinsReward RewardsPerStar { get; }
     public string BiomName { get; }
     public int CurrentStars { get; }
-    public int ReduseUpgrades { get; }
+    public float ReduseUpgrades { get; }
     public Rare MaxEnemyGadget { get; }
 }
 
@@ -20,22 +20,22 @@ public class CompanyBiomInfo : ICompanyBiomInfoReadOnly
     private readonly int _id;
     private readonly Sprite _biomSprite;
     private readonly MapCellsContainer _map;
-    private readonly ChestRewardInfo[] _rewards;
+    private readonly BiomReward[] _rewards;
     private readonly CoinsReward _rewardsPerStar;
     private readonly string _biomName;
     private int _currentStars;
-    private int _startReduseUpgrades;
-    private int _reduseUpgradesByStar;
+    private float _startReduseUpgrades;
+    private float _reduseUpgradesByStar;
     private Rare _maxEnemyGadget = Rare.Legendary;
 
     public int ID => _id;
     public Sprite BiomSprite => _biomSprite;
     public MapCellsContainer Map => _map;
-    public ReadOnlyCollection<ChestRewardInfo> Rewards => new(_rewards);
+    public ReadOnlyCollection<BiomReward> Rewards => new(_rewards);
     public CoinsReward RewardsPerStar => _rewardsPerStar;
     public string BiomName => _biomName;
     public int CurrentStars => _currentStars;
-    public int ReduseUpgrades => _startReduseUpgrades + _reduseUpgradesByStar * _currentStars;
+    public float ReduseUpgrades => _startReduseUpgrades + _reduseUpgradesByStar * _currentStars;
     public Rare MaxEnemyGadget => _maxEnemyGadget;
 
     public CompanyBiomInfo(Biom biom)
@@ -73,11 +73,11 @@ public class CompanyBiomInfo : ICompanyBiomInfoReadOnly
             {
                 if (_rewards[_currentStars + i] != null)
                 {
-                    rewards.Add(_rewards[_currentStars + i].GetRewards());
+                    rewards.AddRange(_rewards[_currentStars + i].GetRewards());
                 }
-            }
 
-            rewards.Add(_rewardsPerStar);
+                rewards.Add(_rewardsPerStar);
+            }
         }
 
         _currentStars += stars;

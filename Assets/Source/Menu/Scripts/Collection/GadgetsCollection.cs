@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,18 +9,28 @@ public class GadgetsCollection : MonoBehaviour
     [SerializeField] private TitleCellLine _titleCellLinePrefab;
     [SerializeField] private GadgetCollectionLine _gadgetCollectionLinePrefab;
     [SerializeField] private GameObject _emptyLine;
+    [SerializeField] private UpgradePanel _upgradePanel;
 
-    private GlobalSettings _globalSettings;
+    private GadgetSettings _gadgetSettings;
     private List<GadgetCollectionCell> _gadgetCells = new();
 
-    private void Awake()
+    private GadgetSettings GadgetSettings
     {
-        _globalSettings = GlobalSettings.Instance;
+        get
+        {
+            if (_gadgetSettings == null)
+            {
+                _gadgetSettings = GadgetSettings.Instance;
+            }
+
+            return _gadgetSettings;
+        }
     }
 
     private void OnEnable()
     {
         Initialize();
+        _upgradePanel.UpgradeGadget.LevelUp += UpdateCollection;
     }
 
     private void OnDisable()
@@ -28,6 +39,13 @@ public class GadgetsCollection : MonoBehaviour
         {
             gadgetCell.OnClick -= OnClickGadget;
         }
+
+        _upgradePanel.UpgradeGadget.LevelUp -= UpdateCollection;
+    }
+
+    private void UpdateCollection(Gadget gadget)
+    {
+        Initialize();
     }
 
     private void Initialize()
@@ -43,15 +61,22 @@ public class GadgetsCollection : MonoBehaviour
 
     private void OnClickGadget(GadgetCollectionCell gadgetCell)
     {
-        if (gadgetCell.IsFound)
+        OpenGadgetMenu(gadgetCell.Gadget);
+    }
+
+    private void OpenGadgetMenu(Gadget gadget)
+    {
+        for (int i = 0; i < Enum.GetNames(typeof(ChunkType)).Length; i++)
         {
-            if (gadgetCell.Gadget.TryLevelUp())
+            GadgetChunkInfo gadgetChunkInfo = gadget.ScriptableObject.GetChunkInfo((ChunkType)(i));
+
+            if (gadgetChunkInfo != null)
             {
-                gadgetCell.UpdateGadget();
+                _upgradePanel.Active(gadget.ScriptableObject, gadgetChunkInfo);
             }
         }
     }
-
+    
     private void Clear()
     {
         _gadgetCells.Clear();
@@ -66,7 +91,7 @@ public class GadgetsCollection : MonoBehaviour
     {
         AddTitle();
 
-        int allGadgetsCount = _globalSettings.GetAllGadgets().Count;
+        int allGadgetsCount = GadgetSettings.GetAllGadgets().Count;
 
         List<Gadget> playerGadgets = PlayerData.PlayerGadgets.ToList();
 
@@ -126,7 +151,7 @@ public class GadgetsCollection : MonoBehaviour
     {
         int notFoundIndex = -1;
 
-        List<Gadget> allGadgets = _globalSettings.GetAllGadgets();
+        List<Gadget> allGadgets = GadgetSettings.GetAllGadgets();
 
         for (int i = 0; i < allGadgets.Count; i++)
         {

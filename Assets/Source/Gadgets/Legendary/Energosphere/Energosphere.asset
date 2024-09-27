@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 6282605191327768729, guid: 4f7ae03f88f91fd468d9dca965328073, type: 3}
   _group: 0
-  _rare: 3
+  _rare: 4
   _gadgetAnimationInfos:
   - _chunkType: 0
     _powerUsing: 0
@@ -42,5 +42,6 @@ MonoBehaviour:
   _isInfiniteActiveCounts: 0
   _isUsageSplited: 0
   _name: Energosphere
-  _sprite: {fileID: 21300000, guid: fd6cb712d7bfb4fd389415edff702a10, type: 3}
+  _bigSprite: {fileID: 0}
+  _smallSprite: {fileID: 0}
   _description: 

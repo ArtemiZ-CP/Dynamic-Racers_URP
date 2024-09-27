@@ -8,7 +8,7 @@ public class AddGadgets : MonoBehaviour
     [ContextMenu("Give Gadget")]
     public void GiveGadget()
     {
-        foreach (Gadget gadget in GlobalSettings.Instance.GetAllGadgets())
+        foreach (Gadget gadget in GadgetSettings.Instance.GetAllGadgets())
         {
             PlayerData.AddGadget(new Gadget(gadget.ScriptableObject, _gadgetCount));
         }
@@ -18,14 +18,14 @@ public class AddGadgets : MonoBehaviour
     {
         if (int.TryParse(inputField.text, out int gadgetCount))
         {
-            foreach (Gadget gadget in GlobalSettings.Instance.GetAllGadgets())
+            foreach (Gadget gadget in GadgetSettings.Instance.GetAllGadgets())
             {
                 PlayerData.AddGadget(new Gadget(gadget.ScriptableObject, gadgetCount));
             }
         }
         else
         {
-            foreach (Gadget gadget in GlobalSettings.Instance.GetAllGadgets())
+            foreach (Gadget gadget in GadgetSettings.Instance.GetAllGadgets())
             {
                 PlayerData.AddGadget(new Gadget(gadget));
             }
