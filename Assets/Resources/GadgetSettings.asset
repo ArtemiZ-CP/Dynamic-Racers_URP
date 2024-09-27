@@ -45,4 +45,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d3f26c5999c8b4e77a1bb3dd31f0af38, type: 3}
   - {fileID: 21300000, guid: 75126d6798f7144a78c560ebd74942ce, type: 3}
   - {fileID: 21300000, guid: 6fd9ea4d23f8e4a0da06316f1e36a57d, type: 3}
-  _gadgetMisteryRareBackgrounds: []
+  _gadgetMisteryRareBackgrounds:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
