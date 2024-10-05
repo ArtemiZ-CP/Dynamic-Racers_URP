@@ -12,6 +12,10 @@ public class MapEditor : MonoBehaviour
 	[SerializeField] private MapCellsContainer _mapCellsContainer;
 	[SerializeField] private int _playersCount;
 
+    private FinishMeshDrawer _finishMeshDrawer;
+
+	public void ActiveFinishParticles() => _finishMeshDrawer.ActiveFinishParticles();
+
 	[ContextMenu("Respawn Chunks")]
 	public void DebugRespawnChunks()
 	{
@@ -25,12 +29,12 @@ public class MapEditor : MonoBehaviour
 	private void Start()
 	{
 		int playersCount;
-		List<ChunkSettings> map;
+		ChunkSettings[] map;
 		MapCellsContainer mapCellsContainer;
 
 		if (RunSettings.Map != null)
 		{
-			map = RunSettings.Map.ToList();
+			map = RunSettings.Map.ToArray();
 			playersCount = RunSettings.PlayersCount;
 			mapCellsContainer = RunSettings.MapCellsContainer;
 		}
@@ -44,14 +48,15 @@ public class MapEditor : MonoBehaviour
 		RespawnChunks(playersCount, map, mapCellsContainer);
 	}
 
-	private void RespawnChunks(int linesCount, List<ChunkSettings> map, MapCellsContainer mapCellsContainer)
+	private void RespawnChunks(int linesCount, ChunkSettings[] map, MapCellsContainer mapCellsContainer)
 	{
 		linesCount += 2 * GlobalSettings.Instance.AdditionalRoadWidht;
 		DestroyAll();
 		SpawnChunks(linesCount, map, mapCellsContainer);
+		RenderSettings.skybox = mapCellsContainer.Skybox;
 	}
 
-	private void SpawnChunks(int linesCount, List<ChunkSettings> map, MapCellsContainer mapCellsContainer)
+	private void SpawnChunks(int linesCount, ChunkSettings[] map, MapCellsContainer mapCellsContainer)
 	{
 		foreach (ChunkSettings chunkSettings in map)
 		{
@@ -78,7 +83,7 @@ public class MapEditor : MonoBehaviour
 
 			bool emptyBefore;
 			bool emptyAfter;
-			int index = map.IndexOf(chunkSettings);
+			int index = System.Array.IndexOf(map, chunkSettings);
 
 			if (index == 0 || map[index - 1].Type == ChunkType.Fly)
 			{
@@ -89,7 +94,7 @@ public class MapEditor : MonoBehaviour
 				emptyBefore = false;
 			}
 			
-			if (index == map.Count - 1 || map[index + 1].Type == ChunkType.Fly || map[index].Type == ChunkType.Wall)
+			if (index == map.Length - 1 || map[index + 1].Type == ChunkType.Fly || map[index].Type == ChunkType.Wall)
 			{
 				emptyAfter = true;
 			}
@@ -99,6 +104,11 @@ public class MapEditor : MonoBehaviour
 			}
 
 			chunk.SetupChunk(size, mapCellsContainer, emptyBefore, emptyAfter);
+
+			if (chunk is FinishChunk finishChunk)
+			{
+				_finishMeshDrawer = finishChunk.GetComponent<FinishMeshDrawer>();
+			}
 		}
 	}
 

@@ -18,7 +18,7 @@ public class SpeedGameBase : MonoBehaviour
     [SerializeField] private string _startTextOnNotTouch;
     [SerializeField] private Color _startTextColorOnNotTouch;
 
-    public event Action<float, bool> EndedSpeedGame;
+    public event Action<float, SpeedPower.Type> EndedSpeedGame;
     public event Action<string, Color> ShowStartText;
 
     public PlayerMovement PlayerMovement => _playerMovement;
@@ -33,12 +33,13 @@ public class SpeedGameBase : MonoBehaviour
     private Vector3 _startPlayerPosition;
     private bool _isGameActive;
     private float _speedMultiplier;
-    private bool _goodStart;
+    private SpeedPower.Type _partIndex;
     private string _startText;
     private Color _startTextColor;
     private float _startTouchPositionY;
     private float _touchOffset;
     private bool _fullCharge = false;
+    private int _fps;
 
     protected virtual void Awake()
     {
@@ -63,10 +64,10 @@ public class SpeedGameBase : MonoBehaviour
         ProcessTouch();
     }
 
-    public float GetRandomSpeedMultiplier(out bool goodStart)
+    public float GetRandomSpeedMultiplier(out SpeedPower.Type powerType)
     {
         SpeedPower speedPower = _speedPowers[UnityEngine.Random.Range(0, _speedPowers.Count)];
-        goodStart = speedPower.GoodStart;
+        powerType = speedPower.PowerType;
         return speedPower.SpeedMultiplier;
     }
 
@@ -147,7 +148,7 @@ public class SpeedGameBase : MonoBehaviour
     protected void StartRunning()
     {
         HideHint();
-        EndedSpeedGame?.Invoke(_speedMultiplier, _goodStart);
+        EndedSpeedGame?.Invoke(_speedMultiplier, _partIndex);
         ShowStartText?.Invoke(_startText, _startTextColor);
     }
 
@@ -184,7 +185,7 @@ public class SpeedGameBase : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    private float GetMultiplierRotation(float rotationZ, out bool goodStart, out string startText, out Color startTextColor)
+    private float GetMultiplierRotation(float rotationZ, out SpeedPower.Type powerType, out string startText, out Color startTextColor)
     {
         foreach (SpeedPower speedPower in _speedPowers)
         {
@@ -192,7 +193,7 @@ public class SpeedGameBase : MonoBehaviour
             {
                 startText = speedPower.StartText;
                 startTextColor = speedPower.StartTextColor;
-                goodStart = speedPower.GoodStart;
+                powerType = speedPower.PowerType;
                 return speedPower.SpeedMultiplier;
             }
         }
@@ -235,6 +236,6 @@ public class SpeedGameBase : MonoBehaviour
             yield return null;
         }
 
-        _speedMultiplier = GetMultiplierRotation(currentPositionX, out _goodStart, out _startText, out _startTextColor);
+        _speedMultiplier = GetMultiplierRotation(currentPositionX, out _partIndex, out _startText, out _startTextColor);
     }
 }

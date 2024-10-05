@@ -34258,7 +34258,7 @@ GameObject:
   - component: {fileID: 559900368479999024}
   - component: {fileID: 6322070086300369953}
   m_Layer: 0
-  m_Name: FX_8
+  m_Name: EnergySphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

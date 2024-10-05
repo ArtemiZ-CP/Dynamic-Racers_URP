@@ -28,3 +28,4 @@ MonoBehaviour:
     type: 2}
   _finishCellsContainer: {fileID: 11400000, guid: de57bf185f49d4ba5a94da3513bc5070,
     type: 2}
+  _skybox: {fileID: 2100000, guid: 5392f3603dd73486cb7d829f697425c7, type: 2}

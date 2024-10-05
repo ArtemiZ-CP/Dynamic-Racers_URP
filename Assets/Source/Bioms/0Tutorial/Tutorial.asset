@@ -15,7 +15,10 @@ MonoBehaviour:
   _id: 0
   _icon: {fileID: 21300000, guid: df32e52ad95244a90a063941f305c5b0, type: 3}
   _map: {fileID: 11400000, guid: e5b89b49a50424b18a17c198a12baceb, type: 2}
+  _randomMap: 1
   _mapPresets: []
+  _mapGenerationSettings: {fileID: 11400000, guid: d38ac1783ebc5436aaa475b2b50c9f46,
+    type: 2}
   _rewards:
   - {fileID: 11400000, guid: ae97558c6423c44f6a26a4dbdf8b1031, type: 2}
   - {fileID: 11400000, guid: 5904808131cab497c8fd78ae0672bc12, type: 2}

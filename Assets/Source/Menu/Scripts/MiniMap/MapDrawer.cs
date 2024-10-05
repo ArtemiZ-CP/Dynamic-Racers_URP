@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MapDrawer : MonoBehaviour
 {
-    [SerializeField] private MapPreset _mapPreset;
+    [SerializeField] private ChunkSettings[] _mapPreset;
     [SerializeField] private RectTransform _tilesParent;
     [SerializeField] private Vector2 _tileSize;
     [SerializeField] private Vector2 _mapOffset;
@@ -33,7 +33,17 @@ public class MapDrawer : MonoBehaviour
 
     public void DrawMap(MapPreset mapPreset)
     {
-        _mapPreset = mapPreset;
+        _mapPreset = mapPreset.Map;
+
+        if (isActiveAndEnabled)
+        {
+            DrawMap();
+        }
+    }
+
+    public void DrawMap(ChunkSettings[] chunkSettings)
+    {
+        _mapPreset = chunkSettings;
 
         if (isActiveAndEnabled)
         {
@@ -66,10 +76,10 @@ public class MapDrawer : MonoBehaviour
     {
         Vector2Int position = Vector2Int.zero;
 
-        _mapPreset.Map.ForEach(chunkSettings =>
+        foreach (var chunkSettings in _mapPreset)
         {
             position += SpawnChunk(position, chunkSettings);
-        });
+        }
     }
 
     private void CenterMap()
@@ -235,8 +245,9 @@ public class MapDrawer : MonoBehaviour
 
     private RectTransform GetTilePrefab(List<MapTile> mapTiles, ChunkType chunkType, ChunkSettings chunkSettings)
     {
-        ChunkType prewievChunkType = _mapPreset.Map[Mathf.Max(_mapPreset.Map.IndexOf(chunkSettings) - 1, 0)].Type;
-        ChunkType nextChunkType = _mapPreset.Map[Mathf.Min(_mapPreset.Map.IndexOf(chunkSettings) + 1, _mapPreset.Map.Count - 1)].Type;
+        int index = System.Array.IndexOf(_mapPreset, chunkSettings);
+        ChunkType prewievChunkType = _mapPreset[Mathf.Max(index - 1, 0)].Type;
+        ChunkType nextChunkType = _mapPreset[Mathf.Min(index + 1, _mapPreset.Length - 1)].Type;
 
         RectTransform tile;
 

@@ -1,5 +1,9 @@
 public class FinishChunk : Chunk
 {
+	public void ActiveFinishParticles()
+	{
+		
+	}
 
 	public override int SetChunkLength(int length)
 	{

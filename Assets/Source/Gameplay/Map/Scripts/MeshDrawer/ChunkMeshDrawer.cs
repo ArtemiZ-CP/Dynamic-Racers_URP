@@ -143,7 +143,7 @@ public abstract class ChunkMeshDrawer : MonoBehaviour
 		}
 	}
 
-	protected void SpawnCell(GameObject objectToSpawn, Vector3 position, Vector3 scaleMultiplier, bool emptyBefore, bool emptyAfter)
+	protected GameObject SpawnCell(GameObject objectToSpawn, Vector3 position, Vector3 scaleMultiplier, bool emptyBefore, bool emptyAfter)
 	{
 		if (scaleMultiplier.z < 0)
 		{
@@ -156,6 +156,8 @@ public abstract class ChunkMeshDrawer : MonoBehaviour
 		{
 			tileEditor.SetupTile(emptyBefore, emptyAfter);
 		}
+
+		return gameObject;
 	}
 
 	private Vector3 CellToWorldPosition(Vector3 position)

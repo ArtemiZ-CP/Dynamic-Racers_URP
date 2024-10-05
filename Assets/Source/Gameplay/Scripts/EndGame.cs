@@ -5,6 +5,9 @@ public class EndGame : MonoBehaviour
     [SerializeField] private EndGamePanel _endGamePanel;
     [SerializeField] private float _showDelay = 1;
     [SerializeField] private GameObject _characterPoint;
+    [SerializeField] private MapEditor _mapEditor;
+
+    private bool _particelsActive = false;
 
     public void AddPlayerFinisher(CharacterGadgets characterGadgets)
     {
@@ -15,6 +18,12 @@ public class EndGame : MonoBehaviour
 
     public int AddFinisher(CharacterGadgets characterGadgets)
     {
+        if (_particelsActive == false)
+        {
+            _mapEditor.ActiveFinishParticles();
+            _particelsActive = true;
+        }
+
         Sprite gadgetSprite = null;
 
         if (characterGadgets.Gadget != null)

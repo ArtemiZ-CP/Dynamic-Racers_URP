@@ -5,6 +5,7 @@ using UnityEngine;
 public class ChunkSettings
 {
 	[SerializeField] private ChunkType _chunkType;
+
 	[Min(3)] public int Length;
 
 	public ChunkType Type => _chunkType;

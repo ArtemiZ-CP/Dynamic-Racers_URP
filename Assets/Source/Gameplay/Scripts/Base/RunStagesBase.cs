@@ -32,18 +32,11 @@ public abstract class RunStagesBase : MonoBehaviour
     private void Awake()
     {
         _playerInfo.gameObject.SetActive(false);
-
-        if (RunSettings.EnemyGadgets != null)
-        {
-            foreach (EnemyMovement enemy in _enemies)
-            {
-                enemy.GetComponent<CharacterGadgets>().Init(RunSettings.EnemyGadgets.ToList()[_enemies.IndexOf(enemy)]);
-            }
-        }
     }
 
     private void Start()
     {
+        SetEnemyGadgets();
         StartCoroutine(StartPrewiev());
     }
 
@@ -98,6 +91,24 @@ public abstract class RunStagesBase : MonoBehaviour
 
     protected abstract void GiveReward(int placement);
 
+    private void SetEnemyGadgets()
+    {
+        if (RunSettings.EnemyGadgets == null)
+        {
+            return;
+        }
+
+        Gadget[] gadgets = RunSettings.EnemyGadgets.ToArray();
+
+        for (int i = 0; i < _enemies.Count; i++)
+        {
+            CharacterGadgets enemyGadget = _enemies[i].GetComponent<CharacterGadgets>();
+            CharacterAnimation characterAnimation = enemyGadget.GetComponent<CharacterAnimation>();
+            enemyGadget.Init(gadgets[i]);
+            characterAnimation.Initialize(gadgets[i]);
+        }
+    }
+
     private float GetEnemyUpgrades()
     {
         return Random.Range(_minCharacteristicsDelta, _maxCharacteristicsDelta);
@@ -129,7 +140,7 @@ public abstract class RunStagesBase : MonoBehaviour
         }
     }
 
-    private void StartRunning(float multiplier, bool goodStart)
+    private void StartRunning(float multiplier, SpeedPower.Type partIndex)
     {
         _cameraSwitcher.SwitchToGameplayCamera();
         _speedGame.gameObject.SetActive(false);
@@ -139,7 +150,7 @@ public abstract class RunStagesBase : MonoBehaviour
         List<Chunk> chunks = _map.Chunks;
 
         _playerMovement.StartMove(chunks, multiplier);
-        _playerMovement.GetComponent<CharacterAnimation>().LaunchCharacter(goodStart, _speedGame.FullCharge);
+        _playerMovement.GetComponent<CharacterAnimation>().LaunchCharacter(partIndex, _speedGame.FullCharge);
 
         if (_enemies.Count > 0)
         {
@@ -150,8 +161,8 @@ public abstract class RunStagesBase : MonoBehaviour
                     GetEnemyUpgrades(),
                     GetEnemyUpgrades(),
                     GetEnemyUpgrades());
-                enemy.StartMove(chunks, _speedGame.GetRandomSpeedMultiplier(out goodStart));
-                enemy.GetComponent<CharacterAnimation>().LaunchCharacter(goodStart, true);
+                enemy.StartMove(chunks, _speedGame.GetRandomSpeedMultiplier(out partIndex));
+                enemy.GetComponent<CharacterAnimation>().LaunchCharacter(partIndex, true);
             }
         }
     }

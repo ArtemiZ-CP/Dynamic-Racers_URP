@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
@@ -13,42 +14,30 @@ public interface ICompanyBiomInfoReadOnly
     public int CurrentStars { get; }
     public float ReduseUpgrades { get; }
     public Rare MaxEnemyGadget { get; }
+    public Func<ChunkSettings[]> GetMapPreset { get; }
 }
 
 public class CompanyBiomInfo : ICompanyBiomInfoReadOnly
 {
     private readonly int _id;
-    private readonly Sprite _biomSprite;
-    private readonly MapCellsContainer _map;
-    private readonly BiomReward[] _rewards;
-    private readonly CoinsReward _rewardsPerStar;
-    private readonly string _biomName;
+    private readonly Biom _biom;
     private int _currentStars;
-    private float _startReduseUpgrades;
-    private float _reduseUpgradesByStar;
-    private Rare _maxEnemyGadget = Rare.Legendary;
 
     public int ID => _id;
-    public Sprite BiomSprite => _biomSprite;
-    public MapCellsContainer Map => _map;
-    public ReadOnlyCollection<BiomReward> Rewards => new(_rewards);
-    public CoinsReward RewardsPerStar => _rewardsPerStar;
-    public string BiomName => _biomName;
+    public Sprite BiomSprite => _biom.Sprite;
+    public MapCellsContainer Map => _biom.Map;
+    public ReadOnlyCollection<BiomReward> Rewards => new(_biom.Rewards);
+    public CoinsReward RewardsPerStar => new(_biom.CoinsRewardPerStar);
+    public string BiomName => _biom.name;
     public int CurrentStars => _currentStars;
-    public float ReduseUpgrades => _startReduseUpgrades + _reduseUpgradesByStar * _currentStars;
-    public Rare MaxEnemyGadget => _maxEnemyGadget;
+    public float ReduseUpgrades => _biom.StartReduseUpgrades + _biom.ReduseUpgradesByStar * _currentStars;
+    public Rare MaxEnemyGadget => _biom.MaxEnemyGadget;
+    public Func<ChunkSettings[]> GetMapPreset => () => _biom.GetMapPreset();
 
     public CompanyBiomInfo(Biom biom)
     {
         _id = biom.ID;
-        _biomSprite = biom.Sprite;
-        _map = biom.Map;
-        _rewards = biom.Rewards;
-        _rewardsPerStar = new CoinsReward(biom.CoinsRewardPerStar);
-        _biomName = biom.name;
-        _startReduseUpgrades = biom.StartReduseUpgrades;
-        _reduseUpgradesByStar = biom.ReduseUpgradesByStar;
-        _maxEnemyGadget = biom.MaxEnemyGadget;
+        _biom = biom;
         _currentStars = 0;
     }
 
@@ -60,31 +49,32 @@ public class CompanyBiomInfo : ICompanyBiomInfoReadOnly
             return;
         }
 
-        throw new System.Exception("Save info does not match biom index");
+        throw new Exception("Save info does not match biom index");
     }
 
     public List<Reward> AddStars(int stars)
     {
         List<Reward> rewards = new();
+        BiomReward[] biomRewards = _biom.Rewards;
 
         for (int i = 0; i < stars; i++)
         {
-            if (_currentStars + i < _rewards.Length)
+            if (_currentStars + i < biomRewards.Length)
             {
-                if (_rewards[_currentStars + i] != null)
+                if (biomRewards[_currentStars + i] != null)
                 {
-                    rewards.AddRange(_rewards[_currentStars + i].GetRewards());
+                    rewards.AddRange(biomRewards[_currentStars + i].GetRewards());
                 }
 
-                rewards.Add(_rewardsPerStar);
+                rewards.Add(RewardsPerStar);
             }
         }
 
         _currentStars += stars;
 
-        if (_currentStars > _rewards.Length)
+        if (_currentStars > biomRewards.Length)
         {
-            _currentStars = _rewards.Length;
+            _currentStars = biomRewards.Length;
         }
 
         return rewards;

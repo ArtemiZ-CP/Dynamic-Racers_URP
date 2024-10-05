@@ -72,7 +72,7 @@ public static class DataSaver
             PlayerAscend = 0,
             PlayerGlide = 0,
             TrainingsPassed = 0,
-            FPS = globalSettings.MinFPS,
+            FPS = globalSettings.MaxFPS,
             IsMusicOn = true,
             IsSoundsOn = true,
             IsHapticOn = true,

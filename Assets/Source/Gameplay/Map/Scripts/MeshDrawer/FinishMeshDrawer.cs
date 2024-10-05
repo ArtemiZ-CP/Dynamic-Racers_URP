@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
@@ -5,6 +6,20 @@ using UnityEngine;
 public class FinishMeshDrawer : ChunkMeshDrawer
 {
     private BasisMeshDrawer _basisMeshDrawer;
+    private List<FinishConfetti> _finishParticles = new();
+
+    public void ActiveFinishParticles()
+    {
+        if (_finishParticles == null || _finishParticles.Count == 0)
+        {
+            return;
+        }
+
+        foreach (FinishConfetti finishConfetti in _finishParticles)
+        {
+            finishConfetti.gameObject.SetActive(true);
+        }
+    }
 
     public override Vector3Int SpawnMesh(Vector3Int size, MapCellsContainer mapCellsContainer, bool emptyBefore, bool emptyAfter)
     {
@@ -26,6 +41,8 @@ public class FinishMeshDrawer : ChunkMeshDrawer
         Vector3 sizeVector = Vector3.one;
         int min = GlobalSettings.Instance.ChunkMargin;
         int max = size.x - 1 - min;
+        _finishParticles.Clear();
+        GameObject finishCell = null;
 
         for (int x = 0; x < size.x; x++)
         {
@@ -35,25 +52,45 @@ public class FinishMeshDrawer : ChunkMeshDrawer
             {
                 if (x == min)
                 {
-                    SpawnCell(finishCellsContainer.LeftLine, new Vector3(xPosition, 0, 0), sizeVector, emptyBefore, emptyAfter);
+                    finishCell = SpawnCell(finishCellsContainer.LeftLine, new Vector3(xPosition, 0, 0), sizeVector, emptyBefore, emptyAfter);
                 }
                 else if (x == max)
                 {
-                    SpawnCell(finishCellsContainer.RightLine, new Vector3(xPosition, 0, 0), sizeVector, emptyBefore, emptyAfter);
+                    finishCell = SpawnCell(finishCellsContainer.RightLine, new Vector3(xPosition, 0, 0), sizeVector, emptyBefore, emptyAfter);
                 }
                 else
                 {
-                    SpawnCell(finishCellsContainer.MiddleLine, new Vector3(xPosition, 0, 0), sizeVector, emptyBefore, emptyAfter);
+                    finishCell = SpawnCell(finishCellsContainer.MiddleLine, new Vector3(xPosition, 0, 0), sizeVector, emptyBefore, emptyAfter);
                 }
             }
 
-            SpawnCell(finishCellsContainer.Middle, new Vector3(xPosition, 0, 1), sizeVector, emptyBefore, emptyAfter);
+            TryAddFinishParticles(finishCell);
+
+            finishCell = SpawnCell(finishCellsContainer.Middle, new Vector3(xPosition, 0, 1), sizeVector, emptyBefore, emptyAfter);
+
+            TryAddFinishParticles(finishCell);
         }
 
         if (finishCellsContainer.FinishObject != null)
         {
             SpawnCell(finishCellsContainer.FinishObject, Vector3.zero, Vector3.one, emptyBefore, emptyAfter);
         }
+    }
+
+    private bool TryAddFinishParticles(GameObject finishCell)
+    {
+        if (finishCell == null)
+        {
+            return false;
+        }
+
+        if (finishCell.GetComponentInChildren<FinishConfetti>(includeInactive: true) is FinishConfetti finishConfetti)
+        {
+            _finishParticles.Add(finishConfetti);
+            return true;
+        }
+
+        return false;
     }
 
     private void SpawnGround(Vector3Int size, MarginCellsContainer marginCellsContainer, bool emptyBefore, bool emptyAfter)

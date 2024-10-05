@@ -846,43 +846,43 @@ MonoBehaviour:
   - _left: {fileID: 4271046523883203714}
     _right: {fileID: 6698475104866548030}
     _speedMultiplier: 0.5
-    _goodStart: 0
+    _type: 0
     _startText: Bad
     _startTextColor: {r: 1, g: 0, b: 0, a: 1}
   - _left: {fileID: 6698475104866548030}
     _right: {fileID: 8733378539543289939}
     _speedMultiplier: 0.75
-    _goodStart: 0
+    _type: 0
     _startText: Ok
     _startTextColor: {r: 1, g: 0.6666667, b: 0, a: 1}
   - _left: {fileID: 8733378539543289939}
     _right: {fileID: 6380549809478617733}
     _speedMultiplier: 1.5
-    _goodStart: 1
+    _type: 1
     _startText: Good
     _startTextColor: {r: 1, g: 0.95686275, b: 0, a: 1}
   - _left: {fileID: 6380549809478617733}
     _right: {fileID: 4720934260519675621}
     _speedMultiplier: 3
-    _goodStart: 1
+    _type: 2
     _startText: Perfect!
     _startTextColor: {r: 0.015686275, g: 1, b: 0, a: 1}
   - _left: {fileID: 4720934260519675621}
     _right: {fileID: 785127872734052884}
     _speedMultiplier: 1.5
-    _goodStart: 1
+    _type: 1
     _startText: Good
     _startTextColor: {r: 1, g: 0.95686275, b: 0, a: 1}
   - _left: {fileID: 785127872734052884}
     _right: {fileID: 3004634271191662387}
     _speedMultiplier: 0.75
-    _goodStart: 0
+    _type: 0
     _startText: Ok
     _startTextColor: {r: 1, g: 0.6666667, b: 0, a: 1}
   - _left: {fileID: 3004634271191662387}
     _right: {fileID: 3154176459889327851}
     _speedMultiplier: 0.5
-    _goodStart: 0
+    _type: 0
     _startText: Bad
     _startTextColor: {r: 1, g: 0, b: 0, a: 1}
   _visual: {fileID: 5920202835726889148}

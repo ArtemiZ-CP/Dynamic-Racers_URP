@@ -11,6 +11,7 @@ public class MapCellsContainer : ScriptableObject
     [SerializeField] private WallMarginCellsContainer _wallMarginCellsContainer;
     [SerializeField] private EnvironmentContainer _environmentContainer;
     [SerializeField] private FinishCellsContainer _finishCellsContainer;
+    [SerializeField] private Material _skybox;
 
     public BasisCellsContainer BasisCellsContainer => _basisCellsContainer;
     public GroundCellsContainer GroundCellsContainer => _groundCellsContainer;
@@ -20,4 +21,5 @@ public class MapCellsContainer : ScriptableObject
     public WallMarginCellsContainer WallMarginCellsContainer => _wallMarginCellsContainer;
     public EnvironmentContainer EnvironmentContainer => _environmentContainer;
     public FinishCellsContainer FinishCellsContainer => _finishCellsContainer;
+    public Material Skybox => _skybox;
 }

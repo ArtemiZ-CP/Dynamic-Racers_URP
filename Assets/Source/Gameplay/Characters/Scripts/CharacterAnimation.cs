@@ -20,6 +20,8 @@ public class CharacterAnimation : MonoBehaviour
 	[SerializeField] private Animator _slingAnimator;
 	[SerializeField] private float _launchAnimationDuration;
 	[SerializeField] private GameObject _characterPoint;
+	[SerializeField] private ParticleSystem _switchGadgetParticles;
+	[SerializeField] private GameObject _bestStartParticles;
 
 	private GlobalSettings _globalSettings;
 	private RunStagesBase _runStagesBase;
@@ -42,17 +44,11 @@ public class CharacterAnimation : MonoBehaviour
 		_characterGadgets = GetComponent<CharacterGadgets>();
 		_runStagesBase = FindObjectOfType<RunStagesBase>();
 		if (_characterPoint != null) _characterPoint.SetActive(false);
+		_bestStartParticles.SetActive(false);
 	}
 
 	private void Start()
 	{
-		if (_characterGadgets.Gadget != null)
-		{
-			_activeGadget = Instantiate(_characterGadgets.Gadget.ScriptableObject.Prefab, _meshSpawner.transform);
-			_gadgetAnimator = _activeGadget.GetComponent<Animator>();
-			_activeGadget.SetActive(false);
-		}
-
 		_launchAnimationCoroutine = StartCoroutine(ControllLaunchAnimation());
 	}
 
@@ -81,7 +77,17 @@ public class CharacterAnimation : MonoBehaviour
 		}
 	}
 
-	public void LaunchCharacter(bool goodStart, bool fullCharge)
+	public void Initialize(Gadget gadget)
+	{
+		if (gadget != null)
+		{
+			_activeGadget = Instantiate(gadget.ScriptableObject.Prefab, _meshSpawner.transform);
+			_gadgetAnimator = _activeGadget.GetComponent<Animator>();
+			_activeGadget.SetActive(false);
+		}
+	}
+
+	public void LaunchCharacter(SpeedPower.Type speedPowerType, bool fullCharge)
 	{
 		if (_characterPoint != null) _characterPoint.SetActive(true);
 		StopCoroutine(_launchAnimationCoroutine);
@@ -94,8 +100,13 @@ public class CharacterAnimation : MonoBehaviour
 		}
 		else
 		{
-			if (goodStart)
+			if (speedPowerType != SpeedPower.Type.Bad)
 			{
+				if (speedPowerType == SpeedPower.Type.Best)
+				{
+					_bestStartParticles.SetActive(true);
+				}
+
 				_slingAnimator.SetTrigger(Launch);
 				_animator.SetTrigger(Launch);
 				StartCoroutine(StartAnimationDelay(_goodStartAnimationDelay));
@@ -124,6 +135,7 @@ public class CharacterAnimation : MonoBehaviour
 	private IEnumerator StartAnimationDelay(float delay)
 	{
 		yield return new WaitForSeconds(delay);
+		_bestStartParticles.SetActive(false);
 		_isAbleToAnimate = true;
 		ActiveAnimationHandler(_activeGadgetChunkInfo, _isGadgetActive);
 	}
@@ -181,6 +193,7 @@ public class CharacterAnimation : MonoBehaviour
 				_activeGadget.SetActive(true);
 				_gadgetAnimator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
 				_animator.SetTrigger(gadgetChunkInfo.AnimationTriggerName);
+				_switchGadgetParticles.Play();
 			}
 			else
 			{
@@ -198,7 +211,11 @@ public class CharacterAnimation : MonoBehaviour
 
 	private void DisactiveAnimationHandler(ChunkType chunkType)
 	{
-		_activeGadget?.SetActive(false);
+		if (_activeGadget != null)
+		{
+			_activeGadget.SetActive(false);
+			_switchGadgetParticles.Play();
+		}
 
 		if (chunkType != ChunkType.Finish)
 		{

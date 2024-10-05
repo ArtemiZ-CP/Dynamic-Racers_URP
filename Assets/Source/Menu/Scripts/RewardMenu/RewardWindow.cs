@@ -70,5 +70,6 @@ public class RewardWindow : MonoBehaviour
         _rewardCharacteristic.Hide();
         _rewardCoins.Hide();
         _rewardDiamonds.Hide();
+        gameObject.SetActive(false);
     }
 }

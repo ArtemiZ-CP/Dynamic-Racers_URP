@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterMovement))]

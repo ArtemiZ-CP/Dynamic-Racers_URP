@@ -4,17 +4,24 @@ using UnityEngine;
 [Serializable]
 public struct SpeedPower
 {
+	public enum Type
+	{
+		Bad,
+		Good,
+		Best
+	}	
+
 	[SerializeField] private Transform _left;
 	[SerializeField] private Transform _right;
 	[SerializeField] private float _speedMultiplier;
-	[SerializeField] private bool _goodStart;
+	[SerializeField] private Type _type;
 	[SerializeField] private string _startText;
 	[SerializeField] private Color _startTextColor;
 
 	public readonly Vector3 LeftPosition => _left.localPosition;
 	public readonly Vector3 RightPosition => _right.localPosition;
 	public readonly float SpeedMultiplier => _speedMultiplier;
-	public readonly bool GoodStart => _goodStart;
+	public readonly Type PowerType => _type;
 	public readonly string StartText => _startText;
 	public readonly Color StartTextColor => _startTextColor;
 

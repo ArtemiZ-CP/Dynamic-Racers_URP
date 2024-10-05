@@ -1,6 +1,7 @@
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
 public class BiomProgress : MonoBehaviour
@@ -12,7 +13,22 @@ public class BiomProgress : MonoBehaviour
     [SerializeField] private Image _progressSlider;
     [SerializeField] private TMP_Text _coinsRewardPerStar;
 
+    private ICompanyBiomInfoReadOnly _currentBiomInfo;
+
     public void SetBiomPoints(ICompanyBiomInfoReadOnly companyBiomInfo)
+    {
+        _currentBiomInfo = companyBiomInfo;
+    }
+
+    private void FixedUpdate()
+    {
+        if (_currentBiomInfo != null)
+        {
+            UpdateBiomPoints(_currentBiomInfo);
+        }
+    }
+
+    private void UpdateBiomPoints(ICompanyBiomInfoReadOnly companyBiomInfo)
     {
         BiomReward[] rewards = companyBiomInfo.Rewards.ToArray();
 

@@ -246,9 +246,9 @@ public static class PlayerData
         _fps = fps;
         Application.targetFrameRate = fps;
 
-#if UNITY_EDITOR
-        Application.targetFrameRate = 10000;
-#endif
+// #if UNITY_EDITOR
+//         Application.targetFrameRate = 10000;
+// #endif
 
         DataSaver.SaveData();
     }

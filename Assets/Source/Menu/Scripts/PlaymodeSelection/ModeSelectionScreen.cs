@@ -24,17 +24,17 @@ public class ModeSelectionScreen : MonoBehaviour
 
     public void ChooseCompanyMapPreset(ICompanyBiomInfoReadOnly biomInfo)
     {
-        RunSettings.SetCompanyRun(biomInfo,  GlobalSettings.StarsRewards.ToArray(), SelectRandomMap(_mapPresets).Map.ToArray(), GlobalSettings.GameplayPlayersCount);
+        RunSettings.SetCompanyRun(biomInfo,  GlobalSettings.StarsRewards.ToArray(), SelectMap(biomInfo), GlobalSettings.GameplayPlayersCount);
     }
 
     public void ChooseRankedMapPreset(ICompanyBiomInfoReadOnly biomInfo)
     {
-        RunSettings.SetRankedRun(biomInfo, _rankedExperienceRewards, SelectRandomMap(_mapPresets).Map.ToArray(), GlobalSettings.GameplayPlayersCount);
+        RunSettings.SetRankedRun(biomInfo, _rankedExperienceRewards,  SelectMap(biomInfo), GlobalSettings.GameplayPlayersCount);
     }
 
-    private MapPreset SelectRandomMap(MapPreset[] mapPresets)
+    private ChunkSettings[] SelectMap(ICompanyBiomInfoReadOnly biomInfo)
     {
-        MapPreset mapPreset = mapPresets[Random.Range(0, _mapPresets.Length)];
+        ChunkSettings[] mapPreset = biomInfo.GetMapPreset();
         _mapDrawer.DrawMap(mapPreset);
         return mapPreset;
     }

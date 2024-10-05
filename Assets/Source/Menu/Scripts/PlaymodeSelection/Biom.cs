@@ -7,7 +7,9 @@ public class Biom : ScriptableObject
     [SerializeField] private Sprite _icon;
     [Header("Map")] 
     [SerializeField] private MapCellsContainer _map;
+    [SerializeField] private bool _randomMap;
     [SerializeField] private MapPreset[] _mapPresets;
+    [SerializeField] private MapGenerationSettings _mapGenerationSettings;
     [Header("Rewards")]
     [SerializeField] private BiomReward[] _rewards;
     [SerializeField, Min(1)] private int _starPerReward;
@@ -21,12 +23,21 @@ public class Biom : ScriptableObject
     public int ID => _id;
     public Sprite Sprite => _icon;
     public MapCellsContainer Map => _map;
-    public MapPreset[] MapPresets => _mapPresets;
     public BiomReward[] Rewards => ConvertRewards();
     public int CoinsRewardPerStar => _coinsRewardPerStar;
     public float StartReduseUpgrades => _startReduseUpgrades;
     public float ReduseUpgradesByStar => _reduseUpgradesByStar;
     public Rare MaxEnemyGadget => _maxEnemyGadget;
+
+    public ChunkSettings[] GetMapPreset()
+    {
+        if (_randomMap || _mapPresets == null || _mapPresets.Length == 0)
+        {
+            return _mapGenerationSettings.GenerateMap();
+        }
+
+        return _mapPresets[Random.Range(0, _mapPresets.Length)].Map;
+    }
 
     private BiomReward[] ConvertRewards()
     {

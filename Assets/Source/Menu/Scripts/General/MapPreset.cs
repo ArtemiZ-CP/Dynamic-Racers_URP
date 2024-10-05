@@ -1,16 +1,15 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MapPreset", menuName = "MapPreset", order = 0)]
 public class MapPreset : ScriptableObject
 {
-    [SerializeField] private List<ChunkSettings> _map = new();
+    [SerializeField] private ChunkSettings[] _map;
 
-    public List<ChunkSettings> Map => _map;
+    public ChunkSettings[] Map => _map;
 
     private void OnValidate()
     {
-        _map.ForEach(chunkSettings =>
+        System.Array.ForEach(_map, chunkSettings =>
         {
             if (chunkSettings.Type == ChunkType.Start)
             {
