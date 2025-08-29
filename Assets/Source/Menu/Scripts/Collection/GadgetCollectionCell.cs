@@ -73,6 +73,10 @@ public class GadgetCollectionCell : MonoBehaviour
     private void SetGadget(Gadget gadget)
     {
         Gadget = gadget;
-        _gadget.sprite = gadget.ScriptableObject.SmallSprite;
+
+        if (gadget != null)
+        {
+            _gadget.sprite = gadget.ScriptableObject.SmallSprite;
+        }
     }
 }
